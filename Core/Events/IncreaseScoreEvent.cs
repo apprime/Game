@@ -25,7 +25,7 @@ namespace Core.Events
             ScoreCanIncrease = (i) => i.Score + ScoreAmount <= MaxScore;
         }
 
-        internal override Event Dispatch()
+        protected override Event Dispatch()
         {
             if(ScoreCanIncrease(currentPlayer))
             {
@@ -38,7 +38,7 @@ namespace Core.Events
             return this;
         }
 
-        internal override Event Resolve()
+        protected override Event Resolve()
         {
             //TODO: Handle locking / writing to resource 
             var player = ResourceLocator.GetPlayer(currentPlayer.Id.Trunk);
@@ -46,7 +46,7 @@ namespace Core.Events
             return this;
         }
 
-        internal override Event Persist()
+        protected override Event Persist()
         {
             throw new NotImplementedException();   
         }

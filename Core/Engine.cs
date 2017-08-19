@@ -61,7 +61,7 @@ namespace Core
 
         public Event EventProcess(Event @event)
         {
-            return @event.Dispatch().Resolve();
+            return @event.Process();
                          
         }
 

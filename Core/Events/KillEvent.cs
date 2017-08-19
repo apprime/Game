@@ -16,17 +16,17 @@ namespace Core.Events
 
         }
 
-        internal override Event Dispatch()
+        protected override Event Dispatch()
         {
             throw new NotImplementedException();
         }
 
-        internal override Event Resolve()
+        protected override Event Resolve()
         {
             throw new NotImplementedException();
         }
 
-        internal override Event Persist()
+        protected override Event Persist()
         {
             throw new NotImplementedException();
         }

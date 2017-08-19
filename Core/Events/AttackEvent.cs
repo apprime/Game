@@ -26,7 +26,7 @@ namespace Core.Events
             _targetId = target;
         }
 
-        internal override Event Dispatch()
+        protected override Event Dispatch()
         {
             Validate();
 
@@ -43,10 +43,9 @@ namespace Core.Events
             return this;
         }
 
-        internal override Event Resolve()
+        protected override Event Resolve()
         {
-            //Todo: Make AttackMessage delta. Then make attack delta inculde value of Damage.Effective and Target Id so that client can adjust hp bar.
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(damage), Targets = ResourceLocator.GetPlayers(Result) });
+            Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(damage), Targets = new IEntity[] { _target } });
             Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = damage.ToString(), Targets = ResourceLocator.GetPlayers(Result) });
             Result.Actor = _actor;
             Result.Targets = _eventTargets;
@@ -55,7 +54,7 @@ namespace Core.Events
             return this;
         }
 
-        internal override Event Persist()
+        protected override Event Persist()
         {
             _target.HitPoints.Current -= damage.Effective;
 
