@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.EventResolution;
+using Core.Mutators;
 using Core.ResourceManagers;
 using System;
 
@@ -36,9 +37,7 @@ namespace Core.Events
             //Todo: This object doesn't feel natural. There should be a 
             // process inside Damage taking in both actor and target and 
             // the return should be the complete result.
-            damage = new Damage();
-            _actor.Attack(_target, damage);
-            _target.Mitigate(_actor, damage);
+            damage = Process(_actor, _target);
 
             return this;
         }
@@ -66,6 +65,19 @@ namespace Core.Events
             }
 
             return this;
+        }
+
+        /// <summary>
+        /// Process for Attacking.
+        /// </summary>
+        private static Damage Process(IAttack actor, IDestructible target)
+        {
+            var damage = new Damage();
+            Combat.Setup(damage);
+            Combat.Attack(actor, damage);
+            Combat.Mitigate(target, damage);
+            Combat.Cleanup(damage);
+            return damage;
         }
 
         //Todo: This is not very pretty, but somehow we must provide what actually happened to active entities in client

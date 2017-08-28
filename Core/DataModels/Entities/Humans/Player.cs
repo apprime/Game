@@ -29,6 +29,28 @@ namespace Core.Entities.Humans
             Party = party;
         }
 
+        #region TEMP Event Management 
+
+        private Connection c = new Connection(); //TODO: This needs to go away at some point
+        public bool Send(string eventString)
+        {
+            Debug.WriteLine("Receiving message: ");
+            Debug.WriteLine(eventString);
+            c.Send(eventString);
+
+            return true;
+        }
+        //Placeholder for Websockets connection
+        private class Connection
+        {
+            public void Send(string message)
+            {
+                Debug.WriteLine("Linking message to Websocket");
+            }
+        }
+
+        #endregion
+
         public string Name { get; set; }
 
         public Id Id { get; set; }
@@ -40,11 +62,6 @@ namespace Core.Entities.Humans
         public Scene Scene { get; set; }
 
         public HitPoints HitPoints { get; }
-
-        public bool Add(string key, string value)
-        {
-            throw new NotImplementedException();
-        }
 
         public Damage Attack(IDestructible target, Damage payload)
         {
@@ -75,26 +92,10 @@ namespace Core.Entities.Humans
             throw new NotImplementedException();
         }
 
-        #region TEMP Event Management 
+        public Spellbook Spellbook { get; set; }
+        public Ink Currency { get; set; }
+        public Bucket Bucket{ get; set; }
 
-        private Connection c = new Connection(); //TODO: This needs to go away at some point
-        public bool Send(string eventString)
-        {
-            Debug.WriteLine("Receiving message: ");
-            Debug.WriteLine(eventString);
-            c.Send(eventString);
 
-            return true;
-        }
-        //Placeholder for Websockets connection
-        private class Connection
-        {
-            public void Send(string message)
-            {
-                Debug.WriteLine("Linking message to Websocket");
-            }
-        }
-
-        #endregion
     }
 }

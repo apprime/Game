@@ -36,6 +36,9 @@ namespace Core.Events
         /// <summary>
         /// Persist the change set in memory
         /// (i.e. make the changes)
+        /// TODO: There is a major todo lurking here. 
+        /// We need some way of locking resources and 
+        /// rollbacking if they cant be committed.
         /// </summary>
         /// <returns></returns>
         protected abstract Event Persist();
