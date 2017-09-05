@@ -42,7 +42,7 @@ namespace Core.Entities.Humans
         {
             if(ulong.MaxValue - value < Amount)
             {
-                throw new Exception("Player has gained more money than is possible. ")
+                throw new Exception("Player has gained more money than is possible.");
             }
         }
 

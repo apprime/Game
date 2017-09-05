@@ -240,3 +240,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+/Web/wwwroot/css/global
+/Web/wwwroot/css/test.css
