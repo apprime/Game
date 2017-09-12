@@ -14,12 +14,13 @@
     </environment>
 </head>
 <body>
-    @{ Html.RenderPartial("~/ Views/Components/TopMenu.cshtml", topMenuMessage); }
+    @await Component.InvokeAsync("TopMenu");
+
     <main>
         @RenderBody()
     </main>
     
-    @{ Html.RenderPartial("~/ Views/Components/TopMenu.cshtml"); }
+    @await Component.InvokeAsync("Footer");
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
