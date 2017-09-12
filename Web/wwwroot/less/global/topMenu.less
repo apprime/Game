@@ -1,3 +1,66 @@
-﻿div {
-    background-color: red;
+﻿nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 5rem;
+    background-color: #CFDBC5;
+        
+    img {
+        display: none;
+        width: 100px;
+        height: auto;
+        margin: 1rem auto;
+    }
+
+    > ul {
+        width: 100%;
+        max-width: 1200px;
+        height: 5rem;
+        margin: 0 auto 0 auto;
+        display: flex;
+        justify-content: center;
+        .reset-list-formats;
+
+        > li {
+            flex: 1;
+            line-height: 3;
+            text-align: center;
+            
+            > ul {
+                background-color: red;
+                .reset-list-formats;
+            }
+        }
+    }
+
+    &:hover {
+        height: 15rem;     
+        
+        > ul {
+            height: inherit;
+
+            > li:hover {
+                background-color: #9CBA7F;
+            }
+        }
+
+        img {
+            display: block;
+        }   
+    }
+}
+
+/* This belongs here because all main blocks need to be offset because of our menu */
+body > main {
+    .top-menu-offset;
+}
+
+.top-menu-offset {
+    margin-top: 5rem;
+}
+
+/* Todo: Move this to some sort of mixins file*/
+.reset-list-formats {
+    list-style: none;
+    padding: 0;
 }
