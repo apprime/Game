@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
+    [Route("Home")]
     public class HomeController : Controller
     {
+        [Route("Index")]
+        [Route("")]
+        [Route("/")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Route("About")]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -20,6 +21,7 @@ namespace Web.Controllers
             return View();
         }
 
+        [Route("Contact")]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -27,6 +29,7 @@ namespace Web.Controllers
             return View();
         }
 
+        [Route("Error")]
         public IActionResult Error()
         {
             return View();

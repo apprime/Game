@@ -3,8 +3,11 @@ using Web.Models;
 
 namespace Web.Controllers
 {
+    [Route("Main")]
     public class MainController : Controller
     {
+        [Route("Index")]
+        [Route("")]
         public IActionResult Index()
         {
             var model = new BaseModel();

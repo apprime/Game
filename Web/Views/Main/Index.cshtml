@@ -1,2 +1,57 @@
-﻿<div>The Stage!</div><!-- Todo -->
+﻿<canvas>The Stage!</canvas>
+<button>A Button</button>    
+   
+
+<input id="userNameInput" type="text" placeholder="Enter your user name..." />
+<input id="textInput" type="text" placeholder="Enter your status..." />
+
+<button id="publishPostButton">Publish post!</button>
+
+<ul id="postsList"></ul>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+<script src="/signalr/hubs"></script>
+<script type="text/javascript">
+        $.ajax({
+            url: '/Api/Posts/',
+            method: 'GET',
+            dataType: 'JSON',
+            success: addPostsList
+        });
+
+        function addPostsList(posts) {
+            $.each(posts, function (index) {
+                var post = posts[index];
+                addPost(post);
+            });
+        }
+
+        function addPost(post) {
+            $("#postsList").append(
+                    '<li><b>' + post.userName + '</b><br>' + post.text + '</li><br>'
+                 );
+        }
+
+        var hub = $.connection.postsHub;
+
+        hub.client.publishPost = addPost;
+
+        $("#publishPostButton").click(function () {
+
+            var post = {
+                userName: $("#userNameInput").val() || "Guest",
+                text: $("#textInput").val()
+            };
+            $.ajax({
+                url: '/Api/Posts/AddPost',
+                method: 'POST',
+                data: post
+            });
+        });
+
+        $.connection.hub.logging = true;
+        $.connection.hub.start();
+</script>
+
 <div>Controls</div><!-- Todo -->

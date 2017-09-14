@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    height: 5rem;
+    height: @top-menu-offset;
     background-color: #CFDBC5;
         
     img {
@@ -52,12 +52,11 @@
 
 /* This belongs here because all main blocks need to be offset because of our menu */
 body > main {
-    .top-menu-offset;
+    margin-top: @top-menu-offset;
 }
 
-.top-menu-offset {
-    margin-top: 5rem;
-}
+/* TODO: Move this to sort sort of variables file */
+@top-menu-offset: 5rem;
 
 /* Todo: Move this to some sort of mixins file*/
 .reset-list-formats {
