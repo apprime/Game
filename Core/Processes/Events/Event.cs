@@ -10,13 +10,15 @@ namespace Core.Events
     {
         protected EventResult Result = new EventResult();
 
+        public delegate void EventHandler(EventResult result);
+        public static event EventHandler EventResolved;
+
         internal Event Process()
         {
             this.Dispatch()
                 .Resolve()
-                .Persist();
-            //Todo: Figure out if we should broadcast internally as well, or wait until we are outside in the scope of engine with ticks
-               // .Broadcast();
+                .Persist()
+                .Broadcast();
 
             return this;
         }
@@ -46,13 +48,9 @@ namespace Core.Events
         /// <summary>
         /// Broadcast the change set to all relevant targets.
         /// </summary>
-        internal void Broadcast()
+        internal virtual void Broadcast()
         {
-            IEnumerable<Player> targets = ResourceLocator.GetPlayers(Result);
-            foreach (var p in targets)
-            {
-                p.Send(Result.ToJson());
-            }
+            EventResolved?.Invoke(Result);
         }
     }
 }

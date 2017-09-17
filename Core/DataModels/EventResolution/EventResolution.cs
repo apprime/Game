@@ -48,7 +48,7 @@ namespace Core.EventResolution
         internal List<Delta> Deltas { get; set; }
         #endregion
 
-        internal string ToJson()
+        public string ToJson()
         {
             return JsonConvert.SerializeObject(this);
         }

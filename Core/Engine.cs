@@ -8,17 +8,19 @@ using Core.ResourceManagers;
 using Core.Factories;
 using Core.Events;
 using Core.Entities.Humans;
+using System.Threading;
 
 namespace Core
 {
     public class Engine
     {
-        private Queue<Event> EventList { get; set; }
+        private BatchQueue<Event> EventList { get; set; }
 
         public bool run = false;
         public int TickRate = 1000;
         private int batchSize = 1;
         private int threadSize = 1;
+
         public static Engine Instance{ get; }
 
         static Engine()
@@ -28,7 +30,7 @@ namespace Core
 
         private Engine()
         {
-            EventList = new Queue<Event>();
+            EventList = new BatchQueue<Event>();
         }
 
         //Todo: Loop has two problems. 
@@ -43,38 +45,35 @@ namespace Core
                 //Todo: Always tick for at most TickRate time.
                 //Todo: Above means threading for more tick actions.
                 //Todo: Long running operations?
-                if (sw.ElapsedMilliseconds >= TickRate)
+                if (sw.ElapsedMilliseconds >= TickRate) //OR MaxQueueSize is reached? To prevent backlog.
                 {
-                    Broadcast(Task.WhenAll(Ticks(threadSize))
-                                  .Result
-                                  .SelectMany(i => i));
+                    //Note: This might leave some events for next tick, but that is fine since it's a queue
+                    var chunkSize = EventList.Count / threadSize; 
+                    Tick(threadSize, chunkSize);
                     sw.Restart();
                 }
             }
         }
 
-        public void synchCallForPeasants()
+        private void Tick(int threadCount, int chunkSize)
         {
-            EventList.Dequeue()
-                     .Process();
-        }
-
-        public Event EventProcess(Event @event)
-        {
-            return @event.Process();
-                         
-        }
-
-        private Task<IEnumerable<Event>>[] Ticks(int size)
-        {
-            return YieldTasks(size).ToArray();
-        }
-
-        private IEnumerable<Task<IEnumerable<Event>>> YieldTasks(int size)
-        {
-            for (var i = 0; i < size; i++)
+            for(var i = 0; i<threadCount; i++)
             {
-                yield return Task.Run(() => Tick());
+                var eventChunk = EventList.DequeueChunk(chunkSize);
+                var t = Task.Factory.StartNew(
+                    () => 
+                    {
+                        ProcessBatch(eventChunk);
+                    });
+                t.Start();
+            }
+        }
+
+        private void ProcessBatch(IEnumerable<Event> batch)
+        {
+            foreach(var item in batch)
+            {
+                item.Process();
             }
         }
 
@@ -95,14 +94,6 @@ namespace Core
             for(var i = 0; i > batchSize; i++)
             {
                 yield return EventList.Dequeue().Process();
-            }
-        }
-
-        private void Broadcast(IEnumerable<Event> results)
-        {
-            foreach (var @event in results)
-            {
-                @event.Broadcast();
             }
         }
 

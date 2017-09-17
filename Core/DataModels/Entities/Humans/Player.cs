@@ -29,31 +29,15 @@ namespace Core.Entities.Humans
             Party = party;
         }
 
-        #region TEMP Event Management 
-
-        private Connection c = new Connection(); //TODO: This needs to go away at some point
-        public bool Send(string eventString)
-        {
-            Debug.WriteLine("Receiving message: ");
-            Debug.WriteLine(eventString);
-            c.Send(eventString);
-
-            return true;
-        }
-        //Placeholder for Websockets connection
-        private class Connection
-        {
-            public void Send(string message)
-            {
-                Debug.WriteLine("Linking message to Websocket");
-            }
-        }
-
-        #endregion
-
         public string Name { get; set; }
 
         public Id Id { get; set; }
+
+        //TODO: I think we can use string to identify a user in SignalR.
+        //      Also, I think groups could and should be used, question is if we need grouping 
+        //      on SignalR level or whether we just use the gamestate for this.
+        public string ConnectionId { get; set; }
+        public IEnumerable<string> ConnectionGroups { get; set; }
 
         public int Score { get; set; }
 

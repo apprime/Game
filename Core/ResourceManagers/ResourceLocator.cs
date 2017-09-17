@@ -7,7 +7,8 @@ using Core.Entities;
 
 namespace Core.ResourceManagers
 {
-    //TODO: Make internal when client is no longer coupled
+    //This is public because Web uses GetPlayers to ..get players
+    //We should have a property in EventResult that does this insead
     public static class ResourceLocator
     {
         internal static void Add(Player p)
@@ -31,7 +32,7 @@ namespace Core.ResourceManagers
         }
 
         //Todo: This should probably be replaced by simply taking the flag directly instead
-        internal static IEnumerable<Player> GetPlayers(EventResult result)
+        public static IEnumerable<Player> GetPlayers(EventResult result)
         {
             return PlayerResources.Get(result);
         }
