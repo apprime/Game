@@ -1,24 +1,19 @@
-﻿using Core.Entities;
-using Core.Events;
+﻿using Core.Events;
 using System;
 
 namespace Core.EventResolution
 {
-    /// <summary>
-    /// Currently the singleton for all game.
-    /// TODO: Is this correct? Or should engine contain the resolver?
-    /// </summary>
-    public static class EventResolver
+    public static class EventParser
     {
-        public static Event Resolve(string message)
+        public static Event Parse(string message)
         {
-            //Todo: This should be replaced with JSON string handling:
+            //Todo: We expect some sort of message from front. TBD how to parse it.
             var parts = message.Split(';');
 
             //Parts1 should be Act: 
             switch(parts[0])
             {
-                //Todo: Remember to remove this!
+                //Todo: Remember to remove this event!
                 case "IncreaseScore":
                     return new IncreaseScoreEvent(parts);
                 case "Attack":

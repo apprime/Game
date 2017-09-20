@@ -24,9 +24,10 @@ namespace Web.Temp
 
         }
 
-        public void PushEvent(string someEvent)
+        public void PushEvent(string eventString)
         {
-            Engine.Instance.Push(someEvent);
+            var e = EventParser.Parse(eventString);
+            Engine.Instance.Push(e);
         }
 
         private void Broadcast(EventResult result)

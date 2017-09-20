@@ -15,10 +15,6 @@ namespace Core.Entities.Humans
         }
 
         private ulong _amount;
-        private int _basic;
-        private int _advanced;
-        private int _expert;
-        private int _master;
 
         public ulong Amount
         {
@@ -57,15 +53,32 @@ namespace Core.Entities.Humans
             return this;
         }
 
+        public Ink Add(Ink incoming)
+        {
+            Amount += incoming.Amount;
+            return this;
+        }
+
         public Ink Remove(ulong amount)
         {
             Amount -= amount;
             return this;
         }
 
+        public Ink Remove(Ink outgoing)
+        {
+            Amount -= outgoing.Amount;
+            return this;
+        }
+
         public static Ink operator + (Ink a, Ink b)
         {
             return new Ink(a.Amount + b.Amount);
-        }   
+        }
+
+        public static Ink operator -(Ink a, Ink b)
+        {
+            return new Ink(a.Amount - b.Amount);
+        }
     }
 }

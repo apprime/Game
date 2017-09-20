@@ -14,7 +14,7 @@ namespace Core.ResourceManagers
 
         internal static IEnumerable<Player> Get(EventResult result)
         {
-            if (AffectGlobal(result))
+            if (result.Targets.Contains(EventTargets.World))
             {
                 return _players.Select(i => i.Value);
             }
@@ -44,12 +44,12 @@ namespace Core.ResourceManagers
 
         private static IEnumerable<Player> GetFiltered(EventResult result)
         {
-            if (AffectSelf(result))
+            if (result.Targets.Contains(EventTargets.Player))
             {
                 yield return (Player)result.Actor;
             }
 
-            if (AffectParty(result))
+            if (result.Targets.Contains(EventTargets.Party))
             {
                 Player player = (Player)result.Actor;
                 foreach (Player p in player.Party)
@@ -58,7 +58,7 @@ namespace Core.ResourceManagers
                 }
             }
 
-            if (AffectNearby(result))
+            if (result.Targets.Contains(EventTargets.Nearby))
             {
                 Scene scene = result.Actor.Scene;
                 foreach (Player p in scene.Players)
@@ -66,46 +66,6 @@ namespace Core.ResourceManagers
                     yield return p;
                 }
             }
-        }
-
-        /// <summary>
-        /// This rule dictates that the event affects all players at a location
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        private static bool AffectNearby(EventResult result)
-        {
-            return result.Targets.HasFlag(EventTargets.Nearby);
-        }
-
-        /// <summary>
-        /// This rule dictates that an event affects all member of the party of caster
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        private static bool AffectParty(EventResult result)
-        {
-            return result.Targets.HasFlag(EventTargets.Party);
-        }
-
-        /// <summary>
-        /// This rule currently decides that event affects only the Actor herself.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        private static bool AffectSelf(EventResult result)
-        {
-            return result.Targets.HasFlag(EventTargets.Player);
-        }
-
-        /// <summary>
-        /// This rule decides that Event will affect All players currently connected
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        private static bool AffectGlobal(EventResult result)
-        {
-            return result.Targets.HasFlag(EventTargets.World);
         }
     }
 }

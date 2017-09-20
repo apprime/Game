@@ -9,17 +9,21 @@ using Core.Factories;
 using Core.Events;
 using Core.Entities.Humans;
 using System.Threading;
+using System;
 
 namespace Core
 {
     public class Engine
     {
-        private BatchQueue<Event> EventList { get; set; }
+        private BatchQueue<Event> _eventList;
 
+        //TODO: We want to be able to set these values in config I suppose?
         public bool run = false;
-        public int TickRate = 1000;
-        private int batchSize = 1;
-        private int threadSize = 1;
+        private int _tickRate = 1000;
+        private int _threadNumber = 1;
+        private int MaxQueueSize = 100;
+        public AutoResetEvent _loopTimer;
+        private Timer _stateTimer;
 
         public static Engine Instance{ get; }
 
@@ -30,36 +34,17 @@ namespace Core
 
         private Engine()
         {
-            EventList = new BatchQueue<Event>();
+            _eventList = new BatchQueue<Event>();
+            _loopTimer = new AutoResetEvent(false);
         }
 
-        //Todo: Loop has two problems. 
-        //1) It cannot return a result because it runs on a different thread 
-        //2) It doesnt seem to properly create a thread 
-        public void Loop()
+        private void Tick()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            while(run)
-            {
-                //Todo: Always tick for at most TickRate time.
-                //Todo: Above means threading for more tick actions.
-                //Todo: Long running operations?
-                if (sw.ElapsedMilliseconds >= TickRate) //OR MaxQueueSize is reached? To prevent backlog.
-                {
-                    //Note: This might leave some events for next tick, but that is fine since it's a queue
-                    var chunkSize = EventList.Count / threadSize; 
-                    Tick(threadSize, chunkSize);
-                    sw.Restart();
-                }
-            }
-        }
+            var chunkSize = _eventList.Count / _threadNumber;
 
-        private void Tick(int threadCount, int chunkSize)
-        {
-            for(var i = 0; i<threadCount; i++)
+            for (var i = 0; i < _threadNumber; i++)
             {
-                var eventChunk = EventList.DequeueChunk(chunkSize);
+                var eventChunk = _eventList.DequeueChunk(chunkSize);
                 var t = Task.Factory.StartNew(
                     () => 
                     {
@@ -79,21 +64,19 @@ namespace Core
 
         public void Push(Event e)
         {
-            EventList.Enqueue(e);
+            _eventList.Enqueue(e);
+            //We could use an event to trigger if the queue grows too big, but since we know when we are adding to it, I don't think we need it.
+            //TODO:  monitoring hook that can alert when overflow is beginnning
+            //TODO:  autoscaling of potential cloud server (I know, super important in early access super pre-alpha)
+            PreventOverflow();
         }
 
-        //Todo: string -> IEvent as attribute?
-        public void Push(string eventString)
+        private void PreventOverflow()
         {
-            Push(EventResolver.Resolve(eventString));
-        }
-
-        private IEnumerable<Event> Tick()
-        {
-            Debug.WriteLine("Ticking");
-            for(var i = 0; i > batchSize; i++)
+            if(_eventList.Count >= MaxQueueSize)
             {
-                yield return EventList.Dequeue().Process();
+                Tick();
+                _loopTimer.Reset(); //Don't double dip with events.
             }
         }
 
@@ -101,15 +84,14 @@ namespace Core
         public void StartEngine()
         {
             Debug.WriteLine("Starting Engine");
-            run = true;
-            Loop(); //This doesnt work and you know it. We need a good way to start the engine and then feed it
+            _stateTimer = new Timer((a) => Tick(), _loopTimer, 1000, 1000);
         }
 
         //Todo: This is probably not needed, but nice to have for dev purposes
         public void StopEngine()
         {
             Debug.WriteLine("Stopping Engine");
-            run = false;
+            _stateTimer.Dispose();
         }
 
         public void Subscribe(Player p)
