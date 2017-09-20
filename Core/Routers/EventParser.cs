@@ -1,7 +1,8 @@
-﻿using Core.Events;
+﻿using Core.Entities.Exceptions;
+using Core.Events;
 using System;
 
-namespace Core.EventResolution
+namespace Core.Routers
 {
     public static class EventParser
     {
@@ -14,10 +15,16 @@ namespace Core.EventResolution
             switch(parts[0])
             {
                 //Todo: Remember to remove this event!
-                case "IncreaseScore":
+                case "increaseScore":
                     return new IncreaseScoreEvent(parts);
-                case "Attack":
+                case "attack":
                     return new AttackEvent(parts);
+                case "subscribe":
+                    //TODO: Subscribe (player)
+                    throw new TodoException("Player cannot join the game server yet");
+                case "unsubscribe":
+                    //TODO: Unsubscribe (player)
+                    throw new TodoException("Players cannot leave the game server yet (mohaha)");
                 default:
                     throw new ArgumentException("Wrong Message Format or Content");    
             }

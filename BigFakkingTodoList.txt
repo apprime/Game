@@ -37,8 +37,20 @@ This so that player has options when attacking Admiral Aardwark
 
 4.
 AI - A single monster needs to be able to have different personalities. Aggressive, defensive, strength based or intelect based and whether it
-likes to fight on its own or work as a team. This way we can generate random encounters that are reasonably interesting even with only a few types of creatures
+likes to fight on its own or work as a team (add more stuff here). This way we can generate random encounters that are reasonably interesting even with only a few types of creatures
 
 5.
 Everything needs to be async. The game engine should never have to block a thread because of read/write or external requests.
+
+6. 
+A project entirely for data access. Contains:
+- separate database for user info -> encryption, password hashing and various (.njet can handle this)
+- Caching
+- Data source abstractions
+- Mappings (and sql specs inside the concrete implementation of the abstraction)
+- NO ENTITY FRAMEWORK
+- Data analysis? Scheduled work for generating views of table data. Can be used for Read commands that need complex queries mostly,
+but also for systematic updates of various kinds, like player stats, server status etc.
+- Rollback gamestate - server should keep a saved cache so that the restarting application can load itself.
+- Normal sql for the web project. It needs to serve content to REST API.
 

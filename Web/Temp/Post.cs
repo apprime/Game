@@ -107,7 +107,6 @@
             _assembly = typeof(Connection).GetTypeInfo().Assembly;
         }
 
-
         public JsonContract ResolveContract(Type type)
         {
             if (type.GetTypeInfo().Assembly.Equals(_assembly))
@@ -115,6 +114,5 @@
 
             return _camelCaseContractResolver.ResolveContract(type);
         }
-
     }
 }

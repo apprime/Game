@@ -3,28 +3,29 @@ using Core.Entities.Humans;
 using Core.EventResolution;
 using Core.Events;
 using Core.ResourceManagers;
+using Core.Routers;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using System.Collections.Generic;
 
-namespace Web.Temp
+namespace Web.Hubs
 {
-    public class CoreWrapper
+    public class Game : Hub
     {
         public Dictionary<string, string> Players;
         private IConnectionManager _connectionManager { get; set; }
         private IHubContext _context;
 
-        public CoreWrapper(IConnectionManager connectionManager)
+        public Game(IConnectionManager connectionManager)
         {
             _connectionManager = connectionManager;
-            _context = _connectionManager.GetHubContext<GameHub>();
+            _context = _connectionManager.GetHubContext<Game>();
             Event.EventResolved += Broadcast;
             Players = new Dictionary<string, string>();
 
         }
 
-        public void PushEvent(string eventString)
+        public void Push(string eventString)
         {
             var e = EventParser.Parse(eventString);
             Engine.Instance.Push(e);
@@ -40,10 +41,5 @@ namespace Web.Temp
                         .Broadcast(result.ToJson());
             }
         }
-    }
-
-    public class GameHub : Hub
-    {
-
     }
 }

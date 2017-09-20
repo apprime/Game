@@ -84,7 +84,7 @@ namespace Core
         public void StartEngine()
         {
             Debug.WriteLine("Starting Engine");
-            _stateTimer = new Timer((a) => Tick(), _loopTimer, 1000, 1000);
+            _stateTimer = new Timer((a) => Tick(), _loopTimer, _tickRate, _tickRate);
         }
 
         //Todo: This is probably not needed, but nice to have for dev purposes
@@ -110,7 +110,6 @@ namespace Core
 
             p.Scene = todoScene;
         }
-
 
         //Todo: This is trash. In order to properly remove a player, 
         // a) just extract them from the scene they are in and then remove
