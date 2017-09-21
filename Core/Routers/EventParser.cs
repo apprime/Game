@@ -1,4 +1,4 @@
-﻿using Core.Entities.Exceptions;
+﻿using Data.Models.Exceptions;
 using Core.Events;
 using System;
 
@@ -18,7 +18,7 @@ namespace Core.Routers
                 case "increaseScore":
                     return new IncreaseScoreEvent(parts);
                 case "attack":
-                    return new AttackEvent(parts);
+                    return new Subscribe(parts);
                 case "subscribe":
                     //TODO: Subscribe (player)
                     throw new TodoException("Player cannot join the game server yet");

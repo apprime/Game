@@ -1,6 +1,5 @@
-﻿using Core.Entities;
-using Core.Entities.Humans;
-using Core.EventResolution;
+﻿using Data.Models.Entities.Humans;
+using Data.Models.EventResolution;
 using Core.ResourceManagers;
 using System;
 

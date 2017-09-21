@@ -2,10 +2,7 @@
 <button>A Button</button>    
    
 
-<input id="userNameInput" type="text" placeholder="Enter your user name..." />
-<input id="textInput" type="text" placeholder="Enter your status..." />
-
-<button id="publishPostButton">Publish post!</button>
+<button id="sendEvent">Send!</button>
 
 <ul id="postsList"></ul>
 
@@ -13,6 +10,33 @@
 <script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
 <script src="/signalr/hubs"></script>
 <script type="text/javascript">
+      
+        function addPostsList(posts) {
+            $.each(posts, function (index) {
+                var post = posts[index];
+                addPost(post);
+            });
+        }
+
+        function pushedContent(content) {
+            console.log("Incoming data: ", content);
+        }
+
+        var hub = $.connection.game;
+
+        hub.client.publishPost = pushedContent;
+
+        $("#sendEvent").click(function () {
+            console.log("Pushing with hub: ", hub);
+            hub.server.push("Testing");
+        });
+
+        $.connection.hub.logging = true;
+        $.connection.hub.start();
+
+        console.log("Finished setting up: ", $.connection.game);
+</script>
+@*<script type="text/javascript">
         $.ajax({
             url: '/Api/Posts/',
             method: 'GET',
@@ -52,6 +76,6 @@
 
         $.connection.hub.logging = true;
         $.connection.hub.start();
-</script>
+</script>*@
 
 <div>Controls</div><!-- Todo -->

@@ -1,5 +1,5 @@
-﻿using Core.Entities;
-using Core.EventResolution;
+﻿using Data.Models.Entities;
+using Data.Models.EventResolution;
 using System;
 
 namespace Core.Events

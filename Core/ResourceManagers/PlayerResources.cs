@@ -1,6 +1,6 @@
-﻿using Core.Entities;
-using Core.Entities.Humans;
-using Core.EventResolution;
+﻿using Data.Models.Gamestate;
+using Data.Models.Entities.Humans;
+using Data.Models.EventResolution;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;

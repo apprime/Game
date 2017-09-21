@@ -1,4 +1,4 @@
-﻿using Core.Entites.Monsters;
+﻿using Data.Models.Entities.Monsters;
 using System.Collections.Concurrent;
 
 namespace Core.ResourceManagers

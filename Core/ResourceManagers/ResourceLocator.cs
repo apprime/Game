@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Entites.Monsters;
-using Core.Entities.Humans;
-using Core.EventResolution;
-using Core.Entities;
+using Data.Models.Entities.Monsters;
+using Data.Models.Entities.Humans;
+using Data.Models.Gamestate;
+using Data.Models.EventResolution;
+using Data.Models.Entities;
 
 namespace Core.ResourceManagers
 {
@@ -11,22 +12,22 @@ namespace Core.ResourceManagers
     //We should have a property in EventResult that does this insead
     public static class ResourceLocator
     {
-        internal static void Add(Player p)
+        public static void Add(Player p)
         {
             PlayerResources.Add(p);
         }
 
-        internal static void Add(Monster monster)
+        public static void Add(Monster monster)
         {
             MonsterResources.Add(monster);
         }
 
-        internal static void Add(Scene scene)
+        public static void Add(Scene scene)
         {
             SceneResources.Add(scene);
         }
 
-        internal static void Remove(Player p)
+        public static void Remove(Player p)
         {
             PlayerResources.Remove(p);
         }

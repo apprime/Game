@@ -1,8 +1,4 @@
-﻿using Core.Entities;
-using Core.Entities.Humans;
-using Core.EventResolution;
-using Core.ResourceManagers;
-using System.Collections.Generic;
+﻿using Data.Models.EventResolution;
 
 namespace Core.Events
 {

@@ -1,15 +1,12 @@
 ﻿using System.Diagnostics;
-using Core.EventResolution;
-using Core.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 using Core.ResourceManagers;
 using Core.Factories;
 using Core.Events;
-using Core.Entities.Humans;
+using Data.Models.Entities.Humans;
 using System.Threading;
-using System;
+using Data.Models.Gamestate;
 
 namespace Core
 {

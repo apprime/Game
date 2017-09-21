@@ -1,6 +1,6 @@
 ﻿using Core;
-using Core.Entities.Humans;
-using Core.EventResolution;
+using Data.Models.Entities.Humans;
+using Data.Models.EventResolution;
 using Core.Events;
 using Core.ResourceManagers;
 using Core.Routers;

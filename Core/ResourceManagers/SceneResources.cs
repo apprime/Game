@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Data.Models.Entities;
+using Data.Models.Gamestate;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
