@@ -5,6 +5,7 @@ using Data.Models.Entities.Humans;
 using Data.Models.Gamestate;
 using Data.Models.EventResolution;
 using Data.Models.Entities;
+using Data.Models.Entities.EntityInterfaces;
 
 namespace Core.ResourceManagers
 {
@@ -44,7 +45,7 @@ namespace Core.ResourceManagers
             return PlayerResources.Get(id);
         }
 
-        public static object GetMonster(string id)
+        public static Monster GetMonster(string id)
         {
             return MonsterResources.Get(id);
         }
@@ -56,8 +57,9 @@ namespace Core.ResourceManagers
 
         private static Dictionary<char, Func<string, IEntity>> _get = new Dictionary<char, Func<string, IEntity>>
         {
-            { 'M', MonsterResources.Get },
+            {'M', MonsterResources.Get },
             {'P', PlayerResources.Get },
+            {'S', SceneResources.Get }
             //Add here
         };
 

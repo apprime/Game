@@ -1,6 +1,8 @@
-﻿namespace Data.Models.Entities
+﻿using Data.Models.Entities.EntityInterfaces;
+
+namespace Data.Models.Entities
 {
-    public interface IDestructible : IEntity
+    public interface IDestructible : IPositioned
     {
         HitPoints HitPoints { get; }
         Damage Mitigate(IAttack attacker, Damage payload);

@@ -1,13 +1,13 @@
-﻿using Data.Models.Gamestate;
+﻿using Data.Models.Entities.EntityInterfaces;
+using Data.Models.Gamestate;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Data.Models.Entities.Humans
 {
-    public class Player : IEntity, IActor
+    public class Player : IPositioned, IActor
     {
         //TODO: Dont allow this, use a proper way to instatiate objects
         public Player(string data)
@@ -17,6 +17,7 @@ namespace Data.Models.Entities.Humans
             Id = Id.FromString(dataParts[0]);
             Name = dataParts[1];
             Score = int.Parse(dataParts[2]);
+            ConnectionId = dataParts[3];
             Party = Enumerable.Empty<IEntity>();
         }
 

@@ -1,4 +1,5 @@
 ﻿using Data.Models.Entities;
+using Data.Models.Entities.EntityInterfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -48,13 +49,17 @@ namespace Data.Models.EventResolution
         public EventTargets Targets { get; set; }
 
         [JsonProperty]
-        public IEntity Actor { get; set; }
+        public IPositioned Actor { get; set; }
 
         [JsonProperty]
         public EventResolutionType Resolution { get; set; }
 
         [JsonProperty]
         public List<Delta> Deltas { get; set; }
+
+        [JsonProperty]
+        public string Message { get; set; }
+
         #endregion
 
         public string ToJson()

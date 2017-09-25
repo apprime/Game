@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Web.Hubs;
 using Web.Temp;
 
 namespace Web
 {
     public class Startup
     {
+        public static IConnectionManager ConnectionManager;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -37,7 +41,8 @@ namespace Web
                          ServiceLifetime.Transient));
 
             services.AddSingleton<IPostRepository, PostRepository>();
-
+            services.AddSingleton<GameWrapper, GameWrapper>();
+ 
             services.AddSignalR(options =>
             {
                 options.Hubs.EnableDetailedErrors = true;

@@ -10,8 +10,8 @@ namespace Data.Models.Entities
     /// </summary>
     public class Id
     {
-        private const int MaxLength = 20; //Todo: set these 
-        private const int MinLength = 20;
+        private const int MaxLength = 4; //Todo: set these 
+        private const int MinLength = 4;
         private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'S' };
 
         private Id(string raw)

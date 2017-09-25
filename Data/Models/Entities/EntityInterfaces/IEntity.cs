@@ -1,6 +1,6 @@
 ﻿using Data.Models.Gamestate;
 
-namespace Data.Models.Entities
+namespace Data.Models.Entities.EntityInterfaces
 {
     //TODO: Deal with the heirarchy of objects.
     //Preferably, game world should be highest, non targetable.
@@ -19,10 +19,5 @@ namespace Data.Models.Entities
         /// This name is what is displayed in game.
         /// </summary>
         string Name { get; }
-
-        /// <summary>
-        /// Gets the location of the entity
-        /// </summary>
-        Scene Scene{ get; set; }
     }
 }

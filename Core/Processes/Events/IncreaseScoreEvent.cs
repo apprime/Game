@@ -3,7 +3,7 @@ using Data.Models.EventResolution;
 using Core.ResourceManagers;
 using System;
 
-namespace Core.Events
+namespace Core.Processes.Events
 {
     //Todo: This event is obsolete. Remove when there are at least a few actual events to use
     public class IncreaseScoreEvent : Event

@@ -1,4 +1,4 @@
-﻿namespace Data.Models.Entities
+﻿namespace Data.Models.Entities.EntityInterfaces
 {
     public interface ILootable
     {

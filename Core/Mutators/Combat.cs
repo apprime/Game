@@ -1,4 +1,5 @@
 ﻿using Data.Models.Entities;
+using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Exceptions;
 using System;
 

@@ -2,7 +2,7 @@
 using Data.Models.EventResolution;
 using System;
 
-namespace Core.Events
+namespace Core.Processes.Events
 {
     internal class KillEvent : Event
     {

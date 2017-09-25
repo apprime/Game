@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using Data.Models.Gamestate;
+using Data.Models.Entities.EntityInterfaces;
+using Newtonsoft.Json;
 
 namespace Data.Models.Entities.Monsters
 {
-    public class Monster : IEntity, IActor, ILootable
+    [JsonObject]
+    public class Monster : IPositioned, IActor, ILootable
     {
         #region TodoRegion
 
@@ -13,14 +16,18 @@ namespace Data.Models.Entities.Monsters
 
         #endregion
 
+        [JsonProperty]
         public string Name { get; set; }
 
+        [JsonProperty]
         public string Description { get; set; }
 
+        [JsonProperty]
         public Id Id { get; protected set; }
 
         public Scene Scene { get; set; }
 
+        [JsonProperty]
         public HitPoints HitPoints { get; set; }
 
         public virtual Damage Attack(IDestructible target, Damage payload)

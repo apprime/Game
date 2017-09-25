@@ -1,4 +1,5 @@
 ﻿using Data.Models.Entities;
+using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Entities.Humans;
 using Newtonsoft.Json;
 using System.Collections.Generic;

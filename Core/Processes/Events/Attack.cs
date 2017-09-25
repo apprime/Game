@@ -3,8 +3,9 @@ using Data.Models.EventResolution;
 using Core.Mutators;
 using Core.ResourceManagers;
 using System;
+using Data.Models.Entities.EntityInterfaces;
 
-namespace Core.Events
+namespace Core.Processes.Events
 {
     internal class Attack : Event
     {
@@ -34,9 +35,6 @@ namespace Core.Events
             _actor = ResourceLocator.Get(_attackerId) as IAttack;
             _target = ResourceLocator.Get(_targetId) as IDestructible;
 
-            // Todo: This object doesn't feel natural. There should be a 
-            // process inside Damage taking in both actor and target and 
-            // the return should be the complete result.
             damage = Process(_actor, _target);
 
             return this;

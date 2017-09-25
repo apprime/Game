@@ -1,5 +1,5 @@
 ﻿using Data.Models.Exceptions;
-using Core.Events;
+using Core.Processes.Events;
 using System;
 
 namespace Core.Routers
@@ -18,13 +18,13 @@ namespace Core.Routers
                 case "increaseScore":
                     return new IncreaseScoreEvent(parts);
                 case "attack":
-                    return new Subscribe(parts);
+                    return new Attack(parts);
                 case "subscribe":
-                    //TODO: Subscribe (player)
-                    throw new TodoException("Player cannot join the game server yet");
+                    return new Subscribe(parts);
                 case "unsubscribe":
-                    //TODO: Unsubscribe (player)
-                    throw new TodoException("Players cannot leave the game server yet (mohaha)");
+                    return new Unsubscribe(parts);
+                case "getMonster":
+                    return new GetMonsterInfo(parts);
                 default:
                     throw new ArgumentException("Wrong Message Format or Content");    
             }

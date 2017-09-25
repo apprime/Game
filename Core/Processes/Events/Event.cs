@@ -1,6 +1,6 @@
 ﻿using Data.Models.EventResolution;
 
-namespace Core.Events
+namespace Core.Processes.Events
 {
     public abstract class Event
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Data.Models.Entities
+namespace Data.Models.Entities.EntityInterfaces
 {
     public interface IActor : IAttack, IDestructible
     {

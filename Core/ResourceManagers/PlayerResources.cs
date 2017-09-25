@@ -26,7 +26,13 @@ namespace Core.ResourceManagers
 
         internal static Player Get(string id)
         {
-            return _players[id];
+            Player fetchedValue;
+            if(!_players.TryGetValue(id, out fetchedValue))
+            {
+                return null;
+            }
+
+            return fetchedValue;
         }
 
         internal static void Add(Player player)

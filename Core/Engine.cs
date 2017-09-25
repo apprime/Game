@@ -1,12 +1,8 @@
-﻿using System.Diagnostics;
+﻿using Core.Processes.Events;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Core.ResourceManagers;
-using Core.Factories;
-using Core.Events;
-using Data.Models.Entities.Humans;
+using System.Diagnostics;
 using System.Threading;
-using Data.Models.Gamestate;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -18,7 +14,7 @@ namespace Core
         public bool run = false;
         private int _tickRate = 1000;
         private int _threadNumber = 1;
-        private int MaxQueueSize = 100;
+        private int MaxQueueSize = 1;
         public AutoResetEvent _loopTimer;
         private Timer _stateTimer;
 
@@ -42,12 +38,7 @@ namespace Core
             for (var i = 0; i < _threadNumber; i++)
             {
                 var eventChunk = _eventList.DequeueChunk(chunkSize);
-                var t = Task.Factory.StartNew(
-                    () => 
-                    {
-                        ProcessBatch(eventChunk);
-                    });
-                t.Start();
+                Task.Factory.StartNew(() => ProcessBatch(eventChunk));
             }
         }
 
@@ -89,33 +80,6 @@ namespace Core
         {
             Debug.WriteLine("Stopping Engine");
             _stateTimer.Dispose();
-        }
-
-        public void Subscribe(Player p)
-        {
-            //TODO: Crashing on duplicates
-            Debug.WriteLine("Subscribing " +p.Name);
-            ResourceLocator.Add(p);
-
-            //TEMPORARY WORKAROUND TO ALWAYS SPAWN A MONSTER WHEN PLAYER SUBSCRIBES:
-            var monster = MonsterFactory.Create("A");
-            ResourceLocator.Add(monster);
-
-            var todoScene = new Scene();
-            todoScene.Enemies.Add(monster);
-            todoScene.Players.Add(p);
-
-            p.Scene = todoScene;
-        }
-
-        //Todo: This is trash. In order to properly remove a player, 
-        // a) just extract them from the scene they are in and then remove
-        // b) Mark them as offline, until all other players leaves scene, then remove
-        public void Unsubscribe(Player p)
-        {
-            //TODO: Crashes on key not found
-            Debug.WriteLine("Unsubscribing " +p.Name);
-            ResourceLocator.Remove(p);
         }
     }
 }

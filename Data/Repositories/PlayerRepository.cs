@@ -1,4 +1,5 @@
-﻿using Data.Models.Entities.Humans;
+﻿using Data.Models.Entities;
+using Data.Models.Entities.Humans;
 using Data.Models.Exceptions;
 
 namespace Data.Repositories
@@ -7,10 +8,10 @@ namespace Data.Repositories
     {
         //TODO: Inject DataAccessor here.
         //TODO: Cache
-        public Player Get(string id)
+        public Player Get(Id id, string connectionId)
         {
             //Todo: Ok, got some stuff to do in here
-            return new Player("123/PlayerMcPlayerface/1");
+            return new Player("P123/PlayerMcPlayerface/1/"+connectionId);
         }
 
         public Player Add(string id)
