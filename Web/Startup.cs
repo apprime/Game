@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Web.Hubs;
 using Web.Temp;
 
@@ -12,8 +12,6 @@ namespace Web
 {
     public class Startup
     {
-        public static IConnectionManager ConnectionManager;
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -31,23 +29,14 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             //TEMP
-            var settings = new JsonSerializerSettings();
-            settings.ContractResolver = new SignalRContractResolver();
-
-            var serializer = JsonSerializer.Create(settings);
-
-            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
-                         provider => serializer,
-                         ServiceLifetime.Transient));
-
             services.AddSingleton<IPostRepository, PostRepository>();
-            services.AddSingleton<GameWrapper, GameWrapper>();
- 
-            services.AddSignalR(options =>
-            {
-                options.Hubs.EnableDetailedErrors = true;
-            });
             // END TEMP
+            services.AddSingleton<GameWrapper, GameWrapper>();
+
+            services.AddSignalR(option =>
+            {
+                option.JsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             // Add framework services.
             services.AddMvc();
@@ -73,7 +62,13 @@ namespace Web
             app.UseStaticFiles();
             app.UseMvc();
             app.UseWebSockets();
-            app.UseSignalR();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<PlayerHub>("PlayerHub");
+                routes.MapHub<GameHub>("GameHub");
+                routes.MapHub<MonsterHub>("MonsterHub");
+                routes.MapHub<ChatHub>("ChatHub");
+            });
         }
     }
 }

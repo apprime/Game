@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Web.Hubs
 {
-    public class Game : Hub
+    public class GameHub : Hub
     {
-        public Game(GameWrapper wrapper)
+        public GameHub(GameWrapper wrapper)
         {
         }
 

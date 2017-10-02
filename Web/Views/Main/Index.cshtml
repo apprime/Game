@@ -21,7 +21,6 @@
         function addEvent(event) {
             
             event = JSON.parse(event);
-            console.log("Callback!", event);
             var appendString;
             if (event.Deltas[0]) {
                 appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'

@@ -6,7 +6,6 @@
     using Microsoft.AspNetCore.SignalR;
     using System;
     using System.Reflection;
-    using Microsoft.AspNetCore.SignalR.Infrastructure;
     using Newtonsoft.Json.Serialization;
 
     public class PostsHub : Hub
@@ -17,12 +16,12 @@
     public class PostsController : Controller
     {
         private IPostRepository _postRepository { get; set; }
-        private IConnectionManager _connectionManager { get; set; }
+        private IHubContext<PostsHub> _hubContext { get; set; }
 
-        public PostsController(IPostRepository postRepository, IConnectionManager connectionManager)
+        public PostsController(IPostRepository postRepository, IHubContext<PostsHub> hubContext)
         {
             _postRepository = postRepository;
-            _connectionManager = connectionManager;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -42,7 +41,7 @@
         public void AddPost(Post post)
         {
             _postRepository.AddPost(post);
-            _connectionManager.GetHubContext<PostsHub>().Clients.All.publishPost(post);
+            _hubContext.Clients.All.InvokeAsync("publishPost", post);
         }
     }
 
@@ -91,28 +90,6 @@
         public Post GetPost(int id)
         {
             return _posts.FirstOrDefault(p => p.Id == id);
-        }
-    }
-
-    public class SignalRContractResolver : IContractResolver
-    {
-        private readonly Assembly _assembly;
-        private readonly IContractResolver _camelCaseContractResolver;
-        private readonly IContractResolver _defaultContractSerializer;
-
-        public SignalRContractResolver()
-        {
-            _defaultContractSerializer = new DefaultContractResolver();
-            _camelCaseContractResolver = new CamelCasePropertyNamesContractResolver();
-            _assembly = typeof(Connection).GetTypeInfo().Assembly;
-        }
-
-        public JsonContract ResolveContract(Type type)
-        {
-            if (type.GetTypeInfo().Assembly.Equals(_assembly))
-                return _defaultContractSerializer.ResolveContract(type);
-
-            return _camelCaseContractResolver.ResolveContract(type);
         }
     }
 }

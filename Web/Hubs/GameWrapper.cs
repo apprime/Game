@@ -3,7 +3,7 @@ using Core.ResourceManagers;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Infrastructure;
+using Microsoft.AspNetCore.Sockets;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,24 +11,22 @@ namespace Web.Hubs
 {
     public class GameWrapper
     {
-        private IConnectionManager _manager;
+        private IHubContext<PlayerHub> _hubContext;
 
-        public GameWrapper(IConnectionManager manager)
+        public GameWrapper(IHubContext<PlayerHub> hubContext)
         {
-            _manager = manager;
+            _hubContext = hubContext;
             Event.EventResolved += Broadcast;
         }
 
         public void Broadcast(EventResult result)
         {
-            IHubContext context = _manager.GetHubContext<Game>();
-
-            IEnumerable<Player> targets = ResourceLocator.GetPlayers(result);
+            IEnumerable<Player> targets = ResourceLocator.GetPlayers(result) ?? Enumerable.Empty<Player>();
             foreach (var p in targets.Where(t => t != null))
             {
-                context.Clients
-                       .Client(p.ConnectionId)
-                       .Broadcast(result.ToJson());
+                _hubContext.Clients
+                           .Client(p.ConnectionId)
+                           .InvokeAsync("Broadcast", result.ToJson());
             }
         }
     }

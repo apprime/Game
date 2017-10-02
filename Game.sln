@@ -1,18 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Web", "Web\Web.xproj", "{46A2FC19-2E90-4BF9-A24D-755321B55630}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Core", "Core\Core.xproj", "{A1BB30A7-C9B6-4AAD-AE7B-3A35442B665A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84E78B32-4EE2-425E-A7DD-12E304713395}"
 	ProjectSection(SolutionItems) = preProject
+		API Docs.txt = API Docs.txt
 		BigFakkingTodoList.txt = BigFakkingTodoList.txt
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Data", "Data\Data.xproj", "{1ED410B3-E1DF-40B0-9125-78291381601E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{46A2FC19-2E90-4BF9-A24D-755321B55630}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{A1BB30A7-C9B6-4AAD-AE7B-3A35442B665A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{1ED410B3-E1DF-40B0-9125-78291381601E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02A4F35C-F7D2-480D-AFF0-1B11529939AA}
 	EndGlobalSection
 EndGlobal

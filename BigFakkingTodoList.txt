@@ -54,3 +54,11 @@ but also for systematic updates of various kinds, like player stats, server stat
 - Rollback gamestate - server should keep a saved cache so that the restarting application can load itself.
 - Normal sql for the web project. It needs to serve content to REST API.
 
+7.
+API Documentation.
+- Split API into logical hubs
+- DOcument each method
+	+ Name
+	+ Description
+	+ Input param
+	+ Return values
