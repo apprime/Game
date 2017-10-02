@@ -6,11 +6,8 @@
 
 <ul id="eventList"></ul>
 
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
-<script src="/signalr/hubs"></script>
 <script type="text/javascript">
-      
+    $(function () {
         function addPostsList(posts) {
             $.each(posts, function (index) {
                 var post = posts[index];
@@ -19,14 +16,14 @@
         }
 
         function addEvent(event) {
-            
+
             event = JSON.parse(event);
             var appendString;
             if (event.Deltas[0]) {
                 appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'
             } else {
                 event.Message = JSON.parse(event.Message);
-                appendString = '<li>' + event.Message.Name + " - " + event.Message.Description + ", " + event.Message.HitPoints.Current +"/" +event.Message.HitPoints.Current +'hp </li><br>'
+                appendString = '<li>' + event.Message.Name + " - " + event.Message.Description + ", " + event.Message.HitPoints.Current + "/" + event.Message.HitPoints.Current + 'hp </li><br>'
 
             }
             $("#eventList").append(appendString);
@@ -36,34 +33,38 @@
         var monsterId = "M123";
         var subscribeEvent = "subscribe;" + playerId;
         var unsubscribeEvent = "unsubscribe;" + playerId;
-        var getMonsterEvent = "getMonster;" + playerId +";" +monsterId;
+        var getMonsterEvent = "getMonster;" + playerId + ";" + monsterId;
 
-        function pushedContent(content) {   
+        function pushedContent(content) {
             console.log("Incoming data: ", content);
         }
 
-        var hub = $.connection.game;
 
-        hub.client.Broadcast = addEvent;
+        let playerConnection = new signalR.HttpConnection('http://localhost:1337/playerHub');
+        let gameConnection = new signalR.HttpConnection('http://localhost:1337/gameHub');
+        var playerHub = new signalR.HubConnection(playerConnection);
+        var gameHub = new signalR.HubConnection(gameConnection);
+
+        playerHub.on("Broadcast", addEvent);
 
         $("#subscribe").click(function () {
             console.log("Has teh sub");
-            hub.server.push(subscribeEvent);
+            gameHub.invoke("Push", subscribeEvent);
         });
 
         $("#unsubscribe").click(function () {
             console.log("Has teh unsub");
-            hub.server.push(unsubscribeEvent);
+            gameHub.invoke("Push", unsubscribeEvent);
         });
 
         $("#getMonster").click(function () {
             console.log("Has teh monster");
-            hub.server.push(getMonsterEvent);
+            gameHub.invoke("Push", getMonsterEvent);
         });
 
-        $.connection.hub.logging = true;
-        $.connection.hub.start();
-
+        gameHub.start();
+        playerHub.start();
+    });
 </script>
 @*<script type="text/javascript">
         $.ajax({
