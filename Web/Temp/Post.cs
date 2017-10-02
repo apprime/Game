@@ -4,9 +4,6 @@
     using System.Linq;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SignalR;
-    using System;
-    using System.Reflection;
-    using Newtonsoft.Json.Serialization;
 
     public class PostsHub : Hub
     {
