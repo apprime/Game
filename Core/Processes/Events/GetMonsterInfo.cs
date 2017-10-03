@@ -4,6 +4,8 @@ using Data.Models.EventResolution;
 using Core.ResourceManagers;
 using Data.Models.Entities.Humans;
 using Newtonsoft.Json;
+using Data.Models.Exceptions;
+using System.Linq;
 
 namespace Core.Processes.Events
 {
@@ -15,8 +17,9 @@ namespace Core.Processes.Events
         Id _playerId;
 
         EventTargets _eventTargets = EventTargets.Player;
+        private bool playerMayViewMonster => _player.Scene.Enemies.Any(i => i.Id.Equals(_monsterId));
 
-        public GetMonsterInfo(string[] parts) : this(Id.FromString(parts[1]), Id.FromString(parts[2])) { }
+        public GetMonsterInfo(string[] parts) : this(Id.FromString(parts[0]), Id.FromString(parts[1])) { }
 
         public GetMonsterInfo(Id player, Id monsterId)
         {
@@ -39,6 +42,11 @@ namespace Core.Processes.Events
 
         protected override Event Resolve()
         {
+            if(!playerMayViewMonster)
+            {
+                throw new TodoException("Handle error thrown by player attempting illegal action");
+            }
+
             Result.Actor = _player;
             Result.Targets = _eventTargets;
             Result.Message = JsonConvert.SerializeObject(_monster);

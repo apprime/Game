@@ -19,8 +19,8 @@ namespace Core.Processes.Events
 
         public IncreaseScoreEvent(string[] parts)
         {
-            currentPlayer = new Player(parts[1]);
-            ScoreAmount = int.Parse(parts[2]);
+            currentPlayer = new Player(parts[0]);
+            ScoreAmount = int.Parse(parts[1]);
             ScoreCanIncrease = (i) => i.Score + ScoreAmount <= MaxScore;
         }
 

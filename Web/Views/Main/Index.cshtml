@@ -31,39 +31,43 @@
 
         var playerId = "P123";
         var monsterId = "M123";
-        var subscribeEvent = "subscribe;" + playerId;
-        var unsubscribeEvent = "unsubscribe;" + playerId;
-        var getMonsterEvent = "getMonster;" + playerId + ";" + monsterId;
+        var subscribeEvent = "12subscribe|" + playerId;
+        var unsubscribeEvent = "12unsubscribe|" + playerId;
+        var getMonsterEvent = "31getinfo|" + playerId + "/" + monsterId;
 
         function pushedContent(content) {
             console.log("Incoming data: ", content);
         }
 
-
         let playerConnection = new signalR.HttpConnection('http://localhost:1337/playerHub');
         let gameConnection = new signalR.HttpConnection('http://localhost:1337/gameHub');
+        let monsterConnection = new signalR.HttpConnection('http://localhost:1337/monsterHub');
         var playerHub = new signalR.HubConnection(playerConnection);
         var gameHub = new signalR.HubConnection(gameConnection);
+        var monsterHub = new signalR.HubConnection(monsterConnection);
 
-        playerHub.on("Broadcast", addEvent);
+        playerHub.on("broadcast", addEvent);
+        playerHub.on("connected", (a) => console.log(a));
+        playerHub.on("disconnected", (a) => console.log(a));
 
         $("#subscribe").click(function () {
             console.log("Has teh sub");
-            gameHub.invoke("Push", subscribeEvent);
+            playerHub.invoke("subscribe", subscribeEvent);
         });
 
         $("#unsubscribe").click(function () {
             console.log("Has teh unsub");
-            gameHub.invoke("Push", unsubscribeEvent);
+            playerHub.invoke("unsubscribe", unsubscribeEvent);
         });
 
         $("#getMonster").click(function () {
             console.log("Has teh monster");
-            gameHub.invoke("Push", getMonsterEvent);
+            monsterHub.invoke("getInfo", getMonsterEvent);
         });
 
         gameHub.start();
         playerHub.start();
+        monsterHub.start();
     });
 </script>
 @*<script type="text/javascript">

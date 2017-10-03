@@ -18,7 +18,7 @@ namespace Core.Processes.Events
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public Unsubscribe(string[] parts) : this(Id.FromString(parts[1])) { } //This CTOR only converts string array to real params.
+        public Unsubscribe(string[] parts) : this(Id.FromString(parts[0])) { } //This CTOR only converts string array to real params.
 
         internal Unsubscribe(Id player)
         {

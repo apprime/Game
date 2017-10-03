@@ -1,5 +1,9 @@
-﻿using Data.Models.Entities.Humans;
+﻿using Core;
+using Core.Routers;
+using Data.Models.Entities.Humans;
 using Microsoft.AspNetCore.SignalR;
+using System;
+using System.Threading.Tasks;
 
 namespace Web.Hubs
 {
@@ -10,14 +14,28 @@ namespace Web.Hubs
 
         }
 
-        public void Subscribe(Player player)
+        public override Task OnConnectedAsync()
         {
-
+            return Clients.All.InvokeAsync("connected", "Yo has connected");
         }
 
-        public void Unsubscribe(Player player)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
+            return Clients.All.InvokeAsync("disconnected", "Yo has disconnected");
+        }
 
+        public void Subscribe(string eventString)
+        {
+            eventString = eventString + "/" + Context.ConnectionId;
+            var e = EventParser.Parse(eventString);
+            Engine.Instance.Push(e);
+        }
+
+        public void Unsubscribe(string eventString)
+        {
+            eventString = eventString + "/" + Context.ConnectionId;
+            var e = EventParser.Parse(eventString);
+            Engine.Instance.Push(e);
         }
 
         public void Create(Player player)

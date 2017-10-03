@@ -49,5 +49,16 @@ namespace Data.Models.Entities
                 throw new ArgumentException("The prefix of given raw Id is not a valid prefix");
             }
         }
+
+        public override bool Equals(object input)
+        {
+            if(input is Id that)
+            {
+                return Prefix.Equals(that.Prefix) && Trunk.Equals(that.Trunk);
+            }
+
+            //Not the correct type
+            return false;
+        }
     }
 }

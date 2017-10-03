@@ -1,4 +1,6 @@
-﻿using Data.Models.Entities;
+﻿using Core;
+using Core.Routers;
+using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.Entities.Monsters;
 using Microsoft.AspNetCore.SignalR;
@@ -12,9 +14,11 @@ namespace Web.Hubs
 
         }
 
-        public void GetInfo(Id monsterId)
+        public void GetInfo(string eventString)
         {
-
+            eventString = eventString + "/" + Context.ConnectionId;
+            var e = EventParser.Parse(eventString);
+            Engine.Instance.Push(e);
         }
 
         public void Loot(Id monsterId)

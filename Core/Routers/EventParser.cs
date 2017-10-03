@@ -1,33 +1,60 @@
-﻿using Data.Models.Exceptions;
-using Core.Processes.Events;
+﻿using Core.Processes.Events;
 using System;
+using Data.Models.EventResolution;
+using Data.Models.Exceptions;
+using System.Collections.Generic;
 
 namespace Core.Routers
 {
     public static class EventParser
     {
+        private static Dictionary<string, Func<string[], Event>> PlayerEvents = new Dictionary<string, Func<string[], Event>>
+        {
+            { "subscribe", s => new Subscribe(s) },
+            { "unsubscribe", s => new Unsubscribe(s) }
+        };
+
+        private static Dictionary<string, Func<string[], Event>> MonsterEvents = new Dictionary<string, Func<string[], Event>>
+        {
+            { "getinfo", s => new GetMonsterInfo(s) },
+        };
+
+        private static Dictionary<string, Func<string[], Event>> TodoEvents = new Dictionary<string, Func<string[], Event>>
+        {
+            { "increasescore", s => new IncreaseScoreEvent(s) },
+            { "attack", s => new Attack(s) }
+        };
+
+        private static Dictionary<EventCategory, Dictionary<string, Func<string[], Event>>> Categories = new Dictionary<EventCategory, Dictionary<string, Func<string[], Event>>>
+        {
+            {EventCategory.Player, PlayerEvents },
+            {EventCategory.Monster, MonsterEvents },
+            {EventCategory.None, TodoEvents }
+        };
+
         public static Event Parse(string message)
         {
-            //Todo: We expect some sort of message from front. TBD how to parse it.
-            var parts = message.Split(';');
+            var separator = message.IndexOf('|');
 
-            //Parts1 should be Act: 
-            switch(parts[0])
+            if (separator == -1)
             {
-                //Todo: Remember to remove this event!
-                case "increaseScore":
-                    return new IncreaseScoreEvent(parts);
-                case "attack":
-                    return new Attack(parts);
-                case "subscribe":
-                    return new Subscribe(parts);
-                case "unsubscribe":
-                    return new Unsubscribe(parts);
-                case "getMonster":
-                    return new GetMonsterInfo(parts);
-                default:
-                    throw new ArgumentException("Wrong Message Format or Content");    
+                throw new TodoException("Handle this erronenous input");
             }
+
+            var header = message.Substring(0, separator);
+            var tail = message.Substring(separator+1);
+
+            return Parse(EventHeader.FromString(header), tail);
+        }
+
+        public static Event Parse(EventHeader head, string tail)
+        {
+            var eventData = tail.Split('/');
+
+            //This looks kinda wonky, but is O(n) and handles better than a switch.
+            return Categories[head.Category]
+                             [head.Action]
+                             (eventData);
         }
     }
 }

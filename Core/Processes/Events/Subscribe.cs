@@ -20,7 +20,7 @@ namespace Core.Processes.Events
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public Subscribe(string[] parts) : this(Id.FromString(parts[1]), parts[2]) { } //This CTOR only converts string array to real params.
+        public Subscribe(string[] parts) : this(Id.FromString(parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
 
         internal Subscribe(Id player, string connectionId)
         {
