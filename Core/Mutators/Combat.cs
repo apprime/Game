@@ -14,6 +14,11 @@ namespace Core.Mutators
     {
         private static Predicate<IDestructible> isDead = i => i.HitPoints.Current <= 0;
 
+        internal static void Setup(Damage damage)
+        {
+            throw new NotImplementedException();
+        }
+
         public static Damage Attack(IAttack attacker, Damage payload)
         {
             payload.Actor = attacker;
@@ -29,11 +34,6 @@ namespace Core.Mutators
             payload.Target = defender;
             defender.HitPoints.Current -= payload.Effective;
             return payload;
-        }
-
-        internal static void Setup(Damage damage)
-        {
-            throw new NotImplementedException();
         }
 
         internal static void Cleanup(Damage damage)

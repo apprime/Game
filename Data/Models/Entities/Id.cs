@@ -22,8 +22,8 @@ namespace Data.Models.Entities
             Trunk = raw.Substring(1);
         }
 
-        public char Prefix { get; private set; }
-        public string Trunk { get; private set; }
+        public readonly char Prefix;
+        public readonly string Trunk;
 
         //Todo: This should be replaced by some sort of Type input and an actual generation of Id hash;
         public static Id FromString(string input)
@@ -59,6 +59,22 @@ namespace Data.Models.Entities
 
             //Not the correct type
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            //TODO: I am undecided on whether Trunk should be unique on its own
+            // If it is, then these acrobatics are unnecessary.
+
+            //TODO2 (save for year 2140): If there are large lists of these Id's (unknown) we might need a stronger hashing here.
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Trunk.GetHashCode();
+                hash = hash * 23 + Prefix.GetHashCode();
+                return hash;
+            }
+            
         }
     }
 }
