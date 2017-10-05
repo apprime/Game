@@ -1,0 +1,41 @@
+﻿using Data.Models.EventResolution;
+
+namespace Core.Processes.Events
+{
+    public abstract class ReadonlyEvent
+    {
+        protected EventResult Result = new EventResult();
+
+        public delegate void EventHandler(EventResult result);
+        public static event EventHandler EventResolved;
+
+        public virtual ReadonlyEvent Process()
+        {
+            GatherData();
+            Resolve();
+            Broadcast();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Fetch or create the needed resources
+        /// </summary>
+        /// <returns></returns>
+        protected abstract ReadonlyEvent GatherData();
+
+        /// <summary>
+        /// Create an eventResolution object for broadcasting
+        /// </summary>
+        /// <returns></returns>
+        protected abstract ReadonlyEvent Resolve();
+
+        /// <summary>
+        /// Broadcast the change set to all relevant targets.
+        /// </summary>
+        protected virtual void Broadcast()
+        {
+            EventResolved?.Invoke(Result);
+        }
+    }
+}

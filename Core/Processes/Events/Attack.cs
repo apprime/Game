@@ -17,7 +17,6 @@ namespace Core.Processes.Events
 
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player | EventTargets.Nearby | EventTargets.Party;
-        private Predicate<IDestructible> isDead = i => i.HitPoints.Current <= 0;
         #endregion
 
         public Attack(string[] parts) : this(Id.FromString(parts[1]), Id.FromString(parts[2])) { } //This CTOR only converts string array to real params.
@@ -28,19 +27,19 @@ namespace Core.Processes.Events
             _targetId = target;
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             Validate();
 
             _actor = ResourceLocator.Get(_attackerId) as IAttack;
             _target = ResourceLocator.Get(_targetId) as IDestructible;
 
-            damage = Process(_actor, _target);
+            
 
             return this;
         }
 
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
             Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(damage), Targets = new IEntity[] { _target } });
             Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = damage.ToString(), Targets = ResourceLocator.GetPlayers(Result) });
@@ -53,14 +52,9 @@ namespace Core.Processes.Events
 
         protected override Event Persist()
         {
-            _target.HitPoints.Current -= damage.Effective;
+            damage = Process(_actor, _target);
 
-            if(isDead(_target))
-            {
-                _target.HitPoints.Current = 0;
-                var killEvent = new KillEvent(_target.Id, _actor.Id);
-                Engine.Instance.Push(killEvent);
-            }
+
 
             return this;
         }

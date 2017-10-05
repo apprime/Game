@@ -28,7 +28,7 @@ namespace Core.Processes.Events
             _connectionId = connectionId;
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             _player = ResourceLocator.Get(_id) as Player;
 
@@ -44,7 +44,7 @@ namespace Core.Processes.Events
             return this;
         }
 
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
             var val = _alreadyLoggedIn ? "Already logged in" : "OK";
             Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = val, Targets = ResourceLocator.GetPlayers(Result) });

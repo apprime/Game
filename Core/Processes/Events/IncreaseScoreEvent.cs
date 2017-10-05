@@ -24,7 +24,7 @@ namespace Core.Processes.Events
             ScoreCanIncrease = (i) => i.Score + ScoreAmount <= MaxScore;
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             if(ScoreCanIncrease(currentPlayer))
             {
@@ -37,7 +37,7 @@ namespace Core.Processes.Events
             return this;
         }
 
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
             //TODO: Handle locking / writing to resource 
             var player = ResourceLocator.GetPlayer(currentPlayer.Id.Trunk);

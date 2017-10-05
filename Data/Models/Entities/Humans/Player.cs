@@ -49,29 +49,13 @@ namespace Data.Models.Entities.Humans
 
         public HitPoints HitPoints { get; }
 
-        public Damage Attack(IDestructible target, Damage payload)
-        {
-            const string attackName = "Placeholder strike";
-            const int damage = 2;
-            DamageType dt = DamageType.Physical;
 
-            payload.Actor = this;
-            payload.Total = damage;
-            payload.DamageType = dt.ToString("G");
-            payload.Name = attackName;
-            payload.Target = target;
-
-            return payload;
-        }
-
-        //TODO: Placeholder. This is to be used for AoE and other special effects
-        public IEnumerable<Damage> Attack(IEnumerable<IDestructible> targets, Damage payload)
-        {
-            foreach (var t in targets)
-            {
-               yield return Attack(t, new Damage());
-            }
-        }
+        //Todo: These are values needed by CombatMutator. 
+        //They should exist on a spell or monster only. (Player is not IAttack)
+        public int Damage { get; } = 2;
+        public string AttackName { get; } = "Placeholder strike";
+        public DamageType DamageType { get; } = DamageType.Physical;
+ 
 
         public Damage Mitigate(IAttack attacker, Damage payload)
         {

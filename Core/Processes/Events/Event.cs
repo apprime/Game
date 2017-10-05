@@ -1,36 +1,22 @@
-﻿using Data.Models.EventResolution;
-
-namespace Core.Processes.Events
+﻿namespace Core.Processes.Events
 {
-    public abstract class Event
+    /// <summary>
+    /// An Event is a simple extension to ReadonlyEvent.
+    /// It adds a method inside the Process which arranges for 
+    /// mutated data to be set
+    /// </summary>
+    public abstract class Event : ReadonlyEvent
     {
-        protected EventResult Result = new EventResult();
-
-        public delegate void EventHandler(EventResult result);
-        public static event EventHandler EventResolved;
-
-        internal Event Process()
+        public override ReadonlyEvent Process()
         {
-            this.Dispatch()
-                .Resolve()
-                .Persist()
-                .Broadcast();
+            GatherData();
+            Resolve();
+            Persist();
+            Broadcast();
 
             return this;
         }
-
-        /// <summary>
-        /// Fetch or create the needed resources
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Event Dispatch();
-
-        /// <summary>
-        /// Create an eventResolution object for broadcasting
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Event Resolve();
-
+        
         /// <summary>
         /// Persist the change set in memory
         /// (i.e. make the changes)
@@ -40,13 +26,5 @@ namespace Core.Processes.Events
         /// </summary>
         /// <returns></returns>
         protected abstract Event Persist();
-
-        /// <summary>
-        /// Broadcast the change set to all relevant targets.
-        /// </summary>
-        internal virtual void Broadcast()
-        {
-            EventResolved?.Invoke(Result);
-        }
     }
 }

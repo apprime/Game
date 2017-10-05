@@ -8,31 +8,31 @@ namespace Core.Routers
 {
     public static class EventParser
     {
-        private static Dictionary<string, Func<string[], Event>> PlayerEvents = new Dictionary<string, Func<string[], Event>>
+        private static Dictionary<string, Func<string[], ReadonlyEvent>> PlayerEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
         {
             { "subscribe", s => new Subscribe(s) },
             { "unsubscribe", s => new Unsubscribe(s) }
         };
 
-        private static Dictionary<string, Func<string[], Event>> MonsterEvents = new Dictionary<string, Func<string[], Event>>
+        private static Dictionary<string, Func<string[], ReadonlyEvent>> MonsterEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
         {
             { "getinfo", s => new GetMonsterInfo(s) },
         };
 
-        private static Dictionary<string, Func<string[], Event>> TodoEvents = new Dictionary<string, Func<string[], Event>>
+        private static Dictionary<string, Func<string[], ReadonlyEvent>> TodoEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
         {
             { "increasescore", s => new IncreaseScoreEvent(s) },
             { "attack", s => new Attack(s) }
         };
 
-        private static Dictionary<EventCategory, Dictionary<string, Func<string[], Event>>> Categories = new Dictionary<EventCategory, Dictionary<string, Func<string[], Event>>>
+        private static Dictionary<EventCategory, Dictionary<string, Func<string[], ReadonlyEvent>>> Categories = new Dictionary<EventCategory, Dictionary<string, Func<string[], ReadonlyEvent>>>
         {
             {EventCategory.Player, PlayerEvents },
             {EventCategory.Monster, MonsterEvents },
             {EventCategory.None, TodoEvents }
         };
 
-        public static Event Parse(string message)
+        public static ReadonlyEvent Parse(string message)
         {
             var separator = message.IndexOf('|');
 
@@ -47,7 +47,7 @@ namespace Core.Routers
             return Parse(EventHeader.FromString(header), tail);
         }
 
-        public static Event Parse(EventHeader head, string tail)
+        public static ReadonlyEvent Parse(EventHeader head, string tail)
         {
             var eventData = tail.Split('/');
 

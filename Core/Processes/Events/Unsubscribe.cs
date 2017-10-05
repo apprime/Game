@@ -1,4 +1,5 @@
-﻿using Core.ResourceManagers;
+﻿using Core.Mutators;
+using Core.ResourceManagers;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
@@ -25,27 +26,19 @@ namespace Core.Processes.Events
             _player = player;
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             _actor = ResourceLocator.Get(_player) as Player;
-
-            if(_actor == null)
-            {
-                _alreadyLoggedOut = true;
-            }
-
-
             return this;
         }
 
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
-            var val = _alreadyLoggedOut ? "Already logged out" : "OK";
             var delta = new Delta
             {
                 Actor = _actor,
                 Key = "Logout",
-                Value = val,
+                Value = SetLogoutMessage(),
                 Targets = ResourceLocator.GetPlayers(Result)
             };
 
@@ -65,6 +58,19 @@ namespace Core.Processes.Events
             }
 
             return this;
+        }
+
+        private string SetLogoutMessage()
+        {
+            //Actor being null means they were not located
+            if (_actor == null)
+            {
+                return "Already logged out";
+            }
+            else
+            {
+                return "Ok";
+            }
         }
     }
 }

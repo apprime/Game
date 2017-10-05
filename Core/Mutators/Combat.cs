@@ -1,4 +1,5 @@
-﻿using Data.Models.Entities;
+﻿using Core.Processes.Events;
+using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Exceptions;
 using System;
@@ -11,14 +12,23 @@ namespace Core.Mutators
     /// </summary>
     public static class Combat
     {
+        private static Predicate<IDestructible> isDead = i => i.HitPoints.Current <= 0;
+
         public static Damage Attack(IAttack attacker, Damage payload)
         {
-            throw new TodoException("Cannot attack yet");    
+            payload.Actor = attacker;
+            payload.Total = attacker.Damage;
+            payload.DamageType = attacker.DamageType.ToString("G");
+            payload.Name = attacker.AttackName;
+
+            return payload;
         }
 
         public static Damage Mitigate(IDestructible defender, Damage payload)
         {
-            throw new TodoException("Cannot defend yet");
+            payload.Target = defender;
+            defender.HitPoints.Current -= payload.Effective;
+            return payload;
         }
 
         internal static void Setup(Damage damage)
@@ -28,7 +38,13 @@ namespace Core.Mutators
 
         internal static void Cleanup(Damage damage)
         {
-            throw new NotImplementedException();
+            var poorTarget = damage.Target;
+            if (isDead(poorTarget))
+            {
+                poorTarget.HitPoints.Current = 0;
+                var killEvent = new KillEvent(poorTarget.Id, damage.Actor.Id);
+                Engine.Instance.Push(killEvent);
+            }
         }
     }
 }

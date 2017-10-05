@@ -8,7 +8,7 @@ namespace Core
 {
     public class Engine
     {
-        private BatchQueue<Event> _eventList;
+        private BatchQueue<ReadonlyEvent> _eventList;
 
         //TODO: We want to be able to set these values in config I suppose?
         public bool run = false;
@@ -27,7 +27,7 @@ namespace Core
 
         private Engine()
         {
-            _eventList = new BatchQueue<Event>();
+            _eventList = new BatchQueue<ReadonlyEvent>();
             _loopTimer = new AutoResetEvent(false);
         }
 
@@ -42,7 +42,7 @@ namespace Core
             }
         }
 
-        private void ProcessBatch(IEnumerable<Event> batch)
+        private void ProcessBatch(IEnumerable<ReadonlyEvent> batch)
         {
             foreach(var item in batch)
             {
@@ -50,7 +50,7 @@ namespace Core
             }
         }
 
-        public void Push(Event e)
+        public void Push(ReadonlyEvent e)
         {
             _eventList.Enqueue(e);
             //We could use an event to trigger if the queue grows too big, but since we know when we are adding to it, I don't think we need it.
@@ -66,20 +66,6 @@ namespace Core
                 Tick();
                 _loopTimer.Reset(); //Don't double dip with events.
             }
-        }
-
-        //Todo: This is probably not needed, but nice to have for dev purposes
-        public void StartEngine()
-        {
-            Debug.WriteLine("Starting Engine");
-            _stateTimer = new Timer((a) => Tick(), _loopTimer, _tickRate, _tickRate);
-        }
-
-        //Todo: This is probably not needed, but nice to have for dev purposes
-        public void StopEngine()
-        {
-            Debug.WriteLine("Stopping Engine");
-            _stateTimer.Dispose();
         }
     }
 }

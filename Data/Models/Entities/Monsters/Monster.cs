@@ -30,6 +30,12 @@ namespace Data.Models.Entities.Monsters
         [JsonProperty]
         public HitPoints HitPoints { get; set; }
 
+        public int Damage => throw new System.NotImplementedException();
+
+        public string AttackName => throw new System.NotImplementedException();
+
+        public DamageType DamageType => throw new System.NotImplementedException();
+
         public virtual Damage Attack(IDestructible target, Damage payload)
         {
             //1. Calc damage

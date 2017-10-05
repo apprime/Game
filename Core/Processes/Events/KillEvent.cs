@@ -16,12 +16,12 @@ namespace Core.Processes.Events
 
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             throw new NotImplementedException();
         }
 
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
             throw new NotImplementedException();
         }

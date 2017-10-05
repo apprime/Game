@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Core.Processes.Events
 {
-    public class GetMonsterInfo : Event
+    public class GetMonsterInfo : ReadonlyEvent
     {
         Monster _monster;
         Player _player;
@@ -27,20 +27,14 @@ namespace Core.Processes.Events
             _monsterId = monsterId;
         }
 
-        protected override Event Dispatch()
+        protected override ReadonlyEvent GatherData()
         {
             _monster = ResourceLocator.GetMonster(_monsterId.Trunk);
             _player = ResourceLocator.GetPlayer(_playerId.Trunk);
             return this;
         }
 
-        protected override Event Persist()
-        {
-            //TODO: This should be a readOnly event, overloading Event Process so that you can Process without persisting
-            return this;
-        }
-
-        protected override Event Resolve()
+        protected override ReadonlyEvent Resolve()
         {
             if(!playerMayViewMonster)
             {
