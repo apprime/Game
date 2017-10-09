@@ -1,31 +1,6 @@
 ﻿@{ Layout = "_Styleguide"; }
 
-<nav>
-    <ul>
-        <li>
-            <img src="~/images/g.svg"/>
-            Game
-        </li>
-        <li>
-            <img src="~/images/r.svg" />
-            HQ
-        </li>
-        <li>
-            <img src="~/images/b.svg" />
-            Map
-        </li>
-        <li>
-            <img src="~/images/u.svg" />
-            Store
-        </li>
-        <li>
-            <img src="~/images/w.svg" />    
-            Forum
-        </li>
-        <li>Search field</li>
-        <li>User account</li>
-    </ul>
-</nav>
+@await Component.InvokeAsync("TopMenu")
 
 <main>
     Menu - some info:<br />

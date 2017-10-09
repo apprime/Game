@@ -1,18 +1,24 @@
-﻿nav {
+﻿@import "mixins.less";
+@import "variables.less";
+
+nav
+{
     position: fixed;
     top: 0;
     width: 100%;
     height: @top-menu-offset;
     background-color: #CFDBC5;
-        
-    img {
+
+    img
+    {
         display: none;
         width: 100px;
         height: auto;
         margin: 1rem auto;
     }
 
-    > ul {
+    > ul
+    {
         width: 100%;
         max-width: 1200px;
         height: 5rem;
@@ -21,45 +27,39 @@
         justify-content: center;
         .reset-list-formats;
 
-        > li {
+        > li
+        {
             flex: 1;
             line-height: 3;
             text-align: center;
-            
-            > ul {
+
+            > ul
+            {
                 background-color: red;
                 .reset-list-formats;
             }
         }
     }
 
-    &:hover {
-        height: 15rem;     
-        
-        > ul {
+    &:hover
+    {
+        height: 15rem;
+
+        > ul
+        {
             height: inherit;
 
-            > li:hover {
+            > li:hover
+            {
                 background-color: #9CBA7F;
             }
         }
 
-        img {
+        img
+        {
             display: block;
-        }   
+        }
     }
 }
 
-/* This belongs here because all main blocks need to be offset because of our menu */
-body > main {
-    margin-top: @top-menu-offset;
-}
 
-/* TODO: Move this to sort sort of variables file */
-@top-menu-offset: 5rem;
-
-/* Todo: Move this to some sort of mixins file*/
-.reset-list-formats {
-    list-style: none;
-    padding: 0;
-}

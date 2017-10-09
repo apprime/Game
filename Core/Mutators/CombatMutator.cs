@@ -1,7 +1,6 @@
 ﻿using Core.Processes.Events;
 using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
-using Data.Models.Exceptions;
 using System;
 
 
@@ -10,7 +9,7 @@ namespace Core.Mutators
     /// <summary>
     /// Handles mutation of combat related actions.
     /// </summary>
-    public static class Combat
+    public static class CombatMutator
     {
         private static Predicate<IDestructible> isDead = i => i.HitPoints.Current <= 0;
 

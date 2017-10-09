@@ -43,7 +43,7 @@ likes to fight on its own or work as a team (add more stuff here). This way we c
 Everything needs to be async. The game engine should never have to block a thread because of read/write or external requests.
 
 6. 
-A project entirely for data access. Contains:
+A project entirely for data access(done). Contains:
 - separate database for user info -> encryption, password hashing and various (.njet can handle this)
 - Caching
 - Data source abstractions
@@ -56,7 +56,7 @@ but also for systematic updates of various kinds, like player stats, server stat
 
 7.
 API Documentation.
-- Split API into logical hubs
+- Split API into logical hubs(ongoing)
 - DOcument each method
 	+ Name
 	+ Description

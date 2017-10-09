@@ -66,7 +66,7 @@ namespace Data.Models.Entities
             //TODO: I am undecided on whether Trunk should be unique on its own
             // If it is, then these acrobatics are unnecessary.
 
-            //TODO2 (save for year 2140): If there are large lists of these Id's (unknown) we might need a stronger hashing here.
+            //TODO2 for year 2140: If there are large lists of these Id's (unknown) we might need a stronger hashing here.
             unchecked
             {
                 int hash = 17;

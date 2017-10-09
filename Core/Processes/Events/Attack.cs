@@ -65,10 +65,10 @@ namespace Core.Processes.Events
         private static Damage Process(IAttack actor, IDestructible target)
         {
             var damage = new Damage();
-            Combat.Setup(damage);
-            Combat.Attack(actor, damage);
-            Combat.Mitigate(target, damage);
-            Combat.Cleanup(damage);
+            CombatMutator.Setup(damage);
+            CombatMutator.Attack(actor, damage);
+            CombatMutator.Mitigate(target, damage);
+            CombatMutator.Cleanup(damage);
             return damage;
         }
 

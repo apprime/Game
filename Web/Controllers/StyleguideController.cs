@@ -2,19 +2,22 @@
 
 namespace Web.Controllers
 {
+    [Route("Styleguide")]
     public class StyleguideController : Controller
     {
-        // GET: /<controller>/
+        [Route("")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Route("TopMenu")]
         public IActionResult TopMenu()
         {
             return View();
         }
 
+        [Route("Footer")]
         public IActionResult Footer()
         {
             return View();

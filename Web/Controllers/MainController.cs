@@ -8,10 +8,12 @@ namespace Web.Controllers
     {
         [Route("Index")]
         [Route("")]
+        [Route("/")]
         public IActionResult Index()
         {
             var model = new BaseModel();
             model.TopMenu = new TopMenuModel { Number = 5 };
+            model.Footer = new FooterModel { Number = 10 };
 
             return View(model);
         }
