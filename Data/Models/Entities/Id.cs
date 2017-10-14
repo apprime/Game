@@ -10,8 +10,8 @@ namespace Data.Models.Entities
     /// </summary>
     public class Id
     {
-        private const int MaxLength = 4; //Todo: set these 
-        private const int MinLength = 4;
+        private const int MaxLength = 20; //Todo: set these 
+        private const int MinLength = 20;
         private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'S' };
 
         private Id(string raw)
@@ -19,7 +19,29 @@ namespace Data.Models.Entities
             //Todo: Validate raw input
             Validate(raw);
             Prefix = raw[0];
+            //= raw.Substring(1, 4);
             Trunk = raw.Substring(1);
+        }
+
+        private Id(char prefix)
+        {
+            Prefix = prefix;
+            Trunk = GenerateTrunk();
+        }
+
+        private static string GenerateTrunk()
+        {
+            return (new Random().Next() * 1000).ToString();
+        }
+
+        //private static Random GetRandom()
+        //{
+
+        //}
+
+        private static Random GetRandom(int seed)
+        {
+            return new Random(seed);
         }
 
         public readonly char Prefix;
@@ -39,7 +61,6 @@ namespace Data.Models.Entities
             }
 
             if(raw.Length < MinLength)
-
             {
                 throw new ArgumentException("The given raw id is too short");
             }
@@ -48,6 +69,11 @@ namespace Data.Models.Entities
             {
                 throw new ArgumentException("The prefix of given raw Id is not a valid prefix");
             }
+        }
+
+        public static Id Create(char prefix)
+        {
+            return new Id(prefix);
         }
 
         public override bool Equals(object input)

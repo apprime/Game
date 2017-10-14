@@ -1,4 +1,4 @@
-/// <binding ProjectOpened='convertLess:css, watch' />
+/// <binding ProjectOpened='watch' />
 var gulp = require("gulp");
 var fs = require("fs");
 var less = require("gulp-less");

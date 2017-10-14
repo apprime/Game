@@ -1,5 +1,5 @@
-﻿using Data.Models.Entities;
-using Data.Models.Gamestate;
+﻿using Data.Models.Gamestate;
+using Data.Models.Nodes;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
