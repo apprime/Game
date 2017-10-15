@@ -1,5 +1,6 @@
 ﻿using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Gamestate;
+using Data.Models.Nodes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Data.Models.Entities.Humans
             Score = int.Parse(dataParts[2]);
             ConnectionId = dataParts[3];
             Party = Enumerable.Empty<IEntity>();
+            LoggedOutPosition = new Position("1111"); //Todo: This is hardcoded to always spawn player in first hardcoded location. 
         }
 
         [JsonConstructor]
@@ -40,6 +42,9 @@ namespace Data.Models.Entities.Humans
         //      on SignalR level or whether we just use the gamestate for this.
         public string ConnectionId { get; set; }
         public IEnumerable<string> ConnectionGroups { get; set; }
+
+        public Position LoggedOutPosition { get; set; } //Todo: This needs a default value;
+
 
         public int Score { get; set; }
 

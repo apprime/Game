@@ -20,6 +20,7 @@ namespace Data.Models.EventResolution
             Targets = targets;
         }
 
+        public string Message { get; set; }
         public IEntity Actor { get; set; }
         public IEnumerable<IEntity> Targets { get; set; }
         public string Key { get; set; }

@@ -7,6 +7,7 @@ Initially:
 - Use groups for chat, these can be managed freely by users
 
 - Use hubs for functionality. Chat hub, User management hub(logon/off and such) and main game hub.
+! ONGOING. We have hubs that can differntiate incoming events, but all outgoing events are still generic. TODO!
 
 ? Do we want to save users default groups? Persist in DB or just in memory?
 ? Can we use signlaR to also figure out whom to broadcast to? Using groups and maybe multilayer groups for this.
@@ -17,15 +18,19 @@ Initially:
 There needs to be a structure for how a place in game relates to other places in game. I.E A game state as a hierarchical tree.
 Top node is all game, then branches for every major Region, then Locations in those regions. 
 Each location has Scenes, instances of the location. Each scene has lists of live entities within it. A scene is generic.
+! ONGOING: With Position, we get an ID that also relates to the game world. Location is the leaf of that graph and contains any instances of Scene within it.
+
 
 ? So, how do we make a generic scene be specific? Inject a context object of some sort? We need to swap backgrounds, type of 
 entities and so on. Or do we have a factory that can set all properties in a scene so that it is "indirectly" typed?
+! ONGOING: We have builders for objects Theme and Difficulty that are supposed to contain settings for Scenes. Then Factories that create Entities, but that is only just started.
 
 ? Can we have progression in a scene, as in dialogue, cutscenes or similar that only occurs in specific orders and at specific times?
-Are those also just properties of the scene, or do we want an injected dependency also orchestrate how the scene plays out?
+Are those also just properties of the scene, or do we want an injected dependency also orchestrate how the scene plays out? 
 
 ? What about "open world" where maybe all players want to see each other at a location? Does this mean there are two types of scenes,
 one instanced and one open? 
+! Resolved: Yes. We have GlobalScenes that cannot be instanced more than once. These scenes add all players that navigate to the location.
 
 Either way we need a clever system for building generic scenes that contain entities of a reasonable difficulty level(enemies, rewards etc.)
 UberFactory.cs?
@@ -62,3 +67,9 @@ API Documentation.
 	+ Description
 	+ Input param
 	+ Return values
+
+
+8.
+We need an overall structure for the JS-client.
+Scratch that, the TypeScript client.
+We can't really use angular, but somehow it should resemble our hubs/events.

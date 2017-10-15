@@ -1,7 +1,7 @@
 ﻿using Data.Models.Nodes;
 using System.Collections.Generic;
 
-namespace Data.Repositories
+namespace Data.Repositories.Nodes
 {
     /// <summary>
     /// Todo: Resource Locator should keep references to Repositories.
@@ -11,16 +11,16 @@ namespace Data.Repositories
     /// </summary>
     public class RegionRepository
     {
-        private Dictionary<char, Region> _data = new Dictionary<char, Region>();
+        private Dictionary<string, Region> _data = new Dictionary<string, Region>();
 
         public RegionRepository()
         {
-            _data.Add('1', new Region());
+            _data.Add("11", new Region());
         }
 
-        public Region Get(char identifier)
+        public Region Get(string regionId)
         {
-            return _data[identifier];
+            return _data[regionId];
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Data.Models.Entities;
+﻿using Data.DataProviders.Players;
+using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.Exceptions;
 
@@ -6,12 +7,18 @@ namespace Data.Repositories
 {
     public class PlayerRepository
     {
+        private IPlayerDataProvider _dataProvider;
+
+        public PlayerRepository(IPlayerDataProvider dataProvider)
+        {
+            _dataProvider = dataProvider;
+        }
         //TODO: Inject DataAccessor here.
         //TODO: Cache
         public Player Get(Id id, string connectionId)
         {
             //Todo: Ok, got some stuff to do in here
-            return new Player("P123/PlayerMcPlayerface/1/"+connectionId);
+            return _dataProvider.Get(id, connectionId);
         }
 
         public Player Add(string id)

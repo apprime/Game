@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Models.Nodes;
+using System;
 using System.Collections.Generic;
 
 namespace Data.Models.Entities
@@ -10,17 +11,16 @@ namespace Data.Models.Entities
     /// </summary>
     public class Id
     {
-        private const int MaxLength = 20; //Todo: set these 
-        private const int MinLength = 20;
+        private const int MaxLength = 20;
+        private const int MinLength = 6;
         private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'S' };
 
         private Id(string raw)
         {
-            //Todo: Validate raw input
             Validate(raw);
             Prefix = raw[0];
-            //= raw.Substring(1, 4);
-            Trunk = raw.Substring(1);
+            Position = Position.FromString(raw.Substring(1, 4));
+            Trunk = raw.Substring(5);
         }
 
         private Id(char prefix)
@@ -45,6 +45,7 @@ namespace Data.Models.Entities
         }
 
         public readonly char Prefix;
+        public readonly Position Position;
         public readonly string Trunk;
 
         //Todo: This should be replaced by some sort of Type input and an actual generation of Id hash;

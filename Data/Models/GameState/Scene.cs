@@ -5,6 +5,7 @@ using Data.Models.Entities.Monsters;
 using Data.Models.Nodes;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Data.Models.Gamestate
 {
@@ -13,14 +14,18 @@ namespace Data.Models.Gamestate
         public Scene()
         {
             Entities = new List<IEntity>();
+            //TODO: S + Position + Trunk
+            Id = Id.FromString("S1111123"); 
+        }
 
-            //Location = new Location("Defaultistan", 1); //Todo: Move location generation to Core(Scenebuilder).
-            Id = Id.FromString("S123"); 
-            //Location.Instances.Add(123, this); //Arrange Location numbers somehow? Queue?;
+        public Scene(Location location)
+        {
+            Location = location;
         }
 
         public Id Id { get; set; }
         public Location Location { get; set; } 
+        public Position Position { get { return Location.Position; } }
 
         public List<IEntity> Entities { get; set; }
         public IEnumerable<IEntity> Players
@@ -36,6 +41,16 @@ namespace Data.Models.Gamestate
             {
                 return Entities.Where(i => i is Monster);
             }
+        }
+
+        public void RemovePlayer(Player player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddPlayer(Player player)
+        {
+            throw new NotImplementedException();
         }
 
         public string Name

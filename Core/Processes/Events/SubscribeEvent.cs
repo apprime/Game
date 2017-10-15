@@ -1,15 +1,11 @@
-﻿using Core.Factories;
-using Core.ResourceManagers;
+﻿using Core.ResourceManagers;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
-using Data.Models.Entities.Monsters;
-using Data.Models.Entities.EntityInterfaces;
 using Data.Models.EventResolution;
-using Data.Models.Gamestate;
 
 namespace Core.Processes.Events
 {
-    public class Subscribe : Event
+    public class SubscribeEvent : Event
     {
         private Id _id;
         private Player _player;
@@ -20,9 +16,9 @@ namespace Core.Processes.Events
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public Subscribe(string[] parts) : this(Id.FromString(parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
+        public SubscribeEvent(string[] parts) : this(Id.FromString(parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
 
-        internal Subscribe(Id player, string connectionId)
+        internal SubscribeEvent(Id player, string connectionId)
         {
             _id = player;
             _connectionId = connectionId;
@@ -46,6 +42,7 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent Resolve()
         {
+            //TODO: Replace this logic with a simple Rollback if player is already logged in
             var val = _alreadyLoggedIn ? "Already logged in" : "OK";
             Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = val, Targets = ResourceLocator.GetPlayers(Result) });
             Result.Actor = _player;
@@ -59,25 +56,21 @@ namespace Core.Processes.Events
         {
             ResourceLocator.Add(_player);
 
-            //TEMPORARY WORKAROUND TO ALWAYS SPAWN A MONSTER WHEN PLAYER SUBSCRIBES:
-            var todoScene = (Scene)ResourceLocator.Get(Id.FromString("S123"));
-            if(todoScene == null)
-            {
-                todoScene = new Scene();
-                ResourceLocator.Add(todoScene);
-            }
-
-            var monster = (Monster)ResourceLocator.Get(Id.FromString("M123"));
-            if (monster == null)
-            {
-                monster = MonsterFactory.Create("A");
-                ResourceLocator.Add(monster);
-                todoScene.Entities.Add(monster);
-            }
+            var dumpPlayerAt = new ChangeLocationEvent(_id, _player.LoggedOutPosition);
+            Engine.Instance.Push(dumpPlayerAt);
+           
+            // TEMPORARY WORKAROUND TO ALWAYS SPAWN A MONSTER WHEN PLAYER SUBSCRIBES:
+            //var monster = (Monster)ResourceLocator.Get(Id.FromString("M1111123"));
+            //if (monster == null)
+            //{
+            //    monster = MonsterFactory.Create("A");
+            //    ResourceLocator.Add(monster);
+            //    _player.Scene.Entities.Add(monster);
+            //}
 
             //TODO: Look at this! We should be able to have one way references.
-            todoScene.Entities.Add(_player);
-            _player.Scene = todoScene;
+            //_player.Scene.Entities.Add(_player);
+            //_player.Scene = todoScene;
 
             return this;
         }

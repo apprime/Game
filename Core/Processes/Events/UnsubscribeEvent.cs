@@ -1,5 +1,4 @@
-﻿using Core.Mutators;
-using Core.ResourceManagers;
+﻿using Core.ResourceManagers;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
@@ -9,7 +8,7 @@ namespace Core.Processes.Events
     //Todo: This is trash. In order to properly remove a player, 
     // a) just extract them from the scene they are in and then remove
     // b) Mark them as offline, until all other players leaves scene, then remove
-    internal class Unsubscribe : Event
+    internal class UnsubscribeEvent : Event
     {
         private Id _player;
         private Player _actor;
@@ -19,9 +18,9 @@ namespace Core.Processes.Events
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public Unsubscribe(string[] parts) : this(Id.FromString(parts[0])) { } //This CTOR only converts string array to real params.
+        public UnsubscribeEvent(string[] parts) : this(Id.FromString(parts[0])) { } //This CTOR only converts string array to real params.
 
-        internal Unsubscribe(Id player)
+        internal UnsubscribeEvent(Id player)
         {
             _player = player;
         }
@@ -34,27 +33,36 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent Resolve()
         {
-            var delta = new Delta
+            if (_actor != null)
             {
-                Actor = _actor,
-                Key = "Logout",
-                Value = SetLogoutMessage(),
-                Targets = ResourceLocator.GetPlayers(Result)
-            };
+                var delta = new Delta
+                {
+                    Actor = _actor,
+                    Key = "Logout",
+                    Value = SetLogoutMessage(),
+                    Targets = ResourceLocator.GetPlayers(Result)
+                };
 
-            Result.Deltas.Add(delta);
-            Result.Actor = _actor;
-            Result.Targets = _eventTargets;
-            Result.Resolution = EventResolutionType.Commit;
-
+                Result.Deltas.Add(delta);
+                Result.Actor = _actor;
+                Result.Targets = _eventTargets;
+                Result.Resolution = EventResolutionType.Commit;
+            }
+            else
+            {
+                Result.Resolution = EventResolutionType.Rollback;
+            }
             return this;
         }
 
         protected override Event Persist()
         {
-            if(_actor != null)
+            if(Result.Resolution == EventResolutionType.Commit)
             {
+                _actor.LoggedOutPosition = _actor.Scene.Position;
                 ResourceLocator.Remove(_actor);
+                //TODO: Use SceneMutator to clear actor of scene.
+                //TODO: Call PlayerRepo to save player data
             }
 
             return this;

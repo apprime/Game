@@ -1,19 +1,18 @@
 ﻿using Data.Models.Nodes;
 using System.Collections.Generic;
-using System;
 
-namespace Data.Repositories
+namespace Data.Repositories.Nodes
 {
     public class SectorRepository
     {
-        private Dictionary<char, Sector> _data = new Dictionary<char, Sector>();
+        private Dictionary<string, Sector> _data = new Dictionary<string, Sector>();
 
         public SectorRepository()
         {
 
         }
 
-        internal Sector Get(char sectorId)
+        internal Sector Get(string sectorId)
         {
             return _data[sectorId];
         }

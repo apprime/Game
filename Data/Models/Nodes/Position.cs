@@ -1,9 +1,8 @@
-﻿using Data.Repositories;
-using System;
+﻿using System;
 
 namespace Data.Models.Nodes
 {
-    class Position
+    public struct Position
     {
         private string _internal;
 
@@ -16,19 +15,64 @@ namespace Data.Models.Nodes
             _internal = input;
         }
 
-        public Region Region { get
-            {
-                return (new RegionRepository()).Get(_internal[1]);
-            }
-        }
-
-        public Sector Sector
+        public char Continent
         {
             get
             {
-                return (new SectorRepository()).Get(_internal[3]);
+                return _internal[0];
             }
         }
 
+        public string Region
+        {
+            get
+            {
+                return _internal.Substring(0, 2);
+            }
+        }
+
+        public string Sector
+        {
+            get
+            {
+                return _internal.Substring(0, 3);
+            }
+        }
+
+        public static Position FromString(string input)
+        {
+            return new Position(input);
+        }
+
+        public string Location
+        {
+            get
+            {
+                return _internal;
+            }
+        }
+
+        public override string ToString()
+        {
+            return Location.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Position posB)
+            {
+                return Location == posB.Location;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            //Location is the entire value, 4 chars as a string.
+            return Location.GetHashCode();
+        }
     }
 }

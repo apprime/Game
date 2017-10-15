@@ -1,7 +1,9 @@
-﻿namespace Data.Models.Nodes
+﻿using System.Collections.Generic;
+
+namespace Data.Models.Nodes
 {
     public class World
     {
-        public IEnmerable<Continent> Continents { get; }
+        public IEnumerable<Continent> Continents { get; }
     }
 }
