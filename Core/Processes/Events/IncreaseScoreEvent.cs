@@ -2,6 +2,8 @@
 using Data.Models.EventResolution;
 using Core.ResourceManagers;
 using System;
+using Data.Repositories;
+using Data.DataProviders.Players;
 
 namespace Core.Processes.Events
 {
@@ -40,7 +42,9 @@ namespace Core.Processes.Events
         protected override ReadonlyEvent Resolve()
         {
             //TODO: Handle locking / writing to resource 
-            var player = ResourceLocator.GetPlayer(currentPlayer.Id.Trunk);
+            var repo = new PlayerRepository(new MockedPlayerData());
+
+            var player = repo.Get(currentPlayer.Id);
             player.Score = player.Score + ScoreAmount;
             return this;
         }

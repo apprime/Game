@@ -1,10 +1,13 @@
-﻿using Core.Mutators;
+﻿using System;
+using Core.Mutators;
 using Core.ResourceManagers;
+using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Models.Gamestate;
 using Data.Models.Nodes;
+using Data.Repositories;
 
 namespace Core.Processes.Events
 {
@@ -29,8 +32,8 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent GatherData()
         {
-            _actor = PlayerResources.Get(_playerId.Trunk);
-           
+            var repo = new PlayerRepository(new MockedPlayerData());
+            _actor = repo.Get(_playerId);
 
             return this;
         }
@@ -41,9 +44,19 @@ namespace Core.Processes.Events
             //TODO: Currently, the mutator is accessed in Resolve. It is supposed to only change things and therefor be accessed in Persist.
             //Setting of these values is not a write operation, but it involves logic that should not be inside the Process for Changing Location.
             //So thats a problem...
-            SceneMutator.SetActor(_actor, movement);
+            SceneMutator.SetTraveler(_actor, movement);
             SceneMutator.SetOrigin(movement);
             SceneMutator.SetDestination(_destinationId, movement);
+
+            //TODO: Currently, we detect login by saying that we have no origin, so it must be logon.
+            //Maybe we should make this its own event?
+            if(movement.Origin == null)
+            {
+                Result.Message = string.Format("{0} has logged into the location {1}", _actor.Name, movement.Destination.Name);
+                Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerLoggedIn", Value = movement.Destination.Name.ToString(), Targets = ResourceLocator.GetPlayers(Result) });
+                Result.Resolution = EventResolutionType.Commit;
+                return this;
+            }
 
             if (CanGoToPosition(movement))
             {
@@ -73,6 +86,11 @@ namespace Core.Processes.Events
             if (Result.Resolution == EventResolutionType.Commit)
             {
                 SceneMutator.GoToPosition(movement);
+                if(movement.Origin != null)
+                {
+                    SceneMutator.Cleanup(movement);
+                }
+                
                 //TODO: New event to Player only, NewLocationEvent
             }
 

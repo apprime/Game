@@ -19,6 +19,7 @@ namespace Data.Models.Gamestate
         }
 
         public Scene(Location location)
+            : this()
         {
             Location = location;
         }
@@ -50,7 +51,7 @@ namespace Data.Models.Gamestate
 
         public void AddPlayer(Player player)
         {
-            throw new NotImplementedException();
+            Entities.Add(player);
         }
 
         public string Name

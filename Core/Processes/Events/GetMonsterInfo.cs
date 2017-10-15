@@ -6,6 +6,8 @@ using Data.Models.Entities.Humans;
 using Newtonsoft.Json;
 using Data.Models.Exceptions;
 using System.Linq;
+using Data.DataProviders.Players;
+using Data.Repositories;
 
 namespace Core.Processes.Events
 {
@@ -30,7 +32,8 @@ namespace Core.Processes.Events
         protected override ReadonlyEvent GatherData()
         {
             _monster = ResourceLocator.GetMonster(_monsterId.Trunk);
-            _player = ResourceLocator.GetPlayer(_playerId.Trunk);
+            var repo = new PlayerRepository(new MockedPlayerData());
+            _player = repo.Get(_playerId);
             return this;
         }
 

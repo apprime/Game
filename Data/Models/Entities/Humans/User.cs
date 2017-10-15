@@ -1,4 +1,4 @@
-﻿namespace Data.Models.Entites.Humans
+﻿namespace Data.Models.Entities.Humans
 {
     public class User
     {

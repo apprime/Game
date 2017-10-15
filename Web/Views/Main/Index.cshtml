@@ -16,16 +16,20 @@
         }
 
         function addEvent(event) {
-
+            console.log(event);
             event = JSON.parse(event);
+            
             var appendString;
-            if (event.Deltas[0]) {
+            if (event.Deltas[0])
+            {
                 appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'
-            } else {
-                event.Message = JSON.parse(event.Message);
-                appendString = '<li>' + event.Message.Name + " - " + event.Message.Description + ", " + event.Message.HitPoints.Current + "/" + event.Message.HitPoints.Current + 'hp </li><br>'
+            } 
 
+            if (event.Message)
+            {
+                appendString += '<li>' + "The message was: " + event.Message +'</li><br>'
             }
+
             $("#eventList").append(appendString);
         }
 
@@ -51,17 +55,14 @@
         playerHub.on("disconnected", (a) => console.log(a));
 
         $("#subscribe").click(function () {
-            console.log("Has teh sub");
             playerHub.invoke("subscribe", subscribeEvent);
         });
 
         $("#unsubscribe").click(function () {
-            console.log("Has teh unsub");
             playerHub.invoke("unsubscribe", unsubscribeEvent);
         });
 
         $("#getMonster").click(function () {
-            console.log("Has teh monster");
             monsterHub.invoke("getInfo", getMonsterEvent);
         });
 

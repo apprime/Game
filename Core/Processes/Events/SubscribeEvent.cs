@@ -1,7 +1,9 @@
 ﻿using Core.ResourceManagers;
+using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
+using Data.Repositories;
 
 namespace Core.Processes.Events
 {
@@ -26,11 +28,12 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent GatherData()
         {
-            _player = ResourceLocator.Get(_id) as Player;
+            var repo = new PlayerRepository(new MockedPlayerData());
+            _player = repo.Get(_id) as Player;
 
             if (_player == null)
             {
-                _player = (new Data.Repositories.PlayerRepository()).Get(_id, _connectionId);
+                _player = repo.Load(_id, _connectionId);
             }
             else
             {
@@ -42,23 +45,35 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent Resolve()
         {
-            //TODO: Replace this logic with a simple Rollback if player is already logged in
-            var val = _alreadyLoggedIn ? "Already logged in" : "OK";
-            Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = val, Targets = ResourceLocator.GetPlayers(Result) });
+            if(_alreadyLoggedIn)
+            {
+                Result.Message = "Already logged in";
+                Result.Resolution = EventResolutionType.Rollback;
+            }
+            else
+            {
+                Result.Message = "You logged in";
+                Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = "OK", Targets = ResourceLocator.GetPlayers(Result) });
+                Result.Resolution = EventResolutionType.Commit;
+            }
+
             Result.Actor = _player;
             Result.Targets = _eventTargets;
-            Result.Resolution = EventResolutionType.Commit;
 
             return this;
         }
 
         protected override Event Persist()
         {
-            ResourceLocator.Add(_player);
+            if(Result.Resolution == EventResolutionType.Commit)
+            {
+                var repo = new PlayerRepository(new MockedPlayerData());
+                repo.Add(_player);
 
-            var dumpPlayerAt = new ChangeLocationEvent(_id, _player.LoggedOutPosition);
-            Engine.Instance.Push(dumpPlayerAt);
-           
+                var dumpPlayerAt = new ChangeLocationEvent(_id, _player.LoggedOutPosition);
+                Engine.Instance.Push(dumpPlayerAt);
+            }
+
             // TEMPORARY WORKAROUND TO ALWAYS SPAWN A MONSTER WHEN PLAYER SUBSCRIBES:
             //var monster = (Monster)ResourceLocator.Get(Id.FromString("M1111123"));
             //if (monster == null)

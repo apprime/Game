@@ -12,7 +12,11 @@ namespace Core.Mutators
         public static void GoToPosition(Movement movement)
         {
             movement.Destination.AddPlayer(movement.Traveler);
+            movement.Traveler.Scene = movement.Destination;
+        }
 
+        internal static void Cleanup(Movement movement)
+        {
             var origin = movement.Origin;
             origin.RemovePlayer(movement.Traveler);
 
@@ -23,35 +27,20 @@ namespace Core.Mutators
             }
         }
 
-        internal static Movement SetOrigin(Movement movement)
+        internal static void SetOrigin(Movement movement)
         {
-            var actor = movement.Traveler;
-
-            //If Player is "nowhere", they either just logged in or glitched out. Either way, return to sender.
-            if(actor.Scene == null)
-            {
-                movement.Origin = SceneFactory.GetOrCreate(actor.LoggedOutPosition, actor);
-            }
-            else
-            {
-                movement.Origin = actor.Scene;
-            }
-
-            return movement;
+            movement.Origin = movement.Traveler.Scene;
         }
 
-        internal static Movement SetDestination(Position position, Movement movement)
+        internal static void SetDestination(Position position, Movement movement)
         {
             var newScene = SceneFactory.GetOrCreate(position, movement.Traveler);
             movement.Destination = newScene;
-
-            return movement;
         }
 
-        internal static Movement SetActor(Player actor, Movement movement)
+        internal static void SetTraveler(Player actor, Movement movement)
         {
             movement.Traveler = actor;
-            return movement;
         }
     }
 }

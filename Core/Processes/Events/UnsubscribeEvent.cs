@@ -1,7 +1,9 @@
 ﻿using Core.ResourceManagers;
+using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
+using Data.Repositories;
 
 namespace Core.Processes.Events
 {
@@ -12,22 +14,24 @@ namespace Core.Processes.Events
     {
         private Id _player;
         private Player _actor;
-        private bool _alreadyLoggedOut = false;
+        private string _connectionInfo;
 
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public UnsubscribeEvent(string[] parts) : this(Id.FromString(parts[0])) { } //This CTOR only converts string array to real params.
+        public UnsubscribeEvent(string[] parts) : this(Id.FromString(parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
 
-        internal UnsubscribeEvent(Id player)
+        internal UnsubscribeEvent(Id player, string connectionInfo)
         {
             _player = player;
+            _connectionInfo = connectionInfo;
         }
 
         protected override ReadonlyEvent GatherData()
         {
-            _actor = ResourceLocator.Get(_player) as Player;
+            var repo = new PlayerRepository(new MockedPlayerData());
+            _actor = repo.Get(_player);
             return this;
         }
 
@@ -43,15 +47,18 @@ namespace Core.Processes.Events
                     Targets = ResourceLocator.GetPlayers(Result)
                 };
 
+                Result.Message = "You logged out";
                 Result.Deltas.Add(delta);
-                Result.Actor = _actor;
-                Result.Targets = _eventTargets;
                 Result.Resolution = EventResolutionType.Commit;
             }
             else
             {
                 Result.Resolution = EventResolutionType.Rollback;
             }
+
+            Result.Actor = _actor;
+            Result.Targets = _eventTargets;
+
             return this;
         }
 
@@ -60,7 +67,8 @@ namespace Core.Processes.Events
             if(Result.Resolution == EventResolutionType.Commit)
             {
                 _actor.LoggedOutPosition = _actor.Scene.Position;
-                ResourceLocator.Remove(_actor);
+                var repo = new PlayerRepository(new MockedPlayerData());
+                repo.Unload(_actor);
                 //TODO: Use SceneMutator to clear actor of scene.
                 //TODO: Call PlayerRepo to save player data
             }

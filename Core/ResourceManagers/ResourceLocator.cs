@@ -9,8 +9,7 @@ using Data.Models.Entities.EntityInterfaces;
 
 namespace Core.ResourceManagers
 {
-    //This is public because Web uses GetPlayers to ..get players
-    //We should have a property in EventResult that does this insead
+    //TODO: We are trying to move away from using this and into using only Repositories
     public static class ResourceLocator
     {
         public static void Add(Player p)
@@ -40,10 +39,10 @@ namespace Core.ResourceManagers
         }
 
         //Todo: make internal when client is no longer coupled
-        public static Player GetPlayer(string id)
-        {
-            return PlayerResources.Get(id);
-        }
+        //public static Player GetPlayer(string id)
+        //{
+        //    return PlayerResources.Get(id);
+        //}
 
         public static Monster GetMonster(string id)
         {
@@ -58,7 +57,7 @@ namespace Core.ResourceManagers
         private static Dictionary<char, Func<string, IEntity>> _get = new Dictionary<char, Func<string, IEntity>>
         {
             {'M', MonsterResources.Get },
-            {'P', PlayerResources.Get },
+            //{'P', PlayerResources.Get },
             {'S', SceneResources.Get }
             //Add here
         };

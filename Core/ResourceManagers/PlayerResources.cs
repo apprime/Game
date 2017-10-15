@@ -24,16 +24,16 @@ namespace Core.ResourceManagers
             }
         }
 
-        internal static Player Get(string id)
-        {
-            Player fetchedValue;
-            if(!_players.TryGetValue(id, out fetchedValue))
-            {
-                return null;
-            }
+        //internal static Player aGet(string id)
+        //{
+        //    Player fetchedValue;
+        //    if(!_players.TryGetValue(id, out fetchedValue))
+        //    {
+        //        return null;
+        //    }
 
-            return fetchedValue;
-        }
+        //    return fetchedValue;
+        //}
 
         internal static void Add(Player player)
         {
