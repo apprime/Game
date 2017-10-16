@@ -4,7 +4,7 @@ namespace Data.Models.Nodes
 {
     public class Continent
     {
-        public IEnumerable<Region> Regions { get; }
-        public World World { get; }
+        public IEnumerable<Region> Regions { get; set; }
+        public World World { get; set;  }
     }
 }

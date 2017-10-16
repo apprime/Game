@@ -1,8 +1,9 @@
-﻿using Data.Models.Nodes;
+﻿using Data.DataProviders.Locations.Interfaces;
+using Data.Models.Nodes;
 
 namespace Data.DataProviders.Locations
 {
-    public class MockedLocationData : ILocationDataProvider
+    public class MockedLocationData : IPositionDataProvider<Location>, IKnowParent<Sector>
     {
         public Location Get(string locationId)
         {
@@ -14,6 +15,11 @@ namespace Data.DataProviders.Locations
                     //TODO: Handle default somehow
                     return new Location("Town", Position.FromString("1111"));
             }
+        }
+
+        public Sector GetParent(string id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

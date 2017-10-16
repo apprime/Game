@@ -6,10 +6,10 @@ namespace Data.Repositories.Nodes
 {
     public class LocationRepository
     {
-        private ILocationDataProvider _dataProvider;
+        private IPositionDataProvider<Location> _dataProvider;
         private Dictionary<string, Location> _data = new Dictionary<string, Location>();
 
-        public LocationRepository(ILocationDataProvider dataProvider)
+        public LocationRepository(IPositionDataProvider<Location> dataProvider)
         {
             _dataProvider = dataProvider;
         }

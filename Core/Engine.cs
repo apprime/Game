@@ -1,6 +1,5 @@
 ﻿using Core.Processes.Events;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,11 +11,9 @@ namespace Core
 
         //TODO: We want to be able to set these values in config I suppose?
         public bool run = false;
-        private int _tickRate = 1000;
         private int _threadNumber = 1;
         private int MaxQueueSize = 1;
         public AutoResetEvent _loopTimer;
-        private Timer _stateTimer;
 
         public static Engine Instance{ get; }
 
@@ -38,6 +35,9 @@ namespace Core
             for (var i = 0; i < _threadNumber; i++)
             {
                 var eventChunk = _eventList.DequeueChunk(chunkSize);
+                //TODO: EventCulling!
+                // 1. Remove duplicate events
+                // 2. Remove events that are "too late", i.e. acting on something that disappears earlier in this chunk (How?)
                 Task.Factory.StartNew(() => ProcessBatch(eventChunk));
             }
         }
