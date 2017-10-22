@@ -29,12 +29,10 @@ namespace Data.DataProviders.Locations
 
         private static Location GetTown()
         {
-            var loc = new GlobalLocation("Town", Position.FromString("000000000001"));
-
             var seeds = new List<Seed>();
             seeds.Add(Seed.Monster(123));
 
-            loc.Seeds = seeds;
+            var loc = new GlobalLocation("Town", Position.FromString("000000000001"), seeds);
 
             return loc;
         }

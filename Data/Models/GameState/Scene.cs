@@ -11,17 +11,11 @@ namespace Data.Models.Gamestate
 {
     public class Scene : IEntity
     {
-        public Scene()
+        public Scene(Location location)
         {
             Entities = new List<IEntity>();
-            //TODO: S + Position + Trunk
-            Id = Id.FromString("S001001001123"); 
-        }
-
-        public Scene(Location location)
-            : this()
-        {
             Location = location;
+            Id = Id.FromParts('S', Location.Position);
         }
 
         public Id Id { get; set; }
@@ -29,18 +23,18 @@ namespace Data.Models.Gamestate
         public Position Position { get { return Location.Position; } }
 
         public List<IEntity> Entities { get; set; }
-        public IEnumerable<IEntity> Players
+        public IEnumerable<Player> Players
         {
             get
             {
-                return Entities.Where(i => i is Player);
+                return Entities.OfType<Player>();
             }
         }
-        public IEnumerable<IEntity> Enemies
+        public IEnumerable<Monster> Enemies
         {
             get
             {
-                return Entities.Where(i => i is Monster);
+                return Entities.OfType<Monster>();
             }
         }
 

@@ -6,8 +6,6 @@ namespace Data.Models.Entities
 {
     public class Seed
     {
-        private char v;
-
         public Seed(char prefix, int id)
         {
             Prefix = prefix;
@@ -24,7 +22,7 @@ namespace Data.Models.Entities
 
         public IEntity Hydrate()
         {
-            switch (Id)
+            switch (Prefix)
             {
                 case 'M':
                     var repo = new MonsterRepository();

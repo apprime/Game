@@ -12,7 +12,7 @@ namespace Data.DataProviders.Players
 
         public Player Get(Id playerId, string connectionId)
         {
-            return new Player("P1111123/PlayerMcPlayerface/1/" + connectionId);
+            return new Player("P001001001001123/PlayerMcPlayerface/1/" + connectionId);
         }
 
         public void Remove(Player player)

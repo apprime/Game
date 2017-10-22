@@ -33,11 +33,12 @@
             $("#eventList").append(appendString);
         }
 
-        var playerId = "P1111123";
-        var monsterId = "M1111123";
-        var subscribeEvent = "12subscribe|" + playerId;
-        var unsubscribeEvent = "12unsubscribe|" + playerId;
-        var getMonsterEvent = "31getinfo|" + playerId + "/" + monsterId;
+        var playerId = "123";
+        var location = "001001001001";
+        var monsterId = "123";
+        var subscribeEvent = "12subscribe|" + location + playerId;
+        var unsubscribeEvent = "12unsubscribe|" + location + playerId;
+        var getMonsterEvent = "31getinfo|" + location + playerId + "/" + monsterId;
 
         function pushedContent(content) {
             console.log("Incoming data: ", content);

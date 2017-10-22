@@ -1,4 +1,5 @@
 ﻿using Data.Factories;
+using Data.Models.Entities;
 using Data.Models.Gamestate;
 using System.Collections.Generic;
 
@@ -8,8 +9,10 @@ namespace Data.Models.Nodes
     {
         private Scene[] _scenes = new Scene[1];
 
-        public GlobalLocation(string name, Position position) : base(name, position)
+        public GlobalLocation(string name, Position position, IEnumerable<Seed> seeds)
+            : base(name, position)
         {
+            Seeds = seeds;
             _scenes[0] = SceneFactory.Create(this);
         }
 

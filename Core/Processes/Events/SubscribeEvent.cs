@@ -18,7 +18,7 @@ namespace Core.Processes.Events
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public SubscribeEvent(string[] parts) : this(Id.FromString(parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
+        public SubscribeEvent(string[] parts) : this(Id.FromString('P', parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
 
         internal SubscribeEvent(Id player, string connectionId)
         {

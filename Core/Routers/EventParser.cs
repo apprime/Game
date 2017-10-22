@@ -11,7 +11,8 @@ namespace Core.Routers
         private static Dictionary<string, Func<string[], ReadonlyEvent>> PlayerEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
         {
             { "subscribe", s => new SubscribeEvent(s) },
-            { "unsubscribe", s => new UnsubscribeEvent(s) }
+            { "unsubscribe", s => new UnsubscribeEvent(s) },
+            { "getMyPosition", s => new GetMyLocationEvent(s) }
         };
 
         private static Dictionary<string, Func<string[], ReadonlyEvent>> MonsterEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>

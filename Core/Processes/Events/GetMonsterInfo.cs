@@ -21,7 +21,7 @@ namespace Core.Processes.Events
         EventTargets _eventTargets = EventTargets.Player;
         private bool playerMayViewMonster => _player.Scene.Enemies.Any(i => i.Id.Equals(_monsterId));
 
-        public GetMonsterInfo(string[] parts) : this(Id.FromString(parts[0]), Id.FromString(parts[1])) { }
+        public GetMonsterInfo(string[] parts) : this(Id.FromString(parts[0]), Id.FromString('M', parts[1])) { }
 
         public GetMonsterInfo(Id player, Id monsterId)
         {
@@ -31,17 +31,24 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent GatherData()
         {
-            _monster = ResourceLocator.GetMonster(_monsterId.Trunk);
             var repo = new PlayerRepository(new MockedPlayerData());
             _player = repo.Get(_playerId);
+
+            var scene = _player.Scene;
+
+            _monster = scene.Enemies
+                            .SingleOrDefault(i => i.Id == _monsterId);
+
             return this;
         }
 
         protected override ReadonlyEvent Resolve()
         {
-            if(!playerMayViewMonster)
+            if(_monster == null)
             {
-                throw new TodoException("Handle error thrown by player attempting illegal action");
+                Result.Message = "No monster of that type in the Scene";
+                Result.Resolution = EventResolutionType.Rollback;
+                return this;
             }
 
             Result.Actor = _player;

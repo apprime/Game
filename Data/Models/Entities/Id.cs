@@ -20,14 +20,14 @@ namespace Data.Models.Entities
             Validate(raw);
             Prefix = raw[0];
             Position = Position.FromString(raw.Substring(1, 12));
-            Trunk = raw.Substring(14);
+            Trunk = raw.Substring(13);
         }
 
         private Id(char prefix, Position position)
         {
             Prefix = prefix;
             Position = position;
-            //Trunk = trunk; this needs to know how to create itself.
+            Trunk = "123";
         }
 
         public readonly char Prefix;
@@ -37,6 +37,12 @@ namespace Data.Models.Entities
         //Todo: This should be replaced by some sort of Type input and an actual generation of Id hash;
         public static Id FromString(string input)
         {
+            return new Id(input);
+        }
+
+        public static Id FromString(char prefix, string input)
+        {
+            input = prefix + input;
             return new Id(input);
         }
 
@@ -67,7 +73,9 @@ namespace Data.Models.Entities
         {
             if(input is Id that)
             {
-                return Prefix.Equals(that.Prefix) && Trunk.Equals(that.Trunk);
+                return Prefix.Equals(that.Prefix)
+                    && Position.Equals(that.Position)
+                    && Trunk.Equals(that.Trunk);
             }
 
             //Not the correct type

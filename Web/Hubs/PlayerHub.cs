@@ -38,6 +38,12 @@ namespace Web.Hubs
             Engine.Instance.Push(e);
         }
 
+        public void GetMyLocation(string eventString)
+        {
+            var e = EventParser.Parse(eventString);
+            Engine.Instance.Push(e);
+        }
+
         public void Create(Player player)
         {
 

@@ -54,14 +54,9 @@ namespace Data.Models.Nodes
         {
             get
             {
-                return _internal[4];
+                return _internal[3];
             }
         }
-
-        //public override string ToString()
-        //{
-        //    return Continent.ToString() + Region.ToString() + Sector.ToString() + Location.ToString();
-        //}
 
         public override bool Equals(object obj)
         {

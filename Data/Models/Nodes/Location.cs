@@ -1,5 +1,4 @@
 ﻿using Data.Models.Entities;
-using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Entities.Humans;
 using Data.Models.Gamestate;
 using Newtonsoft.Json;

@@ -73,3 +73,24 @@ API Documentation.
 We need an overall structure for the JS-client.
 Scratch that, the TypeScript client.
 We can't really use angular, but somehow it should resemble our hubs/events.
+
+9.
+Event structure needs redesign. 
+a) Switch names around so that Event is base class and WriteEvent inherits. (makes more sense than to return readonly event that actually isnt readonly)
+b) Change Process from GatherrData>Resolve>Persist>Broadcast to PreProcess>LockData>Act>ReleaseData>PostProcess>Broadcast
+																PreProcess>Act>PostProcess>Broadcast for readonly
+
+For Readonly, Act simply polls various repos and returns result.
+
+For write:
+PreProcess does input validation and casts strings into Id types.
+LockData uses repos to fetch and lock instances of all things
+Act will use Mutators to write to these objects
+ReleaseData releases locks -> something clever here to automatically do this
+PostProcess will create the EventResult and if needed create new events to push into engine.
+
+Idea: handle locking and unlocking by having some sort of lazy wrapper for all items
+var x = Lockable<T>(myId);
+x.Lock();
+x.obj.DoStuff();
+x.Unlock();
