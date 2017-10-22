@@ -1,9 +1,8 @@
-﻿using Core.Processes.ContentGeneration;
+﻿using Data.Factories;
+using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.Nodes;
 using System.Linq;
-using System;
-using Data.Models.Entities;
 
 namespace Core.Mutators
 {

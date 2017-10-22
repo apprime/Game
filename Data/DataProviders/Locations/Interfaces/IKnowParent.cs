@@ -2,6 +2,6 @@
 {
     public interface IKnowParent<TParent>
     {
-        TParent GetParent(string id);
+        TParent GetParent(byte id);
     }
 }

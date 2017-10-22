@@ -4,6 +4,6 @@ namespace Data.DataProviders.Locations.Interfaces
 {
     public interface IKnowChildren<TChild>
     {
-        IEnumerable<TChild> GetChildren(string id);
+        IEnumerable<TChild> GetChildren(byte id);
     }
 }

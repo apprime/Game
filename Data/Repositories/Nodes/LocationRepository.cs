@@ -7,19 +7,24 @@ namespace Data.Repositories.Nodes
     public class LocationRepository
     {
         private IPositionDataProvider<Location> _dataProvider;
-        private Dictionary<string, Location> _data = new Dictionary<string, Location>();
+        private Dictionary<byte, Location> _data = new Dictionary<byte, Location>();
 
         public LocationRepository(IPositionDataProvider<Location> dataProvider)
         {
             _dataProvider = dataProvider;
         }
 
-        public  Location Get(string locationId)
+        public LocationRepository()
         {
-            return TodoCache(locationId);
+            _dataProvider = new MockedLocationData();
         }
 
-        private Location TodoCache(string locationId)
+        public  Location Get(Position position)
+        {
+            return TodoCache(position.Location);
+        }
+
+        private Location TodoCache(byte locationId)
         {
             if(_data.TryGetValue(locationId, out Location value))
             {

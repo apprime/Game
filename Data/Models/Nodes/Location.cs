@@ -1,4 +1,6 @@
-﻿using Data.Models.Entities.Humans;
+﻿using Data.Models.Entities;
+using Data.Models.Entities.EntityInterfaces;
+using Data.Models.Entities.Humans;
 using Data.Models.Gamestate;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +16,8 @@ namespace Data.Models.Nodes
     /// </summary>
     public class Location : ILocation
     {
-        public Region Region { get; } //TODO: Make sure this is properly set on create
+        public Sector Parent { get; } //TODO: Make sure this is properly set on create
+        public IEnumerable<Seed> Seeds;
         
         [JsonConstructor]
         public Location(string name, Position position)

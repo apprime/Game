@@ -52,10 +52,10 @@ namespace Core.Processes.Generator
         }
 
         //TODO: This should be a static shared method for all entities. Where?
-        private Id GenerateId()
-        {
-            return Id.Create('S');
-        }
+        //private Id GenerateId()
+        //{
+        //    //return Id.Create('S',);
+        //}
 
         //TODO: This represents string fetched from somewhere
         private JObject test = new JObject

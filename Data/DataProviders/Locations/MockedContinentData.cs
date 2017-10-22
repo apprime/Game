@@ -19,12 +19,12 @@ namespace Data.DataProviders.Locations
             }
         }
 
-        public Continent Get(string id)
+        public Continent Get(byte id)
         {
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<Region> GetChildren(string id)
+        public IEnumerable<Region> GetChildren(byte id)
         {
             throw new System.NotImplementedException();
         }

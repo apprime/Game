@@ -4,39 +4,21 @@ namespace Data.Models.Nodes
 {
     public struct Position
     {
-        private string _internal;
+        private byte[] _internal;
 
         public Position(string input)
         {
-            if(input.Length != 4)
+            if(input.Length != 12)
             {
-                throw new ArgumentException("Positions must always be string of length 4");
+                throw new ArgumentException("Positions must always be string of length 12, 3 for each digit in the positions. Padded with zeroes if needed (such as 001, 010 and 100)");
             }
-            _internal = input;
-        }
 
-        public char Continent
-        {
-            get
-            {
-                return _internal[0];
-            }
-        }
+            _internal = new byte[4];
 
-        public string Region
-        {
-            get
-            {
-                return _internal.Substring(0, 2);
-            }
-        }
-
-        public string Sector
-        {
-            get
-            {
-                return _internal.Substring(0, 3);
-            }
+            _internal[0] = byte.Parse(input.Substring(0, 3));
+            _internal[1] = byte.Parse(input.Substring(3, 3));
+            _internal[2] = byte.Parse(input.Substring(6, 3));
+            _internal[3] = byte.Parse(input.Substring(9, 3));
         }
 
         public static Position FromString(string input)
@@ -44,24 +26,51 @@ namespace Data.Models.Nodes
             return new Position(input);
         }
 
-        public string Location
+        public byte Continent
         {
             get
             {
-                return _internal;
+                return _internal[0];
             }
         }
 
-        public override string ToString()
+        public byte Region
         {
-            return Location.ToString();
+            get
+            {
+                return _internal[1];
+            }
         }
+
+        public byte Sector
+        {
+            get
+            {
+                return _internal[2];
+            }
+        }
+
+        public byte Location
+        {
+            get
+            {
+                return _internal[4];
+            }
+        }
+
+        //public override string ToString()
+        //{
+        //    return Continent.ToString() + Region.ToString() + Sector.ToString() + Location.ToString();
+        //}
 
         public override bool Equals(object obj)
         {
             if (obj is Position posB)
             {
-                return Location == posB.Location;
+                return Continent == posB.Continent
+                    && Region == posB.Region
+                    && Sector == posB.Sector
+                    && Location == posB.Location;
             }
             else
             {
@@ -71,8 +80,7 @@ namespace Data.Models.Nodes
 
         public override int GetHashCode()
         {
-            //Location is the entire value, 4 chars as a string.
-            return Location.GetHashCode();
+            return _internal.GetHashCode();
         }
     }
 }

@@ -7,19 +7,19 @@ namespace Data.Repositories.Nodes
     public class ContinentRepository
     {
         private IPositionDataProvider<Continent> _dataProvider;
-        private Dictionary<char, Continent> _data = new Dictionary<char, Continent>();
+        private Dictionary<byte, Continent> _data = new Dictionary<byte, Continent>();
 
         public ContinentRepository(IPositionDataProvider<Continent> dataProvider)
         {
             _dataProvider = dataProvider;
         }
 
-        public Continent Get(char continentId)
+        public Continent Get(byte continentId)
         {
             return TodoCache(continentId);
         }
 
-        private Continent TodoCache(char continentId)
+        private Continent TodoCache(byte continentId)
         {
             if (_data.TryGetValue(continentId, out Continent value))
             {
@@ -29,7 +29,7 @@ namespace Data.Repositories.Nodes
             else
             {
                 //TODO: Continent should maybe use a string of 1 char just to conform? Otherwise generic interface wont work
-                var newValue = _dataProvider.Get(continentId.ToString());
+                var newValue = _dataProvider.Get(continentId);
                 //setCache
                 return newValue;
             }

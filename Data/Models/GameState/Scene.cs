@@ -15,7 +15,7 @@ namespace Data.Models.Gamestate
         {
             Entities = new List<IEntity>();
             //TODO: S + Position + Trunk
-            Id = Id.FromString("S1111123"); 
+            Id = Id.FromString("S001001001123"); 
         }
 
         public Scene(Location location)

@@ -6,18 +6,18 @@ namespace Data.DataProviders.Locations
 {
     public class MockedRegionData : IPositionDataProvider<Region>, IKnowChildren<Sector>, IKnowParent<Continent>
     {
-        public Region Get(string regionId)
+        public Region Get(byte regionId)
         {
             throw new System.NotImplementedException();
         }
 
 
-        public IEnumerable<Sector> GetChildren(string id)
+        public IEnumerable<Sector> GetChildren(byte id)
         {
             throw new System.NotImplementedException();
         }
 
-        public Continent GetParent(string id)
+        public Continent GetParent(byte id)
         {
             throw new System.NotImplementedException();
         }

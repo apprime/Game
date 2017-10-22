@@ -2,6 +2,6 @@
 {
     public interface IPositionDataProvider<T>
     {
-        T Get(string id);
+        T Get(byte id);
     }
 }

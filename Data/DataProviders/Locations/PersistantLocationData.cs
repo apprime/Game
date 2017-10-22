@@ -6,12 +6,12 @@ namespace Data.DataProviders.Locations
 {
     class PersistantLocationData : IPositionDataProvider<Location>
     {
-        public Location Get(string locationId)
+        public Location Get(byte locationId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Location> GetAllForParent(string parentId)
+        public IEnumerable<Location> GetAllForParent(byte parentId)
         {
             throw new NotImplementedException();
         }

@@ -1,25 +1,23 @@
-﻿using Data.Models.Gamestate;
-using Data.Repositories.Nodes;
+﻿using Data.Factories;
+using Data.Models.Gamestate;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace Data.Models.Nodes
 {
     public class GlobalLocation : Location
     {
-        private ImmutableArray<Scene> scenes;
+        private Scene[] _scenes = new Scene[1];
 
         public GlobalLocation(string name, Position position) : base(name, position)
         {
-            var globalScene = (new SceneRepository()).Create(this);
-            scenes = ImmutableArray.Create<Scene>().Add(globalScene);
+            _scenes[0] = SceneFactory.Create(this);
         }
 
         public override IList<Scene> Scenes
         {
             get
             {
-                return scenes;
+                return _scenes;
             }
         }
     }

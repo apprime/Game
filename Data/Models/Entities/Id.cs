@@ -12,36 +12,22 @@ namespace Data.Models.Entities
     public class Id
     {
         private const int MaxLength = 20;
-        private const int MinLength = 6;
+        private const int MinLength = 14;
         private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'S' };
 
         private Id(string raw)
         {
             Validate(raw);
             Prefix = raw[0];
-            Position = Position.FromString(raw.Substring(1, 4));
-            Trunk = raw.Substring(5);
+            Position = Position.FromString(raw.Substring(1, 12));
+            Trunk = raw.Substring(14);
         }
 
-        private Id(char prefix)
+        private Id(char prefix, Position position)
         {
             Prefix = prefix;
-            Trunk = GenerateTrunk();
-        }
-
-        private static string GenerateTrunk()
-        {
-            return (new Random().Next() * 1000).ToString();
-        }
-
-        //private static Random GetRandom()
-        //{
-
-        //}
-
-        private static Random GetRandom(int seed)
-        {
-            return new Random(seed);
+            Position = position;
+            //Trunk = trunk; this needs to know how to create itself.
         }
 
         public readonly char Prefix;
@@ -52,6 +38,11 @@ namespace Data.Models.Entities
         public static Id FromString(string input)
         {
             return new Id(input);
+        }
+
+        public static Id FromParts(char prefix, Position position)
+        {
+            return new Id(prefix, position);
         }
 
         private void Validate(string raw)
@@ -72,11 +63,6 @@ namespace Data.Models.Entities
             }
         }
 
-        public static Id Create(char prefix)
-        {
-            return new Id(prefix);
-        }
-
         public override bool Equals(object input)
         {
             if(input is Id that)
@@ -90,14 +76,12 @@ namespace Data.Models.Entities
 
         public override int GetHashCode()
         {
-            //TODO: I am undecided on whether Trunk should be unique on its own
-            // If it is, then these acrobatics are unnecessary.
-
             //TODO2 for year 2140: If there are large lists of these Id's (unknown) we might need a stronger hashing here.
             unchecked
             {
                 int hash = 17;
                 hash = hash * 23 + Trunk.GetHashCode();
+                hash = hash * 23 + Position.GetHashCode();
                 hash = hash * 23 + Prefix.GetHashCode();
                 return hash;
             }
