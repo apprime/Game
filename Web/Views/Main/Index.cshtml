@@ -3,6 +3,8 @@
 <button id="subscribe">Subscribe</button>
 <button id="unsubscribe">Unsubscribe</button>
 <button id="getMonster">Get Monster</button>
+<button id="move">Move</button>
+<button id="move2">go back</button>
 
 <ul id="eventList"></ul>
 
@@ -35,10 +37,14 @@
 
         var playerId = "123";
         var location = "001001001001";
+        var newLocation = "001001001002";
         var monsterId = "123";
         var subscribeEvent = "12subscribe|" + location + playerId;
         var unsubscribeEvent = "12unsubscribe|" + location + playerId;
-        var getMonsterEvent = "31getinfo|" + location + playerId + "/" + monsterId;
+        var getMonsterEvent = "31getinfo|" + location + playerId + "/" + location + monsterId;
+        var changeLocationEvent = "12changeLocation|" + location + playerId + "/" + newLocation;
+        var changeLocationEvent2 = "12changeLocation|" + newLocation + playerId + "/" + location;
+        //var getLocationEvent = "11getStatus" +  
 
         function pushedContent(content) {
             console.log("Incoming data: ", content);
@@ -67,51 +73,20 @@
             monsterHub.invoke("getInfo", getMonsterEvent);
         });
 
+        $("#move").click(function () {
+            playerHub.invoke("changeLocation", changeLocationEvent)
+
+        })
+
+        $("#move2").click(function () {
+            playerHub.invoke("changeLocation", changeLocationEvent2)
+
+        })
+
         gameHub.start();
         playerHub.start();
         monsterHub.start();
     });
 </script>
-@*<script type="text/javascript">
-        $.ajax({
-            url: '/Api/Posts/',
-            method: 'GET',
-            dataType: 'JSON',
-            success: addPostsList
-        });
-
-        function addPostsList(posts) {
-            $.each(posts, function (index) {
-                var post = posts[index];
-                addPost(post);
-            });
-        }
-
-        function addPost(post) {
-            $("#postsList").append(
-                    '<li><b>' + post.userName + '</b><br>' + post.text + '</li><br>'
-                 );
-        }
-
-        var hub = $.connection.postsHub;
-
-        hub.client.publishPost = addPost;
-
-        $("#publishPostButton").click(function () {
-
-            var post = {
-                userName: $("#userNameInput").val() || "Guest",
-                text: $("#textInput").val()
-            };
-            $.ajax({
-                url: '/Api/Posts/AddPost',
-                method: 'POST',
-                data: post
-            });
-        });
-
-        $.connection.hub.logging = true;
-        $.connection.hub.start();
-</script>*@
 
 <div>Controls</div><!-- Todo -->

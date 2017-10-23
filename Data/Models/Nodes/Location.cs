@@ -16,7 +16,7 @@ namespace Data.Models.Nodes
     public class Location : ILocation
     {
         public Sector Parent { get; } //TODO: Make sure this is properly set on create
-        public IEnumerable<Seed> Seeds;
+        public List<Seed> Seeds;
         
         [JsonConstructor]
         public Location(string name, Position position)
@@ -24,6 +24,7 @@ namespace Data.Models.Nodes
             Name = name;
             Position = position;
             Scenes = new List<Scene>();
+            Seeds = new List<Seed>();
         }
 
         public string Name { get; set; }
@@ -39,14 +40,20 @@ namespace Data.Models.Nodes
 
         public void RemoveScene(Scene previousScene)
         {
-            throw new NotImplementedException();
+            Scenes.Remove(previousScene);
+            
+            if(!Scenes.Any())
+            {
+                //TODO: Remove itself from Repo?
+                //TODO2: Should GlobalLocations also do this?
+            }
         }
 
-        public IEnumerable<Location> Neighbours { get; } = Enumerable.Empty<Location>(); //TODO: This should be set upon load!
+        public IList<Position> Neighbours { get; set;  } = new List<Position>(); //TODO: This should be set upon load and be enumerable, not list
 
         public bool HasNeighbour(Position p)
         {
-            return Neighbours.Any(i => i.Position.Equals(p));
+            return Neighbours.Any(i => i == p);
         }
     }
 }

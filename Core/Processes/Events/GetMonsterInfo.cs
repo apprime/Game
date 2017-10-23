@@ -19,9 +19,9 @@ namespace Core.Processes.Events
         Id _playerId;
 
         EventTargets _eventTargets = EventTargets.Player;
-        private bool playerMayViewMonster => _player.Scene.Enemies.Any(i => i.Id.Equals(_monsterId));
+        private bool playerMayViewMonster => _player.Scene.Enemies.Any(i => i.Id == _monsterId);
 
-        public GetMonsterInfo(string[] parts) : this(Id.FromString(parts[0]), Id.FromString('M', parts[1])) { }
+        public GetMonsterInfo(string[] parts) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1])) { }
 
         public GetMonsterInfo(Id player, Id monsterId)
         {
@@ -44,6 +44,13 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent Resolve()
         {
+            if(!playerMayViewMonster)
+            {
+                Result.Message = "You can't view monsters in this scene";
+                Result.Resolution = EventResolutionType.Rollback;
+                return this;
+            }
+
             if(_monster == null)
             {
                 Result.Message = "No monster of that type in the Scene";

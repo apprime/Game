@@ -41,7 +41,7 @@ namespace Data.Factories
         public static Scene Create(Location location)
         {
             var scene = new Scene(location);
-            scene.Entities = location.Seeds.Select(s => s.Hydrate()).ToList();
+            scene.Entities = location.Seeds.Select(s => s.Hydrate(scene.Position)).ToList();
             return scene;
         }
 

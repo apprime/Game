@@ -1,5 +1,6 @@
 ﻿using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Exceptions;
+using Data.Models.Nodes;
 using Data.Repositories;
 
 namespace Data.Models.Entities
@@ -20,13 +21,13 @@ namespace Data.Models.Entities
             return new Seed('M', id);
         }
 
-        public IEntity Hydrate()
+        public IEntity Hydrate(Position position)
         {
             switch (Prefix)
             {
                 case 'M':
                     var repo = new MonsterRepository();
-                    return repo.Get(this);
+                    return repo.Get(this, position);
                 default:
                     throw new TodoException("We need a nicer way to hydrate seeds");
             }

@@ -40,7 +40,7 @@ namespace Data.Models.Gamestate
 
         public void RemovePlayer(Player player)
         {
-            throw new NotImplementedException();
+            Entities.Remove(player);
         }
 
         public void AddPlayer(Player player)

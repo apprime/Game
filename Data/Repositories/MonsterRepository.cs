@@ -15,7 +15,7 @@ namespace Data.Repositories
         private Dictionary<int, Monster> _data = new Dictionary<int, Monster>();
 
         //These are all monsters active in all places
-        //private Dictionary<Id, Monster> _activeMonsters  = new Dictionary<Id, Monster>();
+        private Dictionary<Id, Monster> _activeMonsters  = new Dictionary<Id, Monster>();
 
         public MonsterRepository(IMonsterDataProvider monsterDataProvider)
         {
@@ -27,7 +27,7 @@ namespace Data.Repositories
             _dataProvider = new MockedMonsterData();
         }
 
-        public Monster Get(Seed monster/*, Position position*/)
+        public Monster Get(Seed monster, Position position)
         {
             if(_data.TryGetValue(monster.Id, out Monster m))
             {
@@ -36,25 +36,26 @@ namespace Data.Repositories
             else
             {
                 var newMonster = _dataProvider.Get(monster);
+                newMonster.Id.Position = position;
                 _data.Add(monster.Id, newMonster);
-                //_activeMonsters.Add(Id.FromParts('M', position), newMonster);
+                _activeMonsters.Add(Id.FromParts('M', position), newMonster);
                 return newMonster;
             }
         }
 
-        //public Monster Get(Id monsterId)
-        //{
-        //    if (_activeMonsters.TryGetValue(monsterId, out Monster m))
-        //    {
-        //        return m;
-        //    }
-        //    else
-        //    {
-        //        var mid = int.Parse(monsterId.Trunk);
-        //        var newMonster = _dataProvider.Get(Seed.Monster(mid));
-        //        _activeMonsters.Add(monsterId, newMonster);
-        //        return newMonster;
-        //    }
-        //}
+        public Monster Get(Id monsterId)
+        {
+            if (_activeMonsters.TryGetValue(monsterId, out Monster m))
+            {
+                return m;
+            }
+            else
+            {
+                var mid = int.Parse(monsterId.Trunk);
+                var newMonster = _dataProvider.Get(Seed.Monster(mid));
+                _activeMonsters.Add(monsterId, newMonster);
+                return newMonster;
+            }
+        }
     }
 }

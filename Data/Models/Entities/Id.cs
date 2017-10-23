@@ -31,8 +31,8 @@ namespace Data.Models.Entities
         }
 
         public readonly char Prefix;
-        public readonly Position Position;
         public readonly string Trunk;
+        public Position Position;
 
         //Todo: This should be replaced by some sort of Type input and an actual generation of Id hash;
         public static Id FromString(string input)
@@ -95,5 +95,8 @@ namespace Data.Models.Entities
             }
             
         }
+        
+        public static bool operator == (Id a, Id b) => a.Equals(b);
+        public static bool operator !=(Id a, Id b) => !a.Equals(b);
     }
 }

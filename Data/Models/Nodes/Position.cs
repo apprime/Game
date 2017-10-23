@@ -73,6 +73,9 @@ namespace Data.Models.Nodes
             }
         }
 
+        public static bool operator == (Position a, Position b) => a.Equals(b);
+        public static bool operator != (Position a, Position b) => !a.Equals(b);
+
         public override int GetHashCode()
         {
             return _internal.GetHashCode();

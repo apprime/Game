@@ -72,7 +72,8 @@ namespace Data.Models.EventResolution
         //Todo: We might make this one an enum as well?
         private EventHeader ParseAction(string headerstring)
         {
-            Action = headerstring.Substring(2).ToLower(CultureInfo.InvariantCulture); //Todo: Scour the lands for yet more of these grand prospects to undertake when refining ye olde Code!
+            Action = headerstring.Substring(2)
+                                 .ToLower(CultureInfo.InvariantCulture); //Todo: Scour the lands for yet more of these grand prospects to undertake when refining ye olde Code!
             return this;
         }
 

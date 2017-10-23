@@ -10,6 +10,8 @@ namespace Data.Models.Entities.Humans
 {
     public class Player : IPositioned, IActor
     {
+        private Scene _scene;
+
         //TODO: Dont allow this, use a proper way to instatiate objects
         public Player(string data)
         {
@@ -50,7 +52,15 @@ namespace Data.Models.Entities.Humans
 
         public IEnumerable<IEntity> Party { get; internal set; }
 
-        public Scene Scene { get; set; }
+        public Scene Scene
+        {
+            get => _scene;
+            set 
+            {
+                Id.Position = value.Position; //The id needs updating so that the repos know where to look.
+                _scene = value;
+            }
+        }
 
         public HitPoints HitPoints { get; }
 

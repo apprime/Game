@@ -1,11 +1,9 @@
-﻿using System;
-using Core.Mutators;
+﻿using Core.Mutators;
 using Core.ResourceManagers;
 using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
-using Data.Models.Gamestate;
 using Data.Models.Nodes;
 using Data.Repositories;
 
@@ -14,7 +12,7 @@ namespace Core.Processes.Events
     internal class ChangeLocationEvent : Event
     {
         private Id _playerId;
-        private Data.Models.Nodes.Position _destinationId;
+        private Position _destinationId;
         private Player _actor;
 
         #region Rules
@@ -22,9 +20,9 @@ namespace Core.Processes.Events
         private Movement movement;
         #endregion
 
-        public ChangeLocationEvent(string[] parts) : this(Id.FromString(parts[1]), Data.Models.Nodes.Position.FromString(parts[2])) { } //This CTOR only converts string array to real params.
+        public ChangeLocationEvent(string[] parts) : this(Id.FromString('P',parts[0]), Position.FromString(parts[1])) { } //This CTOR only converts string array to real params.
 
-        internal ChangeLocationEvent(Id player, Data.Models.Nodes.Position destination)
+        internal ChangeLocationEvent(Id player, Position destination)
         {
             _playerId = player;
             _destinationId = destination;
