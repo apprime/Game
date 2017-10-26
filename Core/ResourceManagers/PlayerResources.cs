@@ -1,9 +1,5 @@
-﻿using Data.Models.Gamestate;
-using Data.Models.Entities.Humans;
-using Data.Models.EventResolution;
+﻿using Data.Models.Entities.Humans;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Core.ResourceManagers
 {
@@ -12,17 +8,7 @@ namespace Core.ResourceManagers
     {
         private static ConcurrentDictionary<string, Player> _players = new ConcurrentDictionary<string, Player>();
 
-        internal static IEnumerable<Player> Get(EventResult result)
-        {
-            if (result.Targets.Contains(EventTargets.World))
-            {
-                return _players.Select(i => i.Value);
-            }
-            else
-            {
-                return GetFiltered(result).Distinct();
-            }
-        }
+
 
         //internal static Player aGet(string id)
         //{
@@ -48,30 +34,6 @@ namespace Core.ResourceManagers
             _players.TryRemove(player.Id.Trunk, out playerValue);
         }
 
-        private static IEnumerable<Player> GetFiltered(EventResult result)
-        {
-            if (result.Targets.Contains(EventTargets.Player))
-            {
-                yield return (Player)result.Actor;
-            }
-
-            if (result.Targets.Contains(EventTargets.Party))
-            {
-                Player player = (Player)result.Actor;
-                foreach (Player p in player.Party)
-                {
-                    yield return p;
-                }
-            }
-
-            if (result.Targets.Contains(EventTargets.Nearby))
-            {
-                Scene scene = result.Actor.Scene;
-                foreach (Player p in scene.Players)
-                {
-                    yield return p;
-                }
-            }
-        }
+       
     }
 }

@@ -25,9 +25,9 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent GatherData()
         {
-            var repo = new PlayerRepository(new MockedPlayerData());
+            var repo = new PlayerRepository();
             _player = repo.Get(_playerId);
-            _location = _player.Scene.Location;
+            _location = _player.Location;
             
             return this;
         }

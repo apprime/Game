@@ -4,6 +4,7 @@ using Core.Mutators;
 using Core.ResourceManagers;
 using System;
 using Data.Models.Entities.EntityInterfaces;
+using Data.Repositories;
 
 namespace Core.Processes.Events
 {
@@ -34,15 +35,15 @@ namespace Core.Processes.Events
             _actor = ResourceLocator.Get(_attackerId) as IAttack;
             _target = ResourceLocator.Get(_targetId) as IDestructible;
 
-            
-
             return this;
         }
 
         protected override ReadonlyEvent Resolve()
         {
+            var repo = new PlayerRepository();
+
             Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(damage), Targets = new IEntity[] { _target } });
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = damage.ToString(), Targets = ResourceLocator.GetPlayers(Result) });
+            Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = damage.ToString(), Targets = repo.Get(Result) });
             Result.Actor = _actor;
             Result.Targets = _eventTargets;
             Result.Resolution = EventResolutionType.Commit;
@@ -53,9 +54,6 @@ namespace Core.Processes.Events
         protected override Event Persist()
         {
             damage = Process(_actor, _target);
-
-
-
             return this;
         }
 

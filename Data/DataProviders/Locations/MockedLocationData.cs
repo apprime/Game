@@ -1,6 +1,7 @@
 ﻿using Data.DataProviders.Locations.Interfaces;
 using Data.Models.Entities;
 using Data.Models.Nodes;
+using Data.Repositories;
 using System.Collections.Generic;
 
 namespace Data.DataProviders.Locations
@@ -8,36 +9,40 @@ namespace Data.DataProviders.Locations
     public class MockedLocationData : IPositionDataProvider<Location>, IKnowParent<Sector>
     {
         //TODO: We need to be able to fetch list of location per sector(first 3 valiues in Position) from a resource.
-        public Location Get(byte location)
+        public Location Get(Position position)
         {
-            switch (location)
+            switch (position.Location)
             {
                 case 1:
-                    return GetTown();
+                    return GetTown(position);
                 case 2:
-                    return GetGrass();
+                    return GetGrass(position);
                 case 3:
                     return new Location("The Forest", Position.FromString("000000000003"));
                 case 4:
                     return new Location("The Instance", Position.FromString("000000000004"));
                 default:
                     //TODO: Handle default somehow
-                    return GetTown();
+                    return GetTown(position);
             }
         }
 
-        private static Location GetGrass()
+        private static Location GetGrass(Position position)
         {
             var loc = new Location("The Grass", Position.FromString("001001001002"));
 
             loc.Seeds.Add(Seed.Monster(123));
+
+            var repo = new MonsterRepository();
+            loc.Entities.Add(repo.Get(123, position));
+
             loc.Neighbours.Add(Position.FromString("001001001001"));
             loc.Neighbours.Add(Position.FromString("001001001004"));
 
             return loc;
         }
 
-        private static Location GetTown()
+        private static Location GetTown(Position position)
         {
             var seeds = new List<Seed>();
             seeds.Add(Seed.Monster(123));

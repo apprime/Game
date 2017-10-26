@@ -27,17 +27,17 @@ namespace Data.Repositories
             _dataProvider = new MockedMonsterData();
         }
 
-        public Monster Get(Seed monster, Position position)
+        public Monster Get(int id, Position position)
         {
-            if(_data.TryGetValue(monster.Id, out Monster m))
+            if(_data.TryGetValue(id, out Monster m))
             {
                 return m;
             }
             else
             {
-                var newMonster = _dataProvider.Get(monster);
+                var newMonster = _dataProvider.Get(id);
                 newMonster.Id.Position = position;
-                _data.Add(monster.Id, newMonster);
+                _data.Add(id, newMonster);
                 _activeMonsters.Add(Id.FromParts('M', position), newMonster);
                 return newMonster;
             }
@@ -51,9 +51,8 @@ namespace Data.Repositories
             }
             else
             {
-                var mid = int.Parse(monsterId.Trunk);
-                var newMonster = _dataProvider.Get(Seed.Monster(mid));
-                _activeMonsters.Add(monsterId, newMonster);
+                var newMonster = _dataProvider.Get(int.Parse(monsterId.Trunk));
+                _activeMonsters.Add(newMonster.Id, newMonster);
                 return newMonster;
             }
         }

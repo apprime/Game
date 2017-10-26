@@ -28,9 +28,11 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent GatherData()
         {
+            var repo = new PlayerRepository();
+
             if(ScoreCanIncrease(currentPlayer))
             {
-                Result.Deltas.Add(new Delta { Actor = currentPlayer, Key = "Score", Value = ScoreAmount.ToString(), Targets = ResourceLocator.GetPlayers(Result) });
+                Result.Deltas.Add(new Delta { Actor = currentPlayer, Key = "Score", Value = ScoreAmount.ToString(), Targets = repo.Get(Result) });
                 Result.Actor = currentPlayer;
                 Result.Targets = ValidScoreTargets;
                 Result.Resolution = EventResolutionType.Commit;

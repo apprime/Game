@@ -1,13 +1,15 @@
 ﻿using Data.DataProviders.Locations;
+using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Nodes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Data.Repositories.Nodes
 {
     public class LocationRepository
     {
         private IPositionDataProvider<Location> _dataProvider;
-        private Dictionary<byte, Location> _data = new Dictionary<byte, Location>();
+        private Dictionary<Position, List<Location>> _data = new Dictionary<Position, List<Location>>();
 
         public LocationRepository(IPositionDataProvider<Location> dataProvider)
         {
@@ -19,24 +21,38 @@ namespace Data.Repositories.Nodes
             _dataProvider = new MockedLocationData();
         }
 
-        public  Location Get(Position position)
+        public IEnumerable<Location> Get(Position position)
         {
-            return TodoCache(position.Location);
+            return TodoCache(position);
         }
 
-        private Location TodoCache(byte locationId)
+        public Location Get(Position position, IEntity entity)
         {
-            if(_data.TryGetValue(locationId, out Location value))
+            var all = Get(position);
+            return all.SingleOrDefault(i => i.Entities.Any(j => j == entity));
+        }
+
+        public Location Create(Position position)
+        {
+            if (!_data.ContainsKey(position))
             {
-                //updateCache
-                return value;
+                _data.Add(position, new List<Location>());
             }
-            else
+
+            var newLocation = _dataProvider.Get(position);
+            _data[position].Add(newLocation);
+            return newLocation;
+        }
+
+        private IEnumerable<Location> TodoCache(Position position)
+        {
+            if (!_data.ContainsKey(position))
             {
-                var newValue = _dataProvider.Get(locationId);
-                //setCache
-                return newValue;
+                _data.Add(position, new List<Location>());
+                _data[position].Add(_dataProvider.Get(position));
             }
+
+            return _data[position];
         }
     }
 }

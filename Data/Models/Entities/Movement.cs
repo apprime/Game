@@ -1,5 +1,5 @@
 ﻿using Data.Models.Entities.Humans;
-using Data.Models.Gamestate;
+using Data.Models.Nodes;
 
 namespace Data.Models.Entities
 {
@@ -7,7 +7,7 @@ namespace Data.Models.Entities
     {
         //TODO: We might want Traveler to be IEntity so that we can move NPCs and such also
         public Player Traveler { get; set; }
-        public Scene Destination { get; set; }
-        public Scene Origin { get; set; }
+        public Location Destination { get; set; }
+        public Location Origin { get; set; }
     }
 }

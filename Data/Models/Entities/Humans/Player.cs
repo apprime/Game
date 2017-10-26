@@ -1,5 +1,4 @@
 ﻿using Data.Models.Entities.EntityInterfaces;
-using Data.Models.Gamestate;
 using Data.Models.Nodes;
 using Newtonsoft.Json;
 using System;
@@ -10,7 +9,7 @@ namespace Data.Models.Entities.Humans
 {
     public class Player : IPositioned, IActor
     {
-        private Scene _scene;
+        private Location _location;
 
         //TODO: Dont allow this, use a proper way to instatiate objects
         public Player(string data)
@@ -26,12 +25,12 @@ namespace Data.Models.Entities.Humans
         }
 
         [JsonConstructor]
-        public Player(string id, string name, int score, Scene scene, IEnumerable<Player> party)
+        public Player(string id, string name, int score, Location location, IEnumerable<Player> party)
         {
             Id = Id.FromString(id);
             Name = name;
             Score = score;
-            Scene = scene;
+            Location = location;
             Party = party;
         }
 
@@ -44,7 +43,6 @@ namespace Data.Models.Entities.Humans
         //      on SignalR level or whether we just use the gamestate for this.
         public string ConnectionId { get; set; }
         public IEnumerable<string> ConnectionGroups { get; set; }
-
         public Position LoggedOutPosition { get; set; } //Todo: This needs a default value;
 
 
@@ -52,25 +50,29 @@ namespace Data.Models.Entities.Humans
 
         public IEnumerable<IEntity> Party { get; internal set; }
 
-        public Scene Scene
+        public Position Position
         {
-            get => _scene;
+            get => Id.Position;
+            set => Id.Position = value;
+        }
+
+        public Location Location
+        {
+            get => _location;
             set 
             {
                 Id.Position = value.Position; //The id needs updating so that the repos know where to look.
-                _scene = value;
+                _location = value;
             }
         }
 
         public HitPoints HitPoints { get; }
-
 
         //Todo: These are values needed by CombatMutator. 
         //They should exist on a spell or monster only. (Player is not IAttack)
         public int Damage { get; } = 2;
         public string AttackName { get; } = "Placeholder strike";
         public DamageType DamageType { get; } = DamageType.Physical;
- 
 
         public Damage Mitigate(IAttack attacker, Damage payload)
         {
@@ -80,7 +82,5 @@ namespace Data.Models.Entities.Humans
         public Spellbook Spellbook { get; set; }
         public Ink Currency { get; set; }
         public Bucket Bucket{ get; set; }
-
-
     }
 }

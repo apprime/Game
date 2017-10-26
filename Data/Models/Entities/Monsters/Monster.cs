@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Data.Models.Gamestate;
-using Data.Models.Entities.EntityInterfaces;
+﻿using Data.Models.Entities.EntityInterfaces;
+using Data.Models.Nodes;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Data.Models.Entities.Monsters
 {
@@ -25,7 +25,7 @@ namespace Data.Models.Entities.Monsters
         [JsonProperty]
         public Id Id { get; protected set; }
 
-        public Scene Scene { get; set; }
+        public Position Position{ get; set; }
 
         [JsonProperty]
         public HitPoints HitPoints { get; set; }

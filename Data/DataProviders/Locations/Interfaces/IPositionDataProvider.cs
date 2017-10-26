@@ -1,7 +1,9 @@
-﻿namespace Data.DataProviders.Locations
+﻿using Data.Models.Nodes;
+
+namespace Data.DataProviders.Locations
 {
     public interface IPositionDataProvider<T>
     {
-        T Get(byte id);
+        T Get(Position pos);
     }
 }

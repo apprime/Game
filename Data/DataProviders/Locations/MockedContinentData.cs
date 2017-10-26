@@ -7,13 +7,13 @@ namespace Data.DataProviders.Locations
 {
     public class MockedContinentData : IPositionDataProvider<Continent>, IKnowChildren<Region>
     {
-        public Continent Get(char continentId)
+        public Continent Get(Position position)
         {
             //TODO: Fix this so that we have non hardcoded stuff.
-            switch(continentId)
+            switch(position.Continent)
             {
-                case '1':
-                    return SetupContinent(continentId);
+                case 1:
+                    return SetupContinent(position.Continent);
                 default:
                     throw new TodoException("Include more continents!");
             }
@@ -29,7 +29,7 @@ namespace Data.DataProviders.Locations
             throw new System.NotImplementedException();
         }
 
-        private Continent SetupContinent(char continentId)
+        private Continent SetupContinent(byte continentId)
         {
             var continent = new Continent();
             //continent.Regions = new MockedRegionData().GetChildren(continentId.ToString());

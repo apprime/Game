@@ -19,7 +19,7 @@ namespace Core.Processes.Events
         Id _playerId;
 
         EventTargets _eventTargets = EventTargets.Player;
-        private bool playerMayViewMonster => _player.Scene.Enemies.Any(i => i.Id == _monsterId);
+        private bool playerMayViewMonster => _player.Location.Enemies.Any(i => i.Id == _monsterId);
 
         public GetMonsterInfo(string[] parts) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1])) { }
 
@@ -34,7 +34,7 @@ namespace Core.Processes.Events
             var repo = new PlayerRepository(new MockedPlayerData());
             _player = repo.Get(_playerId);
 
-            var scene = _player.Scene;
+            var scene = _player.Location;
 
             _monster = scene.Enemies
                             .SingleOrDefault(i => i.Id == _monsterId);

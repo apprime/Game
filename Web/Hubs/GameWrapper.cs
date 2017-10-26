@@ -2,6 +2,7 @@
 using Core.ResourceManagers;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
+using Data.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,8 @@ namespace Web.Hubs
 
         public void Broadcast(EventResult result)
         {
-            IEnumerable<Player> targets = ResourceLocator.GetPlayers(result) ?? Enumerable.Empty<Player>();
+            var repo = new PlayerRepository();
+            IEnumerable<Player> targets = repo.Get(result) ?? Enumerable.Empty<Player>();
             foreach (var p in targets.Where(t => t != null))
             {
                 _hubContext.Clients

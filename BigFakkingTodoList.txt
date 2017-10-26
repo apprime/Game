@@ -14,25 +14,20 @@ Initially:
   We already have a game state tree that will allow us to rather quickly find players in the game world. This is 
   still going to need to exist since we also have game logic that uses the tree. 
 
-2.
+2. DONE
 There needs to be a structure for how a place in game relates to other places in game. I.E A game state as a hierarchical tree.
 Top node is all game, then branches for every major Region, then Locations in those regions. 
-Each location has Scenes, instances of the location. Each scene has lists of live entities within it. A scene is generic.
-! ONGOING: With Position, we get an ID that also relates to the game world. Location is the leaf of that graph and contains any instances of Scene within it.
+This is handled with World>Continent>Region>Sector>Location heirarchy and the Position struct for navigation.
 
 
-? So, how do we make a generic scene be specific? Inject a context object of some sort? We need to swap backgrounds, type of 
+? So, how do we make a generic location be specific? Inject a context object of some sort? We need to swap backgrounds, type of 
 entities and so on. Or do we have a factory that can set all properties in a scene so that it is "indirectly" typed?
-! ONGOING: We have builders for objects Theme and Difficulty that are supposed to contain settings for Scenes. Then Factories that create Entities, but that is only just started.
+! ONGOING: We have builders for objects Theme and Difficulty that are supposed to contain settings for location. Then Factories that create Entities, but that is only just started.
 
-? Can we have progression in a scene, as in dialogue, cutscenes or similar that only occurs in specific orders and at specific times?
-Are those also just properties of the scene, or do we want an injected dependency also orchestrate how the scene plays out? 
+? Can we have progression in a location, as in dialogue, cutscenes or similar that only occurs in specific orders and at specific times?
+Are those also just properties of the location, or do we want an injected dependency also orchestrate how the location plays out? 
 
-? What about "open world" where maybe all players want to see each other at a location? Does this mean there are two types of scenes,
-one instanced and one open? 
-! Resolved: Yes. We have GlobalScenes that cannot be instanced more than once. These scenes add all players that navigate to the location.
-
-Either way we need a clever system for building generic scenes that contain entities of a reasonable difficulty level(enemies, rewards etc.)
+Either way we need a clever system for building generic location that contain entities of a reasonable difficulty level(enemies, rewards etc.)
 UberFactory.cs?
 
 3.
@@ -51,7 +46,7 @@ Everything needs to be async. The game engine should never have to block a threa
 A project entirely for data access(done). Contains:
 - separate database for user info -> encryption, password hashing and various (.njet can handle this)
 - Caching
-- Data source abstractions
+- Data source abstractions - (done) - DataProviders do this.
 - Mappings (and sql specs inside the concrete implementation of the abstraction)
 - NO ENTITY FRAMEWORK
 - Data analysis? Scheduled work for generating views of table data. Can be used for Read commands that need complex queries mostly,
@@ -91,6 +86,4 @@ PostProcess will create the EventResult and if needed create new events to push 
 
 Idea: handle locking and unlocking by having some sort of lazy wrapper for all items
 var x = Lockable<T>(myId);
-x.Lock();
-x.obj.DoStuff();
-x.Unlock();
+x.DuringLock(obj => obj.doStuff());

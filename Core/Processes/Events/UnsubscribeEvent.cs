@@ -39,12 +39,13 @@ namespace Core.Processes.Events
         {
             if (_actor != null)
             {
+                var repo = new PlayerRepository();
                 var delta = new Delta
                 {
                     Actor = _actor,
                     Key = "Logout",
                     Value = SetLogoutMessage(),
-                    Targets = ResourceLocator.GetPlayers(Result)
+                    Targets = repo.Get(Result)
                 };
 
                 Result.Message = "You logged out";
@@ -66,7 +67,7 @@ namespace Core.Processes.Events
         {
             if(Result.Resolution == EventResolutionType.Commit)
             {
-                _actor.LoggedOutPosition = _actor.Scene.Position;
+                _actor.LoggedOutPosition = _actor.Location.Position;
                 var repo = new PlayerRepository(new MockedPlayerData());
                 repo.Unload(_actor);
                 //TODO: Use SceneMutator to clear actor of scene.

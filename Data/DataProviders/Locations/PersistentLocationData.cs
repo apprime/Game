@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Data.DataProviders.Locations
 {
-    class PersistantLocationData : IPositionDataProvider<Location>
+    class PersistentLocationData : IPositionDataProvider<Location>
     {
-        public Location Get(byte locationId)
+        public Location Get(Position position)
         {
             throw new NotImplementedException();
         }

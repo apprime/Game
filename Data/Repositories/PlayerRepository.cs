@@ -4,6 +4,10 @@ using Data.Models.Entities.Humans;
 using Data.Models.Exceptions;
 using System.Collections.Generic;
 using System;
+using Data.Models.EventResolution;
+using System.Linq;
+using Data.Models.Nodes;
+using Data.Repositories.Nodes;
 
 namespace Data.Repositories
 {
@@ -16,6 +20,12 @@ namespace Data.Repositories
         {
             _dataProvider = dataProvider;
         }
+
+        public PlayerRepository()
+        {
+            _dataProvider = new MockedPlayerData();
+        }
+
         //TODO: Inject DataAccessor here.
         //TODO: Cache
         /// <summary>
@@ -49,6 +59,47 @@ namespace Data.Repositories
             else
             {
                 return null;
+            }
+        }
+
+        public IEnumerable<Player> Get(EventResult result)
+        {
+            if (result.Targets.Contains(EventTargets.World))
+            {
+                return _data.Select(i => i.Value);
+            }
+            else
+            {
+                return GetFiltered(result).Distinct();
+            }
+        }
+
+        private static IEnumerable<Player> GetFiltered(EventResult result)
+        {
+            if (result.Targets.Contains(EventTargets.Player))
+            {
+                yield return (Player)result.Actor;
+            }
+
+            if (result.Targets.Contains(EventTargets.Party))
+            {
+                Player player = (Player)result.Actor;
+                foreach (Player p in player.Party)
+                {
+                    yield return p;
+                }
+            }
+
+            if (result.Targets.Contains(EventTargets.Nearby))
+            {
+                Position pos = result.Actor.Position;
+                var repo = new LocationRepository();
+                Location loc = repo.Get(pos, result.Actor);
+
+                foreach (Player p in loc.Players)
+                {
+                    yield return p;
+                }
             }
         }
 

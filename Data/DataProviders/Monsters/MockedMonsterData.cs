@@ -6,9 +6,9 @@ namespace Data.DataProviders.Monsters
 {
     public class MockedMonsterData : IMonsterDataProvider
     {
-        public Monster Get(Seed monster)
+        public Monster Get(int id)
         {
-            if(monster.Id == 123)
+            if(id == 123)
             {
                 return new AdmiralAardwark();
             }

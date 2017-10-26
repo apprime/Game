@@ -3,7 +3,7 @@ using Data.Models.Entities.Humans;
 
 namespace Data.DataProviders.Players
 {
-    public class PersistantPlayerData : IPlayerDataProvider
+    public class PersistentPlayerData : IPlayerDataProvider
     {
         public Player Add(Player player)
         {

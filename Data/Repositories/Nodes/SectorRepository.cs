@@ -5,16 +5,22 @@ namespace Data.Repositories.Nodes
 {
     public class SectorRepository
     {
-        private Dictionary<string, Sector> _data = new Dictionary<string, Sector>();
+        private static Dictionary<Position, Sector> _data = new Dictionary<Position, Sector>();
+        private static Position dummy = Position.FromString("001001001001");
+
+        static SectorRepository()
+        {
+            _data.Add(dummy, new Sector());
+        }
 
         public SectorRepository()
         {
-
+            
         }
 
-        internal Sector Get(string sectorId)
+        internal Sector Get(Position position)
         {
-            return _data[sectorId];
+            return _data[position];
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Data.Models.Nodes
 {
     public struct Position
     {
-        private byte[] _internal;
+        private readonly byte[] _internal;
 
         public Position(string input)
         {
@@ -78,7 +78,15 @@ namespace Data.Models.Nodes
 
         public override int GetHashCode()
         {
-            return _internal.GetHashCode();
+            unchecked
+            {
+                int hash = 17;
+                foreach (byte item in _internal)
+                {
+                    hash = hash * 31 + item.GetHashCode();
+                }
+                return hash;
+            }
         }
     }
 }

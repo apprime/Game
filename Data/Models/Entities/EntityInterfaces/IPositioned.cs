@@ -1,11 +1,10 @@
-﻿using Data.Models.Gamestate;
+﻿using Data.Models.Nodes;
 using Newtonsoft.Json;
 
 namespace Data.Models.Entities.EntityInterfaces
 {
     public interface IPositioned : IEntity
     {
-        [JsonIgnore]
-        Scene Scene { get; set; }
+        Position Position{ get; set; }
     }
 }

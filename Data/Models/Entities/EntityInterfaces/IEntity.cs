@@ -1,6 +1,4 @@
-﻿using Data.Models.Gamestate;
-
-namespace Data.Models.Entities.EntityInterfaces
+﻿namespace Data.Models.Entities.EntityInterfaces
 {
     //TODO: Deal with the heirarchy of objects.
     //Preferably, game world should be highest, non targetable.

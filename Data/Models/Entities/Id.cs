@@ -13,7 +13,7 @@ namespace Data.Models.Entities
     {
         private const int MaxLength = 20;
         private const int MinLength = 14;
-        private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'S' };
+        private HashSet<char> Prefixes = new HashSet<char>{ 'M', 'P', 'L' };
 
         private Id(string raw)
         {
@@ -78,7 +78,6 @@ namespace Data.Models.Entities
                     && Trunk.Equals(that.Trunk);
             }
 
-            //Not the correct type
             return false;
         }
 

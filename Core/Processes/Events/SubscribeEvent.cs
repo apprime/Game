@@ -52,8 +52,9 @@ namespace Core.Processes.Events
             }
             else
             {
+                var repo = new PlayerRepository();
                 Result.Message = "You logged in";
-                Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = "OK", Targets = ResourceLocator.GetPlayers(Result) });
+                Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = "OK", Targets = repo.Get(Result) });
                 Result.Resolution = EventResolutionType.Commit;
             }
 

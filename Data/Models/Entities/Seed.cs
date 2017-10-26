@@ -21,16 +21,16 @@ namespace Data.Models.Entities
             return new Seed('M', id);
         }
 
-        public IEntity Hydrate(Position position)
-        {
-            switch (Prefix)
-            {
-                case 'M':
-                    var repo = new MonsterRepository();
-                    return repo.Get(this, position);
-                default:
-                    throw new TodoException("We need a nicer way to hydrate seeds");
-            }
-        }
+        //public IEntity Hydrate(Position position)
+        //{
+        //    switch (Prefix)
+        //    {
+        //        case 'M':
+        //            var repo = new MonsterRepository();
+        //            return repo.Get(this, position);
+        //        default:
+        //            throw new TodoException("We need a nicer way to hydrate seeds");
+        //    }
+        //}
     }
 }
