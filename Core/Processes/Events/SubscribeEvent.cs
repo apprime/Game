@@ -71,7 +71,7 @@ namespace Core.Processes.Events
                 var repo = new PlayerRepository(new MockedPlayerData());
                 repo.Add(_player);
 
-                var dumpPlayerAt = new ChangeLocationEvent(_id, _player.LoggedOutPosition);
+                var dumpPlayerAt = new EnterLocationEvent(_id, _player.LoggedOutPosition);
                 Engine.Instance.Push(dumpPlayerAt);
             }
 

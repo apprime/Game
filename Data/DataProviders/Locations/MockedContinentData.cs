@@ -31,7 +31,7 @@ namespace Data.DataProviders.Locations
 
         private Continent SetupContinent(byte continentId)
         {
-            var continent = new Continent();
+            var continent = new Continent(1, "InContinent");
             //continent.Regions = new MockedRegionData().GetChildren(continentId.ToString());
             return continent;
 

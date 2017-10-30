@@ -92,9 +92,9 @@ namespace Data.Repositories
 
             if (result.Targets.Contains(EventTargets.Nearby))
             {
-                Position pos = result.Actor.Position;
+                Id id = result.Place;
                 var repo = new LocationRepository();
-                Location loc = repo.Get(pos, result.Actor);
+                Location loc = repo.Get(id);
 
                 foreach (Player p in loc.Players)
                 {

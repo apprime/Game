@@ -1,30 +1,29 @@
 ﻿using Core.Mutators;
-using Core.ResourceManagers;
-using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Models.Nodes;
 using Data.Repositories;
+using System.Linq;
 
 namespace Core.Processes.Events
 {
-    internal class ChangeLocationEvent : Event
+    internal class EnterLocationEvent : Event
     {
         private Id _playerId;
         private Position _destinationId;
         private Player _actor;
 
         #region Rules
-        private const EventTargets _eventTargets = EventTargets.Player | EventTargets.Nearby | EventTargets.Party;
+        private const EventTargets _eventTargets = EventTargets.Player | EventTargets.Nearby;
         private Movement movement;
         #endregion
 
         private PlayerRepository repo = new PlayerRepository();
 
-        public ChangeLocationEvent(string[] parts) : this(Id.FromString('P',parts[0]), Position.FromString(parts[1])) { } //This CTOR only converts string array to real params.
+        public EnterLocationEvent(string[] parts) : this(Id.FromString('P',parts[0]), Position.FromString(parts[1])) { } //This CTOR only converts string array to real params.
 
-        internal ChangeLocationEvent(Id player, Position destination)
+        internal EnterLocationEvent(Id player, Position destination)
         {
             _playerId = player;
             _destinationId = destination;
@@ -73,9 +72,8 @@ namespace Core.Processes.Events
         private void SetStandardResult()
         {
             Result.Message = GenerateMessageString();
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerMovingTo", Value = movement.Destination.Name.ToString(), Targets = repo.Get(Result) });
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerMovingFrom", Value = movement.Origin.Name.ToString(), Targets = repo.Get(Result) });
             Result.Actor = movement.Traveler;
+            Result.Place = movement.Destination.InstanceId;
             Result.Targets = _eventTargets;
             Result.Resolution = EventResolutionType.Commit;
         }
@@ -84,13 +82,24 @@ namespace Core.Processes.Events
         {
             if (Result.Resolution == EventResolutionType.Commit)
             {
+                Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerMovingTo", Value = movement.Destination.Name.ToString(), Targets = repo.Get(Result) });
                 LocationMutator.GoToPosition(movement);
-                if(movement.Origin != null)
+                if (movement.Origin == null)
                 {
-                    LocationMutator.Cleanup(movement);
+                    return this;
                 }
-                
-                //TODO: New event to Player only, NewLocationEvent
+
+                LocationMutator.RemovePlayerFromScene(movement);
+
+                if (!movement.Origin.Players.Any())
+                {
+                    LocationMutator.RemoveEmptyScene(movement);
+                }
+                else
+                {
+                    var e = new LeaveLocationEvent(movement.Traveler, movement.Origin.InstanceId);
+                    Engine.Instance.Push(e);
+                }
             }
 
             return this;
@@ -104,7 +113,7 @@ namespace Core.Processes.Events
         //Todo: This is not very pretty, but somehow we must provide what actually happened to active entities in client
         private string GenerateMessageString()
         {
-            return string.Format("{0} has moved from {1} to {2}", _actor.Name, _actor.Location.Name, movement.Destination.Name);
+            return string.Format("{0} has moved from {1} to {2}", _actor.Name, movement.Origin.Name, movement.Destination.Name);
         }
     }
 }

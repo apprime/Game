@@ -11,15 +11,15 @@ namespace Data.DataProviders.Locations
         //TODO: We need to be able to fetch list of location per sector(first 3 valiues in Position) from a resource.
         public Location Get(Position position)
         {
-            switch (position.Location)
+            switch (position)
             {
-                case 1:
+                case var p when p == Position.FromNumbers(1, 1, 1, 1):
                     return GetTown(position);
-                case 2:
+                case var p when p == Position.FromNumbers(1, 1, 1, 2):
                     return GetGrass(position);
-                case 3:
+                case var p when p == Position.FromNumbers(1, 1, 1, 3):
                     return new Location("The Forest", Position.FromString("000000000003"));
-                case 4:
+                case var p when p == Position.FromNumbers(1, 1, 1, 4):
                     return new Location("The Instance", Position.FromString("000000000004"));
                 default:
                     //TODO: Handle default somehow

@@ -21,7 +21,7 @@ namespace Data.Models.Entities.Humans
             Score = int.Parse(dataParts[2]);
             ConnectionId = dataParts[3];
             Party = Enumerable.Empty<IEntity>();
-            LoggedOutPosition = new Position("001001001001"); //Todo: This is hardcoded to always spawn player in first hardcoded location. 
+            LoggedOutPosition = Position.FromString("001001001001"); //Todo: This is hardcoded to always spawn player in first hardcoded location. 
         }
 
         [JsonConstructor]

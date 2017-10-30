@@ -23,11 +23,11 @@ namespace Data.Models.Entities
             Trunk = raw.Substring(13);
         }
 
-        private Id(char prefix, Position position)
+        private Id(char prefix, Position position, string trunk)
         {
             Prefix = prefix;
             Position = position;
-            Trunk = "123";
+            Trunk = trunk;
         }
 
         public readonly char Prefix;
@@ -46,9 +46,9 @@ namespace Data.Models.Entities
             return new Id(input);
         }
 
-        public static Id FromParts(char prefix, Position position)
+        public static Id FromParts(char prefix, Position position, string trunk)
         {
-            return new Id(prefix, position);
+            return new Id(prefix, position, trunk);
         }
 
         private void Validate(string raw)
@@ -96,6 +96,6 @@ namespace Data.Models.Entities
         }
         
         public static bool operator == (Id a, Id b) => a.Equals(b);
-        public static bool operator !=(Id a, Id b) => !a.Equals(b);
+        public static bool operator != (Id a, Id b) => !a.Equals(b);
     }
 }

@@ -14,16 +14,14 @@ namespace Core.Mutators
             movement.Traveler.Location = movement.Destination;
         }
 
-        internal static void Cleanup(Movement movement)
+        internal static void RemovePlayerFromScene(Movement movement)
         {
-            var origin = movement.Origin;
-            origin.RemovePlayer(movement.Traveler);
+            movement.Origin.RemovePlayer(movement.Traveler);
+        }
 
-            //Dispose the Scene if noone is there.
-            if (!origin.Players.Any())
-            {
-                origin.Parent.RemoveLocation(movement.Origin);
-            }
+        internal static void RemoveEmptyScene(Movement movement)
+        {
+            movement.Origin.Sector.RemoveLocation(movement.Origin);
         }
 
         internal static void SetOrigin(Movement movement)

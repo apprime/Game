@@ -2,12 +2,12 @@
 using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Entities.Humans;
 using Data.Models.Entities.Monsters;
-using Data.Models.Gamestate;
 using Data.Repositories.Nodes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Data.Models.Nodes
 {
@@ -16,10 +16,13 @@ namespace Data.Models.Nodes
     /// A singleton location will simply contain every player that tries to visit it
     /// A instanced location will generate new Scenes for each player/group that visits it.
     /// </summary>
-    public class Location : ILocation
+    public class Location
     {
-        public Sector Parent { get; private set; } //TODO: Make sure this is properly set on create
+        public Sector Sector { get; } //TODO: Make sure this is properly set on create
         public List<Seed> Seeds;
+        public Id InstanceId { get; }
+
+        private string todoTrunk = "123";
         
         [JsonConstructor]
         public Location(string name, Position position)
@@ -28,22 +31,15 @@ namespace Data.Models.Nodes
             Position = position;
             Seeds = new List<Seed>();
             var sectorRepo = new SectorRepository();
-            Parent = sectorRepo.Get(position);
-            Parent.Locations.Add(this);
+            Sector = sectorRepo.Get(position);
+            Sector.Locations.Add(this);
 
             Entities = new List<IEntity>();
-            Id = Id.FromParts('L', position);
+            InstanceId = Id.FromParts('L', position, todoTrunk);
         }
 
         public string Name { get; set; }
         public Position Position { get; set; }
-        public Id Id { get; set; }
-
-        public IEnumerable<Player> GetPlayers(int instanceId)
-        {
-            //Sometimes we might want to cross over multiple Location in one Sector, or maybe we only want this for singletons?
-            throw new NotImplementedException();
-        }
 
         public IList<Position> Neighbours { get; set;  } = new List<Position>(); //TODO: This should be set upon load and be enumerable, not list
 
@@ -52,7 +48,10 @@ namespace Data.Models.Nodes
             return Neighbours.Any(i => i == p);
         }
 
+        [JsonIgnore]
         public List<IEntity> Entities { get; set; }
+
+        [JsonIgnore]
         public IEnumerable<Player> Players
         {
             get
@@ -60,6 +59,8 @@ namespace Data.Models.Nodes
                 return Entities.OfType<Player>();
             }
         }
+
+        [JsonIgnore]
         public IEnumerable<Monster> Enemies
         {
             get

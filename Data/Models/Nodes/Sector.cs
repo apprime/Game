@@ -6,10 +6,21 @@ using System.Linq;
 
 namespace Data.Models.Nodes
 {
-    public class Sector
+    public class Sector : IParentLocation
     {
         [JsonIgnore]
         public List<Location> Locations = new List<Location>();
+
+        public Region Region { get; set; }
+        public byte Id { get; }
+        public string Name { get; }
+
+        public Sector(byte id, string name, Region parent)
+        {
+            Id = id;
+            Name = name;
+            Region = parent;
+        }
 
         public void RemoveLocation(Location location)
         {
@@ -58,6 +69,11 @@ namespace Data.Models.Nodes
         private static bool IsPartyInScene(IEnumerable<IEntity> party, Location location)
         {
             return location.Players.Intersect(party).Any();
+        }
+
+        public bool IsParent(Position p)
+        {
+            return Region.IsParent(p) && p.Sector == Id;
         }
     }
 }

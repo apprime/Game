@@ -1,4 +1,5 @@
 ﻿using Data.DataProviders.Locations;
+using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Nodes;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Data.Repositories.Nodes
     public class LocationRepository
     {
         private IPositionDataProvider<Location> _dataProvider;
-        private Dictionary<Position, List<Location>> _data = new Dictionary<Position, List<Location>>();
+        private static Dictionary<Position, List<Location>> _data = new Dictionary<Position, List<Location>>();
 
         public LocationRepository(IPositionDataProvider<Location> dataProvider)
         {
@@ -26,10 +27,10 @@ namespace Data.Repositories.Nodes
             return TodoCache(position);
         }
 
-        public Location Get(Position position, IEntity entity)
+        public Location Get(Id id)
         {
-            var all = Get(position);
-            return all.SingleOrDefault(i => i.Entities.Any(j => j == entity));
+            var all = Get(id.Position);
+            return all.SingleOrDefault(i => i.InstanceId == id);
         }
 
         public Location Create(Position position)

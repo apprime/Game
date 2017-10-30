@@ -11,16 +11,17 @@ namespace Data.Repositories.Nodes
     /// </summary>
     public class RegionRepository
     {
-        private Dictionary<string, Region> _data = new Dictionary<string, Region>();
+        private Dictionary<Position, Region> _data = new Dictionary<Position, Region>();
 
         public RegionRepository()
         {
-            _data.Add("11", new Region());
+            _data.Add(Position.FromNumbers(1,1,1,0), 
+                      new Region(1, "Regionistan", new Continent(1, "InContinent")));
         }
 
-        public Region Get(string regionId)
+        public Region Get(Position position)
         {
-            return _data[regionId];
+            return _data[position.StripSector()];
         }
     }
 }

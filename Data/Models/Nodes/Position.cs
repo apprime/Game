@@ -6,13 +6,8 @@ namespace Data.Models.Nodes
     {
         private readonly byte[] _internal;
 
-        public Position(string input)
+        private Position(string input)
         {
-            if(input.Length != 12)
-            {
-                throw new ArgumentException("Positions must always be string of length 12, 3 for each digit in the positions. Padded with zeroes if needed (such as 001, 010 and 100)");
-            }
-
             _internal = new byte[4];
 
             _internal[0] = byte.Parse(input.Substring(0, 3));
@@ -21,9 +16,39 @@ namespace Data.Models.Nodes
             _internal[3] = byte.Parse(input.Substring(9, 3));
         }
 
+        private Position(byte continent, byte region, byte sector, byte location)
+        {
+            _internal = new byte[4];
+
+            _internal[0] = continent;
+            _internal[1] = region;
+            _internal[2] = sector;
+            _internal[3] = location;
+        }
+
         public static Position FromString(string input)
         {
+            if (input.Length != 12)
+            {
+                throw new ArgumentException("Positions must always be string of length 12, 3 for each digit in the positions. Padded with zeroes if needed (such as 001, 010 and 100)");
+            }
+
             return new Position(input);
+        }
+
+        public static Position FromNumbers(byte continent, byte region, byte sector, byte location)
+        {
+            return new Position(continent, region, sector, location);
+        }
+
+        public Position StripLocation()
+        {
+            return FromNumbers(Continent, Region, Sector, 0);
+        }
+
+        public Position StripSector()
+        {
+            return FromNumbers(Continent, Region, 0, 0);
         }
 
         public byte Continent

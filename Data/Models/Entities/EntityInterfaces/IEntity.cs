@@ -11,6 +11,7 @@
         /// <summary>
         /// Todo: Evaluate if object is too bulky
         /// </summary>
+        /// [
         Id Id { get; }
 
         /// <summary>

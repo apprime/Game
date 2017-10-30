@@ -38,7 +38,7 @@ namespace Data.Repositories
                 var newMonster = _dataProvider.Get(id);
                 newMonster.Id.Position = position;
                 _data.Add(id, newMonster);
-                _activeMonsters.Add(Id.FromParts('M', position), newMonster);
+                _activeMonsters.Add(Id.FromParts('M', position, "123"), newMonster);
                 return newMonster;
             }
         }

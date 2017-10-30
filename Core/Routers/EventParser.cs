@@ -13,7 +13,7 @@ namespace Core.Routers
             { "subscribe", s => new SubscribeEvent(s) },
             { "unsubscribe", s => new UnsubscribeEvent(s) },
             { "getmyposition", s => new GetMyLocationEvent(s) },
-            { "changelocation", s => new ChangeLocationEvent(s) }
+            { "changelocation", s => new EnterLocationEvent(s) }
         };
 
         private static Dictionary<string, Func<string[], ReadonlyEvent>> MonsterEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>

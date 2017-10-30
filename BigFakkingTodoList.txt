@@ -87,3 +87,6 @@ PostProcess will create the EventResult and if needed create new events to push 
 Idea: handle locking and unlocking by having some sort of lazy wrapper for all items
 var x = Lockable<T>(myId);
 x.DuringLock(obj => obj.doStuff());
+
+10.
+IKnowChildren and IKnowParent are interfaces implemented by dataproviders but actually, also the objects provided should have these implemented.

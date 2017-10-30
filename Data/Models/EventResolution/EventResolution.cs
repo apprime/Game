@@ -1,5 +1,6 @@
 ﻿using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
+using Data.Models.Nodes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -47,6 +48,9 @@ namespace Data.Models.EventResolution
         [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public EventTargets Targets { get; set; }
+
+        [JsonProperty]
+        public Id Place { get; set; }
 
         [JsonProperty]
         public IPositioned Actor { get; set; }
