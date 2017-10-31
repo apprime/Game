@@ -98,6 +98,11 @@ namespace Data.Models.Nodes
             }
         }
 
+        public override string ToString()
+        {
+            return _internal[0].ToString() + _internal[1].ToString() + _internal[2].ToString() + _internal[3].ToString();
+        }
+
         public static bool operator == (Position a, Position b) => a.Equals(b);
         public static bool operator != (Position a, Position b) => !a.Equals(b);
 

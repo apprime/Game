@@ -34,7 +34,7 @@ namespace Data.DataProviders.Locations
             loc.Seeds.Add(Seed.Monster(123));
 
             var repo = new MonsterRepository();
-            loc.Entities.Add(repo.Get(123, position));
+            loc.Entities.Add(repo.Get(123, loc));
 
             loc.Neighbours.Add(Position.FromString("001001001001"));
             loc.Neighbours.Add(Position.FromString("001001001004"));

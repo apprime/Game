@@ -13,7 +13,8 @@ namespace Core.Routers
             { "subscribe", s => new SubscribeEvent(s) },
             { "unsubscribe", s => new UnsubscribeEvent(s) },
             { "getmyposition", s => new GetMyLocationEvent(s) },
-            { "changelocation", s => new EnterLocationEvent(s) }
+            { "changelocation", s => new EnterLocationEvent(s) },
+            { "attack", s => new AttackEvent(s) }
         };
 
         private static Dictionary<string, Func<string[], ReadonlyEvent>> MonsterEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
@@ -24,7 +25,7 @@ namespace Core.Routers
         private static Dictionary<string, Func<string[], ReadonlyEvent>> TodoEvents = new Dictionary<string, Func<string[], ReadonlyEvent>>
         {
             { "increasescore", s => new IncreaseScoreEvent(s) },
-            { "attack", s => new Attack(s) }
+            { "attack", s => new AttackEvent(s) }
         };
 
         private static Dictionary<EventCategory, Dictionary<string, Func<string[], ReadonlyEvent>>> Categories = new Dictionary<EventCategory, Dictionary<string, Func<string[], ReadonlyEvent>>>

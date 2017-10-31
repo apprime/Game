@@ -69,6 +69,11 @@ namespace Data.Models.Entities
             }
         }
 
+        public override string ToString()
+        {
+            return Prefix + Position.ToString() + Trunk;
+        }
+
         public override bool Equals(object input)
         {
             if(input is Id that)

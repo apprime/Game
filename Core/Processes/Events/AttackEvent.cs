@@ -1,28 +1,27 @@
-﻿using Data.Models.Entities;
-using Data.Models.EventResolution;
-using Core.Mutators;
+﻿using Core.Mutators;
 using Core.ResourceManagers;
-using System;
+using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
+using Data.Models.EventResolution;
 using Data.Repositories;
 
 namespace Core.Processes.Events
 {
-    internal class Attack : Event
+    internal class AttackEvent : Event
     {
         private Id _attackerId;
         private Id _targetId;
         private IAttack _actor;
         private IDestructible _target;
-        private Damage damage;
 
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player | EventTargets.Nearby | EventTargets.Party;
+        private Damage _damage;
         #endregion
 
-        public Attack(string[] parts) : this(Id.FromString(parts[1]), Id.FromString(parts[2])) { } //This CTOR only converts string array to real params.
+        public AttackEvent(string[] parts) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1])) { } //This CTOR only converts string array to real params.
 
-        internal Attack(Id attacker, Id target)
+        internal AttackEvent(Id attacker, Id target)
         {
             _attackerId = attacker;
             _targetId = target;
@@ -40,41 +39,37 @@ namespace Core.Processes.Events
 
         protected override ReadonlyEvent Resolve()
         {
-            var repo = new PlayerRepository();
-
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(damage), Targets = new IEntity[] { _target } });
-            Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = damage.ToString(), Targets = repo.Get(Result) });
             Result.Actor = _actor;
             Result.Targets = _eventTargets;
             Result.Resolution = EventResolutionType.Commit;
+            Result.Place = _actor.Location.InstanceId;
+
+            _damage = new Damage();
+            CombatMutator.Setup(_damage);
 
             return this;
         }
 
         protected override Event Persist()
         {
-            damage = Process(_actor, _target);
-            return this;
-        }
+            var repo = new PlayerRepository();
 
-        /// <summary>
-        /// Process for Attacking.
-        /// </summary>
-        private static Damage Process(IAttack actor, IDestructible target)
-        {
-            var damage = new Damage();
-            CombatMutator.Setup(damage);
-            CombatMutator.Attack(actor, damage);
-            CombatMutator.Mitigate(target, damage);
-            CombatMutator.Cleanup(damage);
-            return damage;
+            CombatMutator.Attack(_actor, _damage);
+            CombatMutator.Mitigate(_target, _damage);
+            
+            Result.Deltas.Add(new Delta { Actor = _actor, Key = "Attack", Value = GenerateAttackString(_damage), Targets = new IEntity[] { _target } });
+            Result.Deltas.Add(new Delta { Actor = _actor, Key = "AttackMessage", Value = _damage.ToString(), Targets = repo.Get(Result) });
+
+            CombatMutator.Cleanup(_damage);
+
+            return this;
         }
 
         //Todo: This is not very pretty, but somehow we must provide what actually happened to active entities in client
         // Overload tostring on Damage? Other solution?
         private string GenerateAttackString(Damage damage)
         {
-            return string.Format("{0};{1}", damage.Effective.ToString(), damage.Target.Id);
+            return string.Format("{0};{1}", damage.Total.ToString(), damage.Target.Id.ToString());
         }
 
         private void Validate()

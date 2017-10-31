@@ -25,10 +25,10 @@ namespace Data.Models.Entities.Monsters
         [JsonProperty]
         public Id Id { get; protected set; }
 
-        public Position Position{ get; set; }
+        public Location Location{ get; set; }
 
         [JsonProperty]
-        public HitPoints HitPoints { get; set; }
+        public HitPoints HitPoints { get; set; }       
 
         public int Damage => 0;                                 //TODO
 

@@ -5,6 +5,7 @@
 <button id="getMonster">Get Monster</button>
 <button id="move">Move</button>
 <button id="move2">go back</button>
+<button id="attack">Attack</button>
 
 <ul id="eventList"></ul>
 
@@ -20,12 +21,12 @@
         function addEvent(event) {
             console.log(event);
             event = JSON.parse(event);
-            
+
             var appendString;
             if (event.Deltas[0])
             {
                 appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'
-            } 
+            }
 
             if (event.Message)
             {
@@ -41,10 +42,10 @@
         var monsterId = "123";
         var subscribeEvent = "12subscribe|" + location + playerId;
         var unsubscribeEvent = "12unsubscribe|" + location + playerId;
-        var getMonsterEvent = "31getinfo|" + location + playerId + "/" + location + monsterId;
+        var getMonsterEvent = "31getinfo|" + newLocation + playerId + "/" + newLocation + monsterId;
+        var attackEvent = "12attack|" + newLocation + playerId + "/" + newLocation + monsterId;
         var changeLocationEvent = "12changeLocation|" + location + playerId + "/" + newLocation;
         var changeLocationEvent2 = "12changeLocation|" + newLocation + playerId + "/" + location;
-        //var getLocationEvent = "11getStatus" +  
 
         function pushedContent(content) {
             console.log("Incoming data: ", content);
@@ -61,26 +62,34 @@
         playerHub.on("connected", (a) => console.log(a));
         playerHub.on("disconnected", (a) => console.log(a));
 
-        $("#subscribe").click(function () {
+        $("#subscribe").click(function ()
+        {
             playerHub.invoke("subscribe", subscribeEvent);
         });
 
-        $("#unsubscribe").click(function () {
+        $("#unsubscribe").click(function ()
+        {
             playerHub.invoke("unsubscribe", unsubscribeEvent);
         });
 
-        $("#getMonster").click(function () {
+        $("#getMonster").click(function ()
+        {
             monsterHub.invoke("getInfo", getMonsterEvent);
         });
 
-        $("#move").click(function () {
+        $("#move").click(function ()
+        {
             playerHub.invoke("changeLocation", changeLocationEvent)
-
         })
 
-        $("#move2").click(function () {
+        $("#move2").click(function ()
+        {
             playerHub.invoke("changeLocation", changeLocationEvent2)
+        })
 
+        $("#attack").click(function ()
+        {
+            playerHub.invoke("attack", attackEvent);
         })
 
         gameHub.start();

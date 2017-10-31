@@ -15,13 +15,14 @@ namespace Core.Mutators
 
         internal static void Setup(Damage damage)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public static Damage Attack(IAttack attacker, Damage payload)
         {
             payload.Actor = attacker;
             payload.Total = attacker.Damage;
+ 
             payload.DamageType = attacker.DamageType.ToString("G");
             payload.Name = attacker.AttackName;
 
@@ -31,7 +32,8 @@ namespace Core.Mutators
         public static Damage Mitigate(IDestructible defender, Damage payload)
         {
             payload.Target = defender;
-            defender.HitPoints.Current -= payload.Effective;
+            //payload.Effective = attacker.Damage;//TOdo: This is subject to change when armor and stuff
+            defender.HitPoints.Current -= payload.Total;
             return payload;
         }
 
