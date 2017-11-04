@@ -1,18 +1,47 @@
 ﻿<canvas>The Stage!</canvas>
-   
-<button id="subscribe">Subscribe</button>
-<button id="unsubscribe">Unsubscribe</button>
-<button id="getMonster">Get Monster</button>
-<button id="move">Move</button>
-<button id="move2">go back</button>
-<button id="attack">Attack</button>
+
+<div class="divider">
+    <ul>
+        <li><button id="subscribe">Subscribe</button></li>
+        <li><button id="unsubscribe">Unsubscribe</button></li>
+        <li><button id="getMonster">Get Monster</button></li>
+        <li><button id="attack">Attack</button></li>
+    </ul>
+</div>
+
+<div id="sector" class="divider">
+    <button id="location1">Location 1</button>
+    <button id="location2">Location 2</button>
+    <button id="location3">Location 3</button>
+    <button id="location4">Location 4</button>
+</div>
 
 <ul id="eventList"></ul>
 
+
+<style>
+    .divider {
+        width: 200px;
+        display: inline-block;
+    }
+
+    #sector button {
+        width: 49%;
+    }
+
+    canvas {
+        width: 640px;
+        height: 480px;
+    }
+</style>
+
 <script type="text/javascript">
-    $(function () {
-        function addPostsList(posts) {
-            $.each(posts, function (index) {
+    $(function () 
+    {
+        function addPostsList(posts) 
+        {
+            $.each(posts, function (index)
+            {
                 var post = posts[index];
                 addPost(post);
             });
@@ -44,12 +73,7 @@
         var unsubscribeEvent = "12unsubscribe|" + location + playerId;
         var getMonsterEvent = "31getinfo|" + newLocation + playerId + "/" + newLocation + monsterId;
         var attackEvent = "12attack|" + newLocation + playerId + "/" + newLocation + monsterId;
-        var changeLocationEvent = "12changeLocation|" + location + playerId + "/" + newLocation;
-        var changeLocationEvent2 = "12changeLocation|" + newLocation + playerId + "/" + location;
-
-        function pushedContent(content) {
-            console.log("Incoming data: ", content);
-        }
+        var changeLocationEvent = "12changeLocation|" + location + playerId + "/";
 
         let playerConnection = new signalR.HttpConnection('http://localhost:1337/playerHub');
         let gameConnection = new signalR.HttpConnection('http://localhost:1337/gameHub');
@@ -77,20 +101,23 @@
             monsterHub.invoke("getInfo", getMonsterEvent);
         });
 
-        $("#move").click(function ()
-        {
-            playerHub.invoke("changeLocation", changeLocationEvent)
-        })
-
-        $("#move2").click(function ()
-        {
-            playerHub.invoke("changeLocation", changeLocationEvent2)
-        })
-
         $("#attack").click(function ()
         {
             playerHub.invoke("attack", attackEvent);
         })
+
+        $("#location1").click(function () { changeLocation("001001001001");})
+
+        $("#location2").click(function () { changeLocation("001001001002");})
+
+        $("#location3").click(function () { changeLocation("001001001003");})
+
+        $("#location4").click(function () { changeLocation("001001001004");})
+
+        function changeLocation(loc)
+        {
+            playerHub.invoke("changeLocation", changeLocationEvent + loc);
+        }
 
         gameHub.start();
         playerHub.start();

@@ -26,10 +26,13 @@ namespace Data.Models.Nodes
         {
             Locations.Remove(location);
 
+            var repo = new LocationRepository();
+            repo.Delete(location);
+
+
             if (!Locations.Any())
             {
-                //TODO: Remove itself from Repo?
-                //TODO2: Should GlobalLocations also do this?
+                //Region.RemoveSector(this);
             }
         }
 

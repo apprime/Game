@@ -48,7 +48,7 @@ namespace Core.Processes.Events
 
             //TODO: Currently, we detect login by saying that we have no origin, so it must be logon.
             //Maybe we should make this its own event?
-            if(movement.Origin == null)
+            if (movement.Origin == null)
             {
                 Result.Message = string.Format("{0} has logged into the location {1}", _actor.Name, movement.Destination.Name);
                 Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerLoggedIn", Value = movement.Destination.Name.ToString(), Targets = repo.Get(Result) });
@@ -62,6 +62,7 @@ namespace Core.Processes.Events
             }
             else
             {
+                movement.Destination.RemovePlayer(movement.Traveler);
                 Result.Message = string.Format("{0} is not allowed to go to {1} from this location.", _actor.Name, movement.Destination.Name); 
                 Result.Resolution = EventResolutionType.Rollback;
             }

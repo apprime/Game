@@ -13,6 +13,11 @@ namespace Data.DataProviders.Monsters
                 return new AdmiralAardwark();
             }
 
+            if (id == 124)
+            {
+                return new AdmiralAardwark();
+            }
+
             throw new NotImplementedException();
         }
 

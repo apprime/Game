@@ -33,6 +33,11 @@ namespace Data.Repositories.Nodes
             return all.SingleOrDefault(i => i.InstanceId == id);
         }
 
+        public void Delete(Location location)
+        {
+            _data[location.Position].Remove(location);
+        }
+
         public Location Create(Position position)
         {
             if (!_data.ContainsKey(position))

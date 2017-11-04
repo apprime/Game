@@ -72,6 +72,10 @@ namespace Data.Models.Nodes
         public void RemovePlayer(Player player)
         {
             Entities.Remove(player);
+            if(!Players.Any())
+            {
+                this.Sector.RemoveLocation(this);
+            }
         }
 
         public void AddPlayer(Player player)
