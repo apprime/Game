@@ -2,7 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Client\startup.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Client\style\global\footer.less" />
+    <Content Include="Client\style\global\mixins.less" />
+    <Content Include="Client\style\global\shared.less" />
+    <Content Include="Client\style\global\topMenu.less" />
+    <Content Include="Client\style\global\variables.less" />
+    <Content Include="Client\style\main\StyleSheet.less" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
@@ -23,7 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Client\scripts\startup.ts" />
   </ItemGroup>
 
 </Project>
