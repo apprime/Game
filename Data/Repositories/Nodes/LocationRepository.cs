@@ -30,7 +30,7 @@ namespace Data.Repositories.Nodes
         public Location Get(Id id)
         {
             var all = Get(id.Position);
-            return all.SingleOrDefault(i => i.InstanceId == id);
+            return all.SingleOrDefault(i => i.Id == id);
         }
 
         public void Delete(Location location)

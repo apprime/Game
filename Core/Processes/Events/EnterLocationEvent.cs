@@ -52,13 +52,14 @@ namespace Core.Processes.Events
             {
                 Result.Message = string.Format("{0} has logged into the location {1}", _actor.Name, movement.Destination.Name);
                 Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerLoggedIn", Value = movement.Destination.Name.ToString(), Targets = repo.Get(Result) });
-                Result.Resolution = EventResolutionType.Commit;
+                SetStandardResult();
                 return this;
             }
 
             if (CanGoToPosition(movement))
             {
                 SetStandardResult();
+                Result.Message = GenerateMessageString();
             }
             else
             {
@@ -72,35 +73,36 @@ namespace Core.Processes.Events
 
         private void SetStandardResult()
         {
-            Result.Message = GenerateMessageString();
             Result.Actor = movement.Traveler;
-            Result.Place = movement.Destination.InstanceId;
+            Result.Place = movement.Destination.Id;
             Result.Targets = _eventTargets;
             Result.Resolution = EventResolutionType.Commit;
         }
 
         protected override Event Persist()
         {
-            if (Result.Resolution == EventResolutionType.Commit)
+            if (Result.Resolution != EventResolutionType.Commit)
             {
-                Result.Deltas.Add(new Delta { Actor = _actor, Key = "PlayerMovingTo", Value = movement.Destination.Name.ToString(), Targets = repo.Get(Result) });
-                LocationMutator.GoToPosition(movement);
-                if (movement.Origin == null)
-                {
-                    return this;
-                }
+                return this;
+            }
 
-                LocationMutator.RemovePlayerFromScene(movement);
+            Result.Deltas.Add(new Delta { Actor = _actor, Key = "NewBackground", Value = movement.Destination.ImageUrl, Targets = repo.Get(Result) });
+            LocationMutator.GoToPosition(movement);
+            if (movement.Origin == null)
+            {
+                return this;
+            }
 
-                if (!movement.Origin.Players.Any())
-                {
-                    LocationMutator.RemoveEmptyScene(movement);
-                }
-                else
-                {
-                    var e = new LeaveLocationEvent(movement.Traveler, movement.Origin.InstanceId);
-                    Engine.Instance.Push(e);
-                }
+            LocationMutator.RemovePlayerFromScene(movement);
+
+            if (!movement.Origin.Players.Any())
+            {
+                LocationMutator.RemoveEmptyScene(movement);
+            }
+            else
+            {
+                var e = new LeaveLocationEvent(movement.Traveler, movement.Origin.Id);
+                Engine.Instance.Push(e);
             }
 
             return this;

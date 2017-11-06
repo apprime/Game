@@ -37,6 +37,8 @@ namespace Data.DataProviders.Locations
             loc.Neighbours.Add(Position.FromString("001001001002"));
             loc.Neighbours.Add(Position.FromString("001001001003"));
 
+            loc.ImageUrl = "town.png";
+
             return loc;
         }
 
@@ -52,6 +54,8 @@ namespace Data.DataProviders.Locations
             loc.Neighbours.Add(Position.FromString("001001001001"));
             loc.Neighbours.Add(Position.FromString("001001001004"));
 
+            loc.ImageUrl = "grass.png";
+
             return loc;
         }
 
@@ -64,6 +68,8 @@ namespace Data.DataProviders.Locations
 
             loc.Neighbours.Add(Position.FromString("001001001001"));
             loc.Neighbours.Add(Position.FromString("001001001004"));
+
+            loc.ImageUrl = "forest.png";
 
             return loc;
         }
@@ -78,6 +84,8 @@ namespace Data.DataProviders.Locations
 
             loc.Neighbours.Add(Position.FromString("001001001002"));
             loc.Neighbours.Add(Position.FromString("001001001003"));
+
+            loc.ImageUrl = "cave.png";
 
             return loc;
         }

@@ -34,9 +34,14 @@ namespace Data.Models.Entities.Humans
             Party = party;
         }
 
+        [JsonProperty]
         public string Name { get; set; }
 
+        [JsonProperty]
         public Id Id { get; set; }
+
+        [JsonProperty]
+        public string ImageUrl { get; set; }
 
         //TODO: I think we can use string to identify a user in SignalR.
         //      Also, I think groups could and should be used, question is if we need grouping 

@@ -34,7 +34,7 @@ namespace Core.Processes.Events
             Result.Actor = traveler;
             Result.Targets = EventTargets.Nearby;
             Result.Message = string.Format("{0} has left the location", Result.Actor);
-            Result.Place = location.InstanceId;
+            Result.Place = location.Id;
             Result.Deltas.Add(new Delta { Actor = traveler, Key = "PlayerMovingFrom", Value = location.Name.ToString(), Targets = repo.Get(Result) });
             Result.Resolution = EventResolutionType.Commit;
 

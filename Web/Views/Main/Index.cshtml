@@ -28,11 +28,6 @@
     #sector button {
         width: 49%;
     }
-
-    canvas {
-        width: 640px;
-        height: 480px;
-    }
 </style>
 
 <script type="text/javascript">
@@ -54,12 +49,22 @@
             var appendString;
             if (event.Deltas[0])
             {
+                if (event.Deltas[0].Key = "NewBackground")
+                {
+                    $("canvas").css("background", "url(../../images/l/" + event.Deltas[0].Value);
+                }
                 appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'
             }
 
             if (event.Message)
             {
                 appendString += '<li>' + "The message was: " + event.Message +'</li><br>'
+            }
+
+            if (event.Deltas[1] && event.Deltas[1].Key == "NewBackground")
+            {
+                console.log("New background for location");
+                $("canvas").css("background", "url(../../images/l/" + event.Deltas[1].Value);
             }
 
             $("#eventList").append(appendString);

@@ -45,9 +45,9 @@ gulp.task('convert:typescript', function ()
 gulp.task("convertLess:css", function ()
 {
     return gulp.src(paths.styles)
-               .pipe(cached('css'))
-               .pipe(less())
-               .pipe(gulp.dest('wwwroot/css'));
+        .pipe(cached('css'))
+        .pipe(less())
+        .pipe(gulp.dest('wwwroot/css'));
 });
 
 gulp.task("compress:css", function ()
@@ -58,8 +58,9 @@ gulp.task("compress:css", function ()
                .pipe(gulp.dest('.'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch([paths.styles], ['dev']);
+gulp.task('watch', function ()
+{
+    gulp.watch([paths.styles], ['convertLess:css']);
 });
 
 gulp.task("prod", ["clean:prod", "convertLess:css", "compress:css", "convert:typescript", "clean:dev" ]);

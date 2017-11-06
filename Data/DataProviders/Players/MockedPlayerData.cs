@@ -12,7 +12,12 @@ namespace Data.DataProviders.Players
 
         public Player Get(Id playerId, string connectionId)
         {
-            return new Player("P001001001001123/PlayerMcPlayerface/1/" + connectionId);
+            var p = new Player("P001001001001123/PlayerMcPlayerface/1/" + connectionId)
+            {
+                ImageUrl = "player.png"
+            };
+
+            return p;
         }
 
         public void Remove(Player player)

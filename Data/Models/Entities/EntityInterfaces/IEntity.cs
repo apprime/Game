@@ -18,5 +18,7 @@
         /// This name is what is displayed in game.
         /// </summary>
         string Name { get; }
+
+        string ImageUrl { get; }
     }
 }

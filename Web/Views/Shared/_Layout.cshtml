@@ -8,11 +8,14 @@
     <!-- TODO: Make loading Async so these can go in footer -->
     <script src="~/lib/signalr/signalr-client-1.0.0-alpha1-final.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
-
     <!-- TODO: Create Component for Css loading -->
     <environment names="Development">
         <link rel="stylesheet" href="~/css/global/footer.css" />
         <link rel="stylesheet" href="~/css/global/topMenu.css" />
+        <link rel="stylesheet" href="~/css/global/mixins.css" />
+        <link rel="stylesheet" href="~/css/global/shared.css" />
+        <link rel="stylesheet" href="~/css/global/variables.css" />
+        <link rel="stylesheet" href="~/css/main/StyleSheet.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/output/site.css" asp-append-version="true" />
@@ -27,9 +30,9 @@
 
     <!-- TODO: Create Component for JS loading. -->
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+        <script src="~/js/startup.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -40,7 +43,7 @@
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)

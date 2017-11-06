@@ -42,7 +42,7 @@ namespace Core.Processes.Events
             Result.Actor = _actor;
             Result.Targets = _eventTargets;
             Result.Resolution = EventResolutionType.Commit;
-            Result.Place = _actor.Location.InstanceId;
+            Result.Place = _actor.Location.Id;
 
             _damage = new Damage();
             CombatMutator.Setup(_damage);

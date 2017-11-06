@@ -36,6 +36,9 @@ namespace Data.Models.Entities.Monsters
 
         public DamageType DamageType => DamageType.Physical;    //TODO
 
+        [JsonProperty]
+        public string ImageUrl { get; set; }
+
         public virtual Damage Attack(IDestructible target, Damage payload)
         {
             //1. Calc damage

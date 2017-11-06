@@ -22,5 +22,11 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        [Route("Interface")]
+        public IActionResult Interface()
+        {
+            return View();
+        }
     }
 }

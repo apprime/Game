@@ -16,11 +16,11 @@ namespace Data.Models.Nodes
     /// A singleton location will simply contain every player that tries to visit it
     /// A instanced location will generate new Scenes for each player/group that visits it.
     /// </summary>
-    public class Location
+    public class Location : IEntity
     {
         public Sector Sector { get; } //TODO: Make sure this is properly set on create
         public List<Seed> Seeds;
-        public Id InstanceId { get; }
+        public Id Id { get; }
 
         private string todoTrunk = "123";
         
@@ -35,11 +35,12 @@ namespace Data.Models.Nodes
             Sector.Locations.Add(this);
 
             Entities = new List<IEntity>();
-            InstanceId = Id.FromParts('L', position, todoTrunk);
+            Id = Id.FromParts('L', position, todoTrunk);
         }
 
         public string Name { get; set; }
         public Position Position { get; set; }
+        public string ImageUrl { get; set; }
 
         public IList<Position> Neighbours { get; set;  } = new List<Position>(); //TODO: This should be set upon load and be enumerable, not list
 

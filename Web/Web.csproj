@@ -38,6 +38,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\css\main\" />
+    <Folder Include="wwwroot\images\m\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

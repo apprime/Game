@@ -8,6 +8,7 @@
             HitPoints = new HitPoints { Current = 5, Total = 5 };
             Name = "Admiral Aardwark";
             Description = "The first";
+            ImageUrl = "m/admiralaardwark.png";
         }
     }
 }

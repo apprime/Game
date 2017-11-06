@@ -1,19 +1,20 @@
 ﻿@import "mixins.less";
+@import "variables.less";
 
-footer 
+footer
 {
     background-color: #CFDBC5;
     display: flex;
-    justify-content : space-around;
+    justify-content: space-around;
     flex-basis: 33%;
 
     div
     {
-        padding: 3rem;
-        
+        padding: @footer-offset;
+
         ul
         {
-            .reset-list-formats            
+            .reset-list-formats
         }
     }
 }
