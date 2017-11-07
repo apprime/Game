@@ -14,11 +14,6 @@ Initially:
   We already have a game state tree that will allow us to rather quickly find players in the game world. This is 
   still going to need to exist since we also have game logic that uses the tree. 
 
-2. DONE
-There needs to be a structure for how a place in game relates to other places in game. I.E A game state as a hierarchical tree.
-Top node is all game, then branches for every major Region, then Locations in those regions. 
-This is handled with World>Continent>Region>Sector>Location heirarchy and the Position struct for navigation.
-
 
 ? So, how do we make a generic location be specific? Inject a context object of some sort? We need to swap backgrounds, type of 
 entities and so on. Or do we have a factory that can set all properties in a scene so that it is "indirectly" typed?
@@ -66,7 +61,7 @@ API Documentation.
 
 8.
 We need an overall structure for the JS-client.
-Scratch that, the TypeScript client.
+Scratch that, the TypeScript client. (Setup done, client nonexistant)
 We can't really use angular, but somehow it should resemble our hubs/events.
 
 9.
@@ -90,3 +85,12 @@ x.DuringLock(obj => obj.doStuff());
 
 10.
 IKnowChildren and IKnowParent are interfaces implemented by dataproviders but actually, also the objects provided should have these implemented.
+
+11. 
+We need to clean up the serialization of json in the event results. There is a lot of duplicate info and a lot of unnecessary info.
+
+12.
+Return events by type, not just by "broadcast" emit.
+
+13.
+Set up WSS protocol. Get a certificate. Handle Auth, Session Cookies, Reconnects and cleanups of players when user goes disconnects

@@ -1,0 +1,133 @@
+﻿<canvas>The Stage!</canvas>
+
+<div class="divider">
+    <ul>
+        <li><button id="subscribe">Subscribe</button></li>
+        <li><button id="unsubscribe">Unsubscribe</button></li>
+        <li><button id="getMonster">Get Monster</button></li>
+        <li><button id="attack">Attack</button></li>
+    </ul>
+</div>
+
+<div id="sector" class="divider">
+    <button id="location1">Location 1</button>
+    <button id="location2">Location 2</button>
+    <button id="location3">Location 3</button>
+    <button id="location4">Location 4</button>
+</div>
+
+<ul id="eventList"></ul>
+
+
+<style>
+    .divider {
+        width: 200px;
+        display: inline-block;
+    }
+
+    #sector button {
+        width: 49%;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () 
+    {
+        function addPostsList(posts) 
+        {
+            $.each(posts, function (index)
+            {
+                var post = posts[index];
+                addPost(post);
+            });
+        }
+
+        function addEvent(event) {
+            console.log(event);
+            event = JSON.parse(event);
+
+            var appendString;
+            if (event.Deltas[0])
+            {
+                if (event.Deltas[0].Key = "NewBackground")
+                {
+                    $("canvas").css("background", "url(../../images/l/" + event.Deltas[0].Value);
+                }
+                appendString = '<li>' + event.Actor.Name + " has " + event.Deltas[0].Key + " and it was " + event.Deltas[0].Value + '</li><br>'
+            }
+
+            if (event.Message)
+            {
+                appendString += '<li>' + "The message was: " + event.Message +'</li><br>'
+            }
+
+            if (event.Deltas[1] && event.Deltas[1].Key == "NewBackground")
+            {
+                console.log("New background for location");
+                $("canvas").css("background", "url(../../images/l/" + event.Deltas[1].Value);
+            }
+
+            $("#eventList").append(appendString);
+        }
+
+        var playerId = "123";
+        var location = "001001001001";
+        var newLocation = "001001001002";
+        var monsterId = "123";
+        var subscribeEvent = "12subscribe|" + location + playerId;
+        var unsubscribeEvent = "12unsubscribe|" + location + playerId;
+        var getMonsterEvent = "31getinfo|" + newLocation + playerId + "/" + newLocation + monsterId;
+        var attackEvent = "12attack|" + newLocation + playerId + "/" + newLocation + monsterId;
+        var changeLocationEvent = "12changeLocation|" + location + playerId + "/";
+
+        let playerConnection = new signalR.HttpConnection('http://localhost:1337/playerHub');
+        let gameConnection = new signalR.HttpConnection('http://localhost:1337/gameHub');
+        let monsterConnection = new signalR.HttpConnection('http://localhost:1337/monsterHub');
+        var playerHub = new signalR.HubConnection(playerConnection);
+        var gameHub = new signalR.HubConnection(gameConnection);
+        var monsterHub = new signalR.HubConnection(monsterConnection);
+
+        playerHub.on("broadcast", addEvent);
+        playerHub.on("connected", (a) => console.log(a));
+        playerHub.on("disconnected", (a) => console.log(a));
+
+        $("#subscribe").click(function ()
+        {
+            playerHub.invoke("subscribe", subscribeEvent);
+        });
+
+        $("#unsubscribe").click(function ()
+        {
+            playerHub.invoke("unsubscribe", unsubscribeEvent);
+        });
+
+        $("#getMonster").click(function ()
+        {
+            monsterHub.invoke("getInfo", getMonsterEvent);
+        });
+
+        $("#attack").click(function ()
+        {
+            playerHub.invoke("attack", attackEvent);
+        })
+
+        $("#location1").click(function () { changeLocation("001001001001");})
+
+        $("#location2").click(function () { changeLocation("001001001002");})
+
+        $("#location3").click(function () { changeLocation("001001001003");})
+
+        $("#location4").click(function () { changeLocation("001001001004");})
+
+        function changeLocation(loc)
+        {
+            playerHub.invoke("changeLocation", changeLocationEvent + loc);
+        }
+
+        gameHub.start();
+        playerHub.start();
+        monsterHub.start();
+    });
+</script>
+
+<div>Controls</div><!-- Todo -->
