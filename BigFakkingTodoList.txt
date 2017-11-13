@@ -94,3 +94,6 @@ Return events by type, not just by "broadcast" emit.
 
 13.
 Set up WSS protocol. Get a certificate. Handle Auth, Session Cookies, Reconnects and cleanups of players when user goes disconnects
+
+14.
+Secure the web - TLS, WSS, Secure cookies, change hashing algo to bcrypt, Sessions,  

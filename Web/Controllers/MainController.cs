@@ -9,11 +9,15 @@ namespace Web.Controllers
         [Route("Index")]
         [Route("")]
         [Route("/")]
+        [HttpGet]
         public IActionResult Index()
         {
-            var model = new Credentials();
-            model.TopMenu = new TopMenuModel { Number = 5 };
-            model.Footer = new FooterModel { Number = 10 };
+            var model = new Credentials
+            {
+                LoginFailed = TempData.ContainsKey("LoginFailed") ? (bool)TempData["LoginFailed"] : false,
+                TopMenu = new TopMenuModel { Number = 5 },
+                Footer = new FooterModel { Number = 10 }
+            };
 
             return View(model);
         }
@@ -26,17 +30,21 @@ namespace Web.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(Credentials credentials)
         {
             if(credentials.Email == "mctest@email.com" && credentials.Password == "password123!")
             {
+                //Todo: Set up session here and redirect to index
                 return RedirectToAction("Game");
             }
-            else
+
+            if (!TempData.ContainsKey("Login"))
             {
-                ModelState.AddModelError("", "Authentication Error");
-                return new EmptyResult();
+                TempData.Add("LoginFailed", true);
             }
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

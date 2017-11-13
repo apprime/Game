@@ -6,8 +6,14 @@
 @model Credentials
 
 <h2>Hello - can you hear me?</h2>
+@if(Model.LoginFailed)
+{
+    <h3>Login Failed lolol</h3>
+}
+
 @using (Html.BeginForm("Login", "Main", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
     @Html.TextBoxFor(model => model.Email)
     @Html.PasswordFor(model => model.Password)
     <input type="submit" />

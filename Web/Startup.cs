@@ -29,9 +29,9 @@ namespace Web
                 option.JsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            // Add framework services.
-            services.AddMvc();
-
+            services.AddSession();
+            services.AddMvc()
+                    .AddSessionStateTempDataProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +49,7 @@ namespace Web
             }
 
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvc();
             app.UseWebSockets();
             app.UseSignalR(routes =>
