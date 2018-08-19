@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Web.Hubs;
+using Data.DataProviders.MySqlHelpers;
+using Data.Repositories;
+using Data.DataProviders.Players;
 
 namespace Web
 {
@@ -16,13 +19,13 @@ namespace Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //TEMP
-            //services.AddSingleton<IPostRepository, PostRepository>();
-            // END TEMP
             services.AddSingleton<GameWrapper, GameWrapper>();
+
+            //Load data providers with physical DB connections.
+            var gameDataConnectionString = Configuration["ConnectionStrings:GameData"];
+            services.AddTransient<IPlayerDataProvider, PersistentPlayerData>(x => new PersistentPlayerData(new MySqlDb(gameDataConnectionString)));
 
             services.AddSignalR(option =>
             {
@@ -34,7 +37,12 @@ namespace Web
                     .AddSessionStateTempDataProvider();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void ConfigureMockService(IServiceCollection services)
+        {
+            //Mock data providers need no setup
+            services.AddTransient<IPlayerDataProvider, MockedPlayerData>(x => new MockedPlayerData());
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //TODO: Gremlins have added code here. Investigate if we need to purge it.
@@ -59,7 +67,6 @@ namespace Web
                 routes.MapHub<MonsterHub>("MonsterHub");
                 routes.MapHub<ChatHub>("ChatHub");
             });
-
         }
     }
 }
