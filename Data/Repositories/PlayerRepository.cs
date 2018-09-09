@@ -1,13 +1,13 @@
 ﻿using Data.DataProviders.Players;
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
-using Data.Models.Exceptions;
-using System.Collections.Generic;
-using System;
 using Data.Models.EventResolution;
-using System.Linq;
+using Data.Models.Exceptions;
 using Data.Models.Nodes;
 using Data.Repositories.Nodes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Data.Repositories
 {
@@ -26,7 +26,6 @@ namespace Data.Repositories
             _dataProvider = new MockedPlayerData();
         }
 
-        //TODO: Inject DataAccessor here.
         //TODO: Cache
         /// <summary>
         /// Loads a player either from memory or from dataprovider if needed.

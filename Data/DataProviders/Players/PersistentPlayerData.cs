@@ -20,39 +20,35 @@ namespace Data.DataProviders.Players
         {
             var cmd = _db.Connection.CreateCommand() as MySqlCommand;
             cmd.CommandText = @"INSERT INTO `player` (`name`, `lastLoggedOutPosition`) VALUES (@name, @lastLoggedOutPosition);";
-            BindParams(cmd);
+
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@name",
+                DbType = DbType.String,
+                Value = player.Name,
+            });
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@lastLoggedOutPosition",
+                DbType = DbType.String,
+                Value = player.LoggedOutPosition,
+            });
+
             await cmd.ExecuteNonQueryAsync();
 
-            var trunk = (int)cmd.LastInsertedId;
-            player.Id = Id.FromParts('P', player.LoggedOutPosition, trunk);
+            player.Id = Id.FromParts('P', player.LoggedOutPosition, cmd.LastInsertedId.ToString());
 
             return player;
         }
 
-        public Player Get(Id playerId, string connectionId)
+        public Task<Player> Get(Id playerId, string connectionId)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Remove(Player player)
+        public Task Remove(Player player)
         {
             throw new System.NotImplementedException();
-        }
-
-        private void BindParams(MySqlCommand cmd)
-        {
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@title",
-                DbType = DbType.String,
-                Value = Title,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@content",
-                DbType = DbType.String,
-                Value = Content,
-            });
         }
     }
 }

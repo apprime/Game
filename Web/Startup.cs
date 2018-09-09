@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Data.DataProviders;
+using Data.DataProviders.Players;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Web.Hubs;
-using Data.DataProviders.MySqlHelpers;
-using Data.Repositories;
-using Data.DataProviders.Players;
 
 namespace Web
 {
@@ -21,11 +21,23 @@ namespace Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<GameWrapper, GameWrapper>();
+            ConfigureCommon(services);
 
             //Load data providers with physical DB connections.
             var gameDataConnectionString = Configuration["ConnectionStrings:GameData"];
-            services.AddTransient<IPlayerDataProvider, PersistentPlayerData>(x => new PersistentPlayerData(new MySqlDb(gameDataConnectionString)));
+            services.AddEntityFrameworkNpgsql().AddDbContextPool<GameDataContext>(options => options.UseNpgsql(gameDataConnectionString));
+        }
+
+        public void ConfigureMockService(IServiceCollection services)
+        {
+            ConfigureCommon(services);
+            //Mock data providers need no setup
+            services.AddTransient<IPlayerDataProvider, MockedPlayerData>(x => new MockedPlayerData());
+        }
+
+        private void ConfigureCommon(IServiceCollection services)
+        {
+            services.AddSingleton<GameWrapper, GameWrapper>();
 
             services.AddSignalR(option =>
             {
@@ -35,12 +47,6 @@ namespace Web
             services.AddSession();
             services.AddMvc()
                     .AddSessionStateTempDataProvider();
-        }
-
-        public void ConfigureMockService(IServiceCollection services)
-        {
-            //Mock data providers need no setup
-            services.AddTransient<IPlayerDataProvider, MockedPlayerData>(x => new MockedPlayerData());
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

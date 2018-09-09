@@ -41,13 +41,18 @@ Everything needs to be async. The game engine should never have to block a threa
 A project entirely for data access(done). Contains:
 - separate database for user info -> encryption, password hashing and various (.njet can handle this)
 - Caching
-- Data source abstractions - (done) - DataProviders do this.
+	Update. Will probably need second level cache, as in a separate memcache, redis or whatever sitting between this project and db.
+
+- Data source abstractions - (done) - DataProviders do this. Subject to change
 - Mappings (and sql specs inside the concrete implementation of the abstraction)
-- NO ENTITY FRAMEWORK
 - Data analysis? Scheduled work for generating views of table data. Can be used for Read commands that need complex queries mostly,
 but also for systematic updates of various kinds, like player stats, server status etc.
 - Rollback gamestate - server should keep a saved cache so that the restarting application can load itself.
+
 - Normal sql for the web project. It needs to serve content to REST API.
+- Game Data files, such as images. Fixed game data such as definitions for monsters, items etc. Dynamic game data, aka game state that needs some sort of serialization,
+ and user data that contains user generated dynamic information that is not produced temporarily such as game state, but is still editable unlike fixed game data.
+
 
 7.
 API Documentation.
