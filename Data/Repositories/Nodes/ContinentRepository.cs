@@ -1,6 +1,7 @@
 ﻿using Data.DataProviders.Locations;
 using Data.Models.Nodes;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Data.Repositories.Nodes
 {
@@ -14,25 +15,26 @@ namespace Data.Repositories.Nodes
             _dataProvider = dataProvider;
         }
 
-        public Continent Get(Position position)
+        public async Task<Continent> Get(Position position)
         {
-            return TodoCache(position);
+            //return TodoCache(position);
+            return await _dataProvider.Get(position);
         }
 
-        private Continent TodoCache(Position position)
-        {
-            if (_data.TryGetValue(position, out Continent value))
-            {
-                //updateCache
-                return value;
-            }
-            else
-            {
-                //TODO: Continent should maybe use a string of 1 char just to conform? Otherwise generic interface wont work
-                var newValue = _dataProvider.Get(position);
-                //setCache
-                return newValue;
-            }
-        }
+        //private async Task<Continent> TodoCache(Position position)
+        //{
+        //    if (_data.TryGetValue(position, out Continent value))
+        //    {
+        //        //updateCache
+        //        return value;
+        //    }
+        //    else
+        //    {
+        //        //TODO: Continent should maybe use a string of 1 char just to conform? Otherwise generic interface wont work
+        //        var newValue = await _dataProvider.Get(position);
+        //        //setCache
+        //        return newValue;
+        //    }
+        //}
     }
 }

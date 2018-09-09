@@ -1,13 +1,12 @@
-﻿using Data.Models.Entities;
+﻿using Data.DataProviders.Players;
+using Data.Models.Entities;
+using Data.Models.Entities.Humans;
 using Data.Models.Entities.Monsters;
 using Data.Models.EventResolution;
-using Core.ResourceManagers;
-using Data.Models.Entities.Humans;
-using Newtonsoft.Json;
-using Data.Models.Exceptions;
-using System.Linq;
-using Data.DataProviders.Players;
 using Data.Repositories;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -28,10 +27,10 @@ namespace Core.Processes.Events
             _monsterId = monsterId;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
             var repo = new PlayerRepository(new MockedPlayerData());
-            _player = repo.Get(_playerId);
+            _player = await repo.Get(_playerId);
 
             var scene = _player.Location;
 

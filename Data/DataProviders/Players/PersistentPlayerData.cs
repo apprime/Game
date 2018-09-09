@@ -1,49 +1,35 @@
-﻿using Data.DataProviders.MySqlHelpers;
-using Data.Models.Entities;
+﻿using Data.Models.Entities;
 using Data.Models.Entities.Humans;
-using MySql.Data.MySqlClient;
-using System.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Data.DataProviders.Players
 {
     public class PersistentPlayerData : IPlayerDataProvider
     {
-        private MySqlDb _db;
+        private GameDataContext _ctx;
 
-        public PersistentPlayerData(MySqlDb db)
+        public PersistentPlayerData(GameDataContext ctx)
         {
-            _db = db;
+            _ctx = ctx;
         }
 
         public async Task<Player> Add(Player player)
         {
-            var cmd = _db.Connection.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"INSERT INTO `player` (`name`, `lastLoggedOutPosition`) VALUES (@name, @lastLoggedOutPosition);";
-
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@name",
-                DbType = DbType.String,
-                Value = player.Name,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@lastLoggedOutPosition",
-                DbType = DbType.String,
-                Value = player.LoggedOutPosition,
-            });
-
-            await cmd.ExecuteNonQueryAsync();
-
-            player.Id = Id.FromParts('P', player.LoggedOutPosition, cmd.LastInsertedId.ToString());
+            //Todo: AddAsync should be used if you generate values with triggers in db.
+            //      Probably won't be needed here, but adding a todo for later cleanup of all ctx adds
+            _ctx.Players.Add(player);
+            await _ctx.SaveChangesAsync();
 
             return player;
         }
 
         public Task<Player> Get(Id playerId, string connectionId)
         {
-            throw new System.NotImplementedException();
+            return _ctx.Players.SingleOrDefaultAsync(p => p.Id == playerId)
+                ?? throw new ArgumentException("No such player in database");
         }
 
         public Task Remove(Player player)

@@ -4,6 +4,7 @@ using Core.ResourceManagers;
 using System;
 using Data.Repositories;
 using Data.DataProviders.Players;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -26,7 +27,7 @@ namespace Core.Processes.Events
             ScoreCanIncrease = (i) => i.Score + ScoreAmount <= MaxScore;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected async override Task<ReadonlyEvent> GatherData()
         {
             var repo = new PlayerRepository();
 
@@ -46,7 +47,7 @@ namespace Core.Processes.Events
             //TODO: Handle locking / writing to resource 
             var repo = new PlayerRepository(new MockedPlayerData());
 
-            var player = repo.Get(currentPlayer.Id);
+            var player = repo.Get(currentPlayer.Id).Result;
             player.Score = player.Score + ScoreAmount;
             return this;
         }

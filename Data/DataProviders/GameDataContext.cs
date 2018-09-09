@@ -8,7 +8,13 @@ namespace Data.DataProviders
         public GameDataContext(DbContextOptions<GameDataContext> options)
             : base(options) { }
 
-        DbSet<Player> Players { get; set; }
+        public DbSet<Player> Players { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Player>().ToTable("Player");
+            modelBuilder.ApplyConfiguration(new PlayerEntityConfiguration());
+        }
     }
 }
     

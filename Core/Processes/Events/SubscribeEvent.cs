@@ -4,6 +4,7 @@ using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Repositories;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -26,14 +27,14 @@ namespace Core.Processes.Events
             _connectionId = connectionId;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
             var repo = new PlayerRepository(new MockedPlayerData());
-            _player = repo.Get(_id) as Player;
+            _player = await repo.Get(_id) as Player;
 
             if (_player == null)
             {
-                _player = repo.Load(_id, _connectionId);
+                _player = await repo.Load(_id, _connectionId);
             }
             else
             {

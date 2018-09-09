@@ -4,6 +4,7 @@ using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
 using Data.Models.EventResolution;
 using Data.Repositories;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -27,12 +28,12 @@ namespace Core.Processes.Events
             _targetId = target;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
             Validate();
 
-            _actor = ResourceLocator.Get(_attackerId) as IAttack;
-            _target = ResourceLocator.Get(_targetId) as IDestructible;
+            _actor = await ResourceLocator.Get(_attackerId) as IAttack;
+            _target = await ResourceLocator.Get(_targetId) as IDestructible;
 
             return this;
         }

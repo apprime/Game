@@ -1,5 +1,7 @@
 ﻿using Data.Models.Entities.EntityInterfaces;
 using Data.Models.Nodes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,11 @@ namespace Data.Models.Entities.Humans
     public class Player : IPositioned, IActor
     {
         private Location _location;
+
+        public Player()
+        {
+
+        }
 
         //TODO: Dont allow this, use a proper way to instatiate objects
         public Player(string data)
@@ -42,6 +49,9 @@ namespace Data.Models.Entities.Humans
 
         [JsonProperty]
         public string ImageUrl { get; set; }
+
+        [JsonIgnore]
+        public string Email { get; set; }
 
         //TODO: I think we can use string to identify a user in SignalR.
         //      Also, I think groups could and should be used, question is if we need grouping 
@@ -87,5 +97,31 @@ namespace Data.Models.Entities.Humans
         public Spellbook Spellbook { get; set; }
         public Ink Currency { get; set; }
         public Bucket Bucket{ get; set; }
+    }
+
+    public class PlayerEntityConfiguration : IEntityTypeConfiguration<Player>
+    {
+        public void Configure(EntityTypeBuilder<Player> builder)
+        {
+            builder.HasKey(i => i.Id);
+
+            builder.Property(p => p.Id)
+                   .IsRequired()
+                   .HasConversion(
+                        objValue => objValue.ToString(),
+                        stringValue => Id.FromString(stringValue)
+                    );
+
+            builder.Property(p => p.Email)
+                   .IsRequired();
+            builder.Property(p => p.Name)
+                   .IsRequired();
+            builder.Property(p => p.LoggedOutPosition)
+                    .HasConversion(
+                        objValue => objValue.ToString(),
+                        stringValue => Position.FromString(stringValue)
+                        )
+                    .HasDefaultValue();
+        }
     }
 }

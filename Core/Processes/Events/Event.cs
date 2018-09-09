@@ -1,4 +1,6 @@
-﻿namespace Core.Processes.Events
+﻿using System.Threading.Tasks;
+
+namespace Core.Processes.Events
 {
     /// <summary>
     /// An Event is a simple extension to ReadonlyEvent.
@@ -7,9 +9,9 @@
     /// </summary>
     public abstract class Event : ReadonlyEvent
     {
-        public override ReadonlyEvent Process()
+        public async override Task<ReadonlyEvent> Process()
         {
-            GatherData();
+            await GatherData();
             Resolve();
             Persist();
             Broadcast();

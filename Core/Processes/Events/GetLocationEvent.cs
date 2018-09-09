@@ -5,6 +5,7 @@ using Data.Models.EventResolution;
 using Data.Models.Nodes;
 using Data.Repositories;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -23,10 +24,10 @@ namespace Core.Processes.Events
             _playerId = player;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
             var repo = new PlayerRepository();
-            _player = repo.Get(_playerId);
+            _player = await repo.Get(_playerId);
             _location = _player.Location;
             
             return this;

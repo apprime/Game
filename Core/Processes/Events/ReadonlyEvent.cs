@@ -1,4 +1,5 @@
 ﻿using Data.Models.EventResolution;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -9,9 +10,9 @@ namespace Core.Processes.Events
         public delegate void EventHandler(EventResult result);
         public static event EventHandler EventResolved;
 
-        public virtual ReadonlyEvent Process()
+        public virtual async Task<ReadonlyEvent> Process()
         {
-            GatherData();
+            await GatherData();
             Resolve();
             Broadcast();
 
@@ -22,7 +23,7 @@ namespace Core.Processes.Events
         /// Fetch or create the needed resources
         /// </summary>
         /// <returns></returns>
-        protected abstract ReadonlyEvent GatherData();
+        protected abstract Task<ReadonlyEvent> GatherData();
 
         /// <summary>
         /// Create an eventResolution object for broadcasting

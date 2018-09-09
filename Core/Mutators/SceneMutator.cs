@@ -31,7 +31,7 @@ namespace Core.Mutators
 
         internal static void SetDestination(Position position, Movement movement)
         {
-            var newLocation = LocationFactory.GetOrCreate(position, movement.Traveler);
+            var newLocation = LocationFactory.GetOrCreate(position, movement.Traveler).Result;
             movement.Destination = newLocation;
         }
 

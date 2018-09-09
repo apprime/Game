@@ -1,6 +1,7 @@
 ﻿using Data.Models.Entities;
 using Data.Models.EventResolution;
 using System;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -16,7 +17,7 @@ namespace Core.Processes.Events
 
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected async  override Task<ReadonlyEvent> GatherData()
         {
             throw new NotImplementedException();
         }

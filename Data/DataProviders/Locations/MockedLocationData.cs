@@ -3,28 +3,32 @@ using Data.Models.Entities;
 using Data.Models.Nodes;
 using Data.Repositories;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Data.DataProviders.Locations
 {
     public class MockedLocationData : IPositionDataProvider<Location>, IKnowParent<Sector>
     {
         //TODO: We need to be able to fetch list of location per sector(first 3 valiues in Position) from a resource.
-        public Location Get(Position position)
+        public Task<Location> Get(Position position)
         {
-            switch (position)
+            return new TaskFactory().StartNew(() =>
             {
-                case var p when p == Position.FromNumbers(1, 1, 1, 1):
-                    return GetTown(position);
-                case var p when p == Position.FromNumbers(1, 1, 1, 2):
-                    return GetGrass(position);
-                case var p when p == Position.FromNumbers(1, 1, 1, 3):
-                    return GetForest(position);
-                case var p when p == Position.FromNumbers(1, 1, 1, 4):
-                    return GetCave(position);
-                default:
-                    //TODO: Handle default somehow
-                    return GetTown(position);
-            }
+                switch (position)
+                {
+                    case var p when p == Position.FromNumbers(1, 1, 1, 1):
+                        return GetTown(position);
+                    case var p when p == Position.FromNumbers(1, 1, 1, 2):
+                        return GetGrass(position);
+                    case var p when p == Position.FromNumbers(1, 1, 1, 3):
+                        return GetForest(position);
+                    case var p when p == Position.FromNumbers(1, 1, 1, 4):
+                        return GetCave(position);
+                    default:
+                        //TODO: Handle default somehow
+                        return GetTown(position);
+                }
+            });
         }
 
         private static Location GetTown(Position position)

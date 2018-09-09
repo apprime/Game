@@ -1,12 +1,13 @@
 ﻿using Data.Models.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Data.DataProviders.Locations
 {
     class PersistentLocationData : IPositionDataProvider<Location>
     {
-        public Location Get(Position position)
+        public Task<Location> Get(Position position)
         {
             throw new NotImplementedException();
         }

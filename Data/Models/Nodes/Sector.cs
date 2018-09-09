@@ -3,6 +3,7 @@ using Data.Repositories.Nodes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Data.Models.Nodes
 {
@@ -56,10 +57,10 @@ namespace Data.Models.Nodes
             return locations.FirstOrDefault(i => IsPartyInScene(party, i));
         }
 
-        public Location Create(Position pos)
+        public async Task<Location> Create(Position pos)
         {
             var repo = new LocationRepository();
-            var location = repo.Create(pos);
+            var location = await repo.Create(pos);
 
             if(Locations.Count == 1)
             {

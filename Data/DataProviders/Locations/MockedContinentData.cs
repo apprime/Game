@@ -2,21 +2,25 @@
 using Data.Models.Exceptions;
 using Data.Models.Nodes;
 using Data.DataProviders.Locations.Interfaces;
+using System.Threading.Tasks;
 
 namespace Data.DataProviders.Locations
 {
     public class MockedContinentData : IPositionDataProvider<Continent>, IKnowChildren<Region>
     {
-        public Continent Get(Position position)
+        public Task<Continent> Get(Position position)
         {
-            //TODO: Fix this so that we have non hardcoded stuff.
-            switch(position.Continent)
+            return new TaskFactory().StartNew(() =>
             {
-                case 1:
-                    return SetupContinent(position.Continent);
-                default:
-                    throw new TodoException("Include more continents!");
-            }
+                //TODO: Fix this so that we have non hardcoded stuff.
+                switch (position.Continent)
+                {
+                    case 1:
+                        return SetupContinent(position.Continent);
+                    default:
+                        throw new TodoException("Include more continents!");
+                }
+            });
         }
 
         public Continent Get(byte id)

@@ -5,6 +5,7 @@ using Data.Models.EventResolution;
 using Data.Models.Nodes;
 using Data.Repositories;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -29,9 +30,9 @@ namespace Core.Processes.Events
             _destinationId = destination;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
-            _actor = repo.Get(_playerId);
+            _actor = await repo.Get(_playerId);
 
             return this;
         }

@@ -4,6 +4,7 @@ using Data.Models.EventResolution;
 using Data.Models.Nodes;
 using Data.Repositories;
 using Data.Repositories.Nodes;
+using System.Threading.Tasks;
 
 namespace Core.Processes.Events
 {
@@ -19,10 +20,10 @@ namespace Core.Processes.Events
             this.locationId = locationId;
         }
 
-        protected override ReadonlyEvent GatherData()
+        protected override async Task<ReadonlyEvent> GatherData()
         {
             var repo = new LocationRepository();
-            location = repo.Get(locationId);
+            location = await repo.Get(locationId);
 
             return this;
         }

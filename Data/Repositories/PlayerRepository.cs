@@ -8,6 +8,7 @@ using Data.Repositories.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -35,11 +36,11 @@ namespace Data.Repositories
         /// <param name="connectionId"></param>
         /// <returns>A valid player</returns>
         /// <exception cref="TodoException">If no player exists or connection info is not provided.</exception>
-        public Player Load(Id id, string connectionId)
+        public async Task<Player> Load(Id id, string connectionId)
         {
             //Todo: Ok, got some stuff to do in here
             //Basically we want a GetOrLoad as well.
-            return _dataProvider.Get(id, connectionId);
+            return await _dataProvider.Get(id, connectionId);
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Data.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A Player object from memory, Null of player is not loaded</returns>
-        public Player Get(Id id)
+        public async Task<Player> Get(Id id)
         {
             //Todo: Ok, got some stuff to do in here
             if (_data.TryGetValue(id.Trunk, out Player value))
@@ -93,7 +94,7 @@ namespace Data.Repositories
             {
                 Id id = result.Place;
                 var repo = new LocationRepository();
-                Location loc = repo.Get(id);
+                Location loc = repo.Get(id).Result;
 
                 foreach (Player p in loc.Players)
                 {

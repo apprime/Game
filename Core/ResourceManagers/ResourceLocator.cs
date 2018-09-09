@@ -4,6 +4,7 @@ using Data.Repositories;
 using Data.Repositories.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Core.ResourceManagers
 {
@@ -66,13 +67,13 @@ namespace Core.ResourceManagers
         //    //Add here
         //};
 
-        public static IEntity Get(Id id)
+        public static async Task<IEntity> Get(Id id)
         {
             switch(id.Prefix)
             {
                 case 'P':
                     var playerRepo = new PlayerRepository();
-                    return playerRepo.Get(id);
+                    return await playerRepo.Get(id);
                 case 'M':
                     var monsterRepo = new MonsterRepository();
                     return monsterRepo.Get(id);
