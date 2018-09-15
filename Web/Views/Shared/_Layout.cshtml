@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - Web</title>
 
     <!-- TODO: Make loading Async so these can go in footer -->
-    <script src="~/lib/signalr/signalr-client-1.0.0-alpha1-final.js"></script>
+
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <!-- TODO: Create Component for Css loading -->
     <environment names="Development">
@@ -32,6 +32,7 @@
     <environment names="Development">
         @*<script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>*@
+        <script src="~/lib/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
         <script src="~/js/startup.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">

@@ -35,7 +35,7 @@ namespace Web.Hubs
             {
                 _hubContext.Clients
                            .Client(p.ConnectionId)
-                           .InvokeAsync("broadcast", result.ToJson());
+                           .SendAsync("broadcast", result.ToJson());
                             //TODO: Question, how do we keep track of client side eventhandlers? Broadcast only exists in stringly format here
             }
         }

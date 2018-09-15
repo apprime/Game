@@ -39,14 +39,24 @@ namespace Web
         {
             services.AddSingleton<GameWrapper, GameWrapper>();
 
-            services.AddSignalR(option =>
-            {
-                option.JsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services.AddSignalR()
+                    .AddJsonProtocol(options => {
+                        options.PayloadSerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
+                    });
 
             services.AddSession();
             services.AddMvc()
                     .AddSessionStateTempDataProvider();
+
+            services.AddCors(options => 
+                options.AddPolicy("CorsPolicy", builder => {
+                    builder.AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .WithOrigins("http://localhost:55830")
+                           .AllowCredentials();
+                })
+            );
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -66,12 +76,13 @@ namespace Web
             app.UseSession();
             app.UseMvc();
             app.UseWebSockets();
+            app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<PlayerHub>("PlayerHub");
-                routes.MapHub<GameHub>("GameHub");
-                routes.MapHub<MonsterHub>("MonsterHub");
-                routes.MapHub<ChatHub>("ChatHub");
+                routes.MapHub<PlayerHub>("/PlayerHub");
+                routes.MapHub<GameHub>("/GameHub");
+                routes.MapHub<MonsterHub>("/MonsterHub");
+                routes.MapHub<ChatHub>("/ChatHub");
             });
         }
     }

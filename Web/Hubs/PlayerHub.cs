@@ -19,12 +19,12 @@ namespace Web.Hubs
 
         public override Task OnConnectedAsync()
         {
-            return Clients.All.InvokeAsync("connected", "Yo has connected");
+            return Clients.All.SendAsync("connected", "Yo has connected");
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            return Clients.All.InvokeAsync("disconnected", "Yo has disconnected");
+            return Clients.All.SendAsync("disconnected", "Yo has disconnected");
         }
 
         public void Subscribe(string eventString)

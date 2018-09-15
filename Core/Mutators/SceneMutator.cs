@@ -2,7 +2,6 @@
 using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.Nodes;
-using System.Linq;
 
 namespace Core.Mutators
 {
