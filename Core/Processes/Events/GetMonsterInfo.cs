@@ -5,13 +5,16 @@ using Data.Models.Entities.Monsters;
 using Data.Models.EventResolution;
 using Data.Repositories;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Processes.Events
 {
     public class GetMonsterInfo : ReadonlyEvent
     {
+        private readonly PlayerRepository playerRepository;
         Monster _monster;
         Player _player;
         Id _monsterId;
@@ -19,18 +22,21 @@ namespace Core.Processes.Events
 
         EventTargets _eventTargets = EventTargets.Player;
 
-        public GetMonsterInfo(string[] parts) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1])) { }
+        public GetMonsterInfo(string[] parts, IServiceProvider sp) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1]))
+        {
+            playerRepository = sp.GetService<PlayerRepository>();
+        }
 
         public GetMonsterInfo(Id player, Id monsterId)
         {
+            
             _playerId = player;
             _monsterId = monsterId;
         }
 
-        protected override async Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
-            var repo = new PlayerRepository(new MockedPlayerData());
-            _player = await repo.Get(_playerId);
+            _player = playerRepository.Get(_playerId);
 
             var scene = _player.Location;
 

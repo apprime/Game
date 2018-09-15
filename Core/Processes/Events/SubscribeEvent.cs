@@ -4,7 +4,9 @@ using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Repositories;
+using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Processes.Events
 {
@@ -14,12 +16,16 @@ namespace Core.Processes.Events
         private Player _player;
         private string _connectionId;
         private bool _alreadyLoggedIn = false;
+        private readonly PlayerRepository playerRepository;
 
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public SubscribeEvent(string[] parts) : this(Id.FromString('P', parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
+        public SubscribeEvent(string[] parts, IServiceProvider sp) : this(Id.FromString('P', parts[0]), parts[1])
+        {
+            playerRepository = sp.GetService<PlayerRepository>();
+        } //This CTOR only converts string array to real params.
 
         internal SubscribeEvent(Id player, string connectionId)
         {
@@ -27,14 +33,13 @@ namespace Core.Processes.Events
             _connectionId = connectionId;
         }
 
-        protected override async Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
-            var repo = new PlayerRepository(new MockedPlayerData());
-            _player = await repo.Get(_id) as Player;
+            _player = playerRepository.Get(_id) as Player;
 
             if (_player == null)
             {
-                _player = await repo.Load(_id, _connectionId);
+                _player = playerRepository.Load(_id, _connectionId);
             }
             else
             {
@@ -53,9 +58,8 @@ namespace Core.Processes.Events
             }
             else
             {
-                var repo = new PlayerRepository();
                 Result.Message = "You logged in";
-                Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = "OK", Targets = repo.Get(Result) });
+                Result.Deltas.Add(new Delta { Actor = _player, Key = "Login", Value = "OK", Targets = playerRepository.Get(Result) });
                 Result.Resolution = EventResolutionType.Commit;
             }
 
@@ -69,8 +73,7 @@ namespace Core.Processes.Events
         {
             if(Result.Resolution == EventResolutionType.Commit)
             {
-                var repo = new PlayerRepository(new MockedPlayerData());
-                repo.Add(_player);
+                playerRepository.Add(_player);
 
                 var dumpPlayerAt = new EnterLocationEvent(_id, _player.LoggedOutPosition);
                 Engine.Instance.Push(dumpPlayerAt);

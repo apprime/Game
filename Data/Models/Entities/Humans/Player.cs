@@ -109,7 +109,7 @@ namespace Data.Models.Entities.Humans
                    .IsRequired()
                    .HasConversion(
                         objValue => objValue.ToString(),
-                        stringValue => Id.FromString(stringValue)
+                        stringValue => Id.FromDb(stringValue)
                     );
 
             builder.Property(p => p.Email)

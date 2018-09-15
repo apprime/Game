@@ -22,11 +22,6 @@ namespace Data.Repositories
             _dataProvider = dataProvider;
         }
 
-        public PlayerRepository()
-        {
-            _dataProvider = new MockedPlayerData();
-        }
-
         //TODO: Cache
         /// <summary>
         /// Loads a player either from memory or from dataprovider if needed.
@@ -36,11 +31,13 @@ namespace Data.Repositories
         /// <param name="connectionId"></param>
         /// <returns>A valid player</returns>
         /// <exception cref="TodoException">If no player exists or connection info is not provided.</exception>
-        public async Task<Player> Load(Id id, string connectionId)
+        public Player Load(Id id, string connectionId)
         {
             //Todo: Ok, got some stuff to do in here
             //Basically we want a GetOrLoad as well.
-            return await _dataProvider.Get(id, connectionId);
+            var temp =  _dataProvider.Get(id, connectionId);
+            _data.Add(id.Trunk, temp);
+            return temp;
         }
 
         /// <summary>
@@ -48,7 +45,7 @@ namespace Data.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A Player object from memory, Null of player is not loaded</returns>
-        public async Task<Player> Get(Id id)
+        public Player Get(Id id)
         {
             //Todo: Ok, got some stuff to do in here
             if (_data.TryGetValue(id.Trunk, out Player value))
@@ -94,7 +91,7 @@ namespace Data.Repositories
             {
                 Id id = result.Place;
                 var repo = new LocationRepository();
-                Location loc = repo.Get(id).Result;
+                Location loc = repo.Get(id);
 
                 foreach (Player p in loc.Players)
                 {

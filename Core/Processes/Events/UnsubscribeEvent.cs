@@ -4,7 +4,9 @@ using Data.Models.Entities;
 using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Repositories;
+using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Processes.Events
 {
@@ -17,11 +19,16 @@ namespace Core.Processes.Events
         private Player _actor;
         private string _connectionInfo;
 
+        private PlayerRepository playerRepository;
+
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player;
         #endregion
 
-        public UnsubscribeEvent(string[] parts) : this(Id.FromString('P', parts[0]), parts[1]) { } //This CTOR only converts string array to real params.
+        public UnsubscribeEvent(string[] parts, IServiceProvider sp) : this(Id.FromString('P', parts[0]), parts[1])
+        {
+            playerRepository = sp.GetService<PlayerRepository>();
+        } //This CTOR only converts string array to real params.
 
         internal UnsubscribeEvent(Id player, string connectionInfo)
         {
@@ -29,10 +36,10 @@ namespace Core.Processes.Events
             _connectionInfo = connectionInfo;
         }
 
-        protected override async Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
             var repo = new PlayerRepository(new MockedPlayerData());
-            _actor = await repo.Get(_player);
+            _actor = repo.Get(_player);
             return this;
         }
 
@@ -40,13 +47,12 @@ namespace Core.Processes.Events
         {
             if (_actor != null)
             {
-                var repo = new PlayerRepository();
                 var delta = new Delta
                 {
                     Actor = _actor,
                     Key = "Logout",
                     Value = SetLogoutMessage(),
-                    Targets = repo.Get(Result)
+                    Targets = playerRepository.Get(Result)
                 };
 
                 Result.Message = "You logged out";

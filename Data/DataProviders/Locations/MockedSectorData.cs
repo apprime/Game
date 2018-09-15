@@ -7,7 +7,7 @@ namespace Data.DataProviders.Locations
 {
     public class MockedSectorData : IPositionDataProvider<Sector>, IKnowChildren<Location>, IKnowParent<Region>
     {
-        public Task<Sector> Get(Position pos)
+        public Sector Get(Position pos)
         {
             throw new System.NotImplementedException();
         }

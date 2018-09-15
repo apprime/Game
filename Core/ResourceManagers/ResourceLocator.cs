@@ -1,9 +1,8 @@
 ﻿using Data.Models.Entities;
 using Data.Models.Entities.EntityInterfaces;
 using Data.Repositories;
-using Data.Repositories.Nodes;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.ResourceManagers
@@ -17,65 +16,15 @@ namespace Core.ResourceManagers
     // c) Provide Repos?
     public static class ResourceLocator
     {
-        //public static void Add(Player p)
-        //{
-        //    PlayerResources.Add(p);
-        //}
-
-        //public static void Add(Monster monster)
-        //{
-        //    MonsterResources.Add(monster);
-        //}
-
-        //public static void Add(Scene scene)
-        //{
-        //    SceneResources.Add(scene);
-        //}
-
-        //public static void Remove(Player p)
-        //{
-        //    PlayerResources.Remove(p);
-        //}
-
-        ////Todo: This should probably be replaced by simply taking the flag directly instead
-        //public static IEnumerable<Player> GetPlayers(EventResult result)
-        //{
-        //    return PlayerResources.Get(result);
-        //}
-
-        ////Todo: make internal when client is no longer coupled
-        ////public static Player GetPlayer(string id)
-        ////{
-        ////    return PlayerResources.Get(id);
-        ////}
-
-        //public static Monster GetMonster(string id)
-        //{
-        //    return MonsterResources.Get(id);
-        //}
-
-        //public static IEntity Get(string id)
-        //{
-        //    return Get(Id.FromString(id));
-        //}
-
-        //private static Dictionary<char, Func<string, IEntity>> _get = new Dictionary<char, Func<string, IEntity>>
-        //{
-        //    {'M', MonsterResources.Get },
-        //    //{'P', PlayerResources.Get },
-        //    {'L', (s) => (new LocationRepository()).Get(s) }
-        //    //Add here
-        //};
-
-        public static async Task<IEntity> Get(Id id)
+        public static IEntity Get(Id id, IServiceProvider sp)
         {
-            switch(id.Prefix)
+            switch (id.Prefix)
             {
                 case 'P':
-                    var playerRepo = new PlayerRepository();
-                    return await playerRepo.Get(id);
+                    var playerRepo = sp.GetService<PlayerRepository>();
+                    return playerRepo.Get(id);
                 case 'M':
-                    var monsterRepo = new MonsterRepository();
+                    var monsterRepo = sp.GetService<MonsterRepository>();
                     return monsterRepo.Get(id);
                 //case 'L':
                 //    var locationRepo = new LocationRepository();

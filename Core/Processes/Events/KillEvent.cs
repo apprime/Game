@@ -17,7 +17,7 @@ namespace Core.Processes.Events
 
         }
 
-        protected async  override Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
             throw new NotImplementedException();
         }

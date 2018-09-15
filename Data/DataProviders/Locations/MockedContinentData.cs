@@ -8,19 +8,16 @@ namespace Data.DataProviders.Locations
 {
     public class MockedContinentData : IPositionDataProvider<Continent>, IKnowChildren<Region>
     {
-        public Task<Continent> Get(Position position)
+        public Continent Get(Position position)
         {
-            return new TaskFactory().StartNew(() =>
+            //TODO: Fix this so that we have non hardcoded stuff.
+            switch (position.Continent)
             {
-                //TODO: Fix this so that we have non hardcoded stuff.
-                switch (position.Continent)
-                {
-                    case 1:
-                        return SetupContinent(position.Continent);
-                    default:
-                        throw new TodoException("Include more continents!");
-                }
-            });
+                case 1:
+                    return SetupContinent(position.Continent);
+                default:
+                    throw new TodoException("Include more continents!");
+            }
         }
 
         public Continent Get(byte id)

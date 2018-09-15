@@ -51,6 +51,11 @@ namespace Data.Models.Entities
             return new Id(prefix, position, trunk);
         }
 
+        public static Id FromDb(string id)
+        {
+            return new Id('P', Position.FromNumbers(0, 0, 0, 0), id);
+        }
+
         private void Validate(string raw)
         {
             if(raw.Length > MaxLength)

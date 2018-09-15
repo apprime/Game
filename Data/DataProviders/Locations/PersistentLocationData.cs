@@ -7,7 +7,7 @@ namespace Data.DataProviders.Locations
 {
     class PersistentLocationData : IPositionDataProvider<Location>
     {
-        public Task<Location> Get(Position position)
+        public Location Get(Position position)
         {
             throw new NotImplementedException();
         }

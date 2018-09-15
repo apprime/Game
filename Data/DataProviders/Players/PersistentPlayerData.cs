@@ -26,15 +26,16 @@ namespace Data.DataProviders.Players
             return player;
         }
 
-        public Task<Player> Get(Id playerId, string connectionId)
+        public Player Get(Id playerId, string connectionId)
         {
-            return _ctx.Players.SingleOrDefaultAsync(p => p.Id == playerId)
-                ?? throw new ArgumentException("No such player in database");
+            var player =  _ctx.Players.SingleOrDefault(p => p.Id == playerId);
+            player.Position = player.LoggedOutPosition;
+            return player;
         }
 
         public Task Remove(Player player)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

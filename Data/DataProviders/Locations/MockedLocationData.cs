@@ -10,25 +10,22 @@ namespace Data.DataProviders.Locations
     public class MockedLocationData : IPositionDataProvider<Location>, IKnowParent<Sector>
     {
         //TODO: We need to be able to fetch list of location per sector(first 3 valiues in Position) from a resource.
-        public Task<Location> Get(Position position)
+        public Location Get(Position position)
         {
-            return new TaskFactory().StartNew(() =>
+            switch (position)
             {
-                switch (position)
-                {
-                    case var p when p == Position.FromNumbers(1, 1, 1, 1):
-                        return GetTown(position);
-                    case var p when p == Position.FromNumbers(1, 1, 1, 2):
-                        return GetGrass(position);
-                    case var p when p == Position.FromNumbers(1, 1, 1, 3):
-                        return GetForest(position);
-                    case var p when p == Position.FromNumbers(1, 1, 1, 4):
-                        return GetCave(position);
-                    default:
-                        //TODO: Handle default somehow
-                        return GetTown(position);
-                }
-            });
+                case var p when p == Position.FromNumbers(1, 1, 1, 1):
+                    return GetTown(position);
+                case var p when p == Position.FromNumbers(1, 1, 1, 2):
+                    return GetGrass(position);
+                case var p when p == Position.FromNumbers(1, 1, 1, 3):
+                    return GetForest(position);
+                case var p when p == Position.FromNumbers(1, 1, 1, 4):
+                    return GetCave(position);
+                default:
+                    //TODO: Handle default somehow
+                    return GetTown(position);
+            }
         }
 
         private static Location GetTown(Position position)

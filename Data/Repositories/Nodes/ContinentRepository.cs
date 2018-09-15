@@ -15,10 +15,10 @@ namespace Data.Repositories.Nodes
             _dataProvider = dataProvider;
         }
 
-        public async Task<Continent> Get(Position position)
+        public Continent Get(Position position)
         {
             //return TodoCache(position);
-            return await _dataProvider.Get(position);
+            return _dataProvider.Get(position);
         }
 
         //private async Task<Continent> TodoCache(Position position)

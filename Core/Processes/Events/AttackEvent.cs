@@ -5,6 +5,8 @@ using Data.Models.Entities.EntityInterfaces;
 using Data.Models.EventResolution;
 using Data.Repositories;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Core.Processes.Events
 {
@@ -14,13 +16,19 @@ namespace Core.Processes.Events
         private Id _targetId;
         private IAttack _actor;
         private IDestructible _target;
+        private readonly IServiceProvider serviceProvider;
+        private PlayerRepository repo;
 
         #region Rules
         private const EventTargets _eventTargets = EventTargets.Player | EventTargets.Nearby | EventTargets.Party;
         private Damage _damage;
         #endregion
 
-        public AttackEvent(string[] parts) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1])) { } //This CTOR only converts string array to real params.
+        public AttackEvent(string[] parts, IServiceProvider sp) : this(Id.FromString('P', parts[0]), Id.FromString('M', parts[1]))
+        {
+            serviceProvider = sp;
+            repo = sp.GetService<PlayerRepository>();
+        } //This CTOR only converts string array to real params.
 
         internal AttackEvent(Id attacker, Id target)
         {
@@ -28,12 +36,12 @@ namespace Core.Processes.Events
             _targetId = target;
         }
 
-        protected override async Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
             Validate();
 
-            _actor = await ResourceLocator.Get(_attackerId) as IAttack;
-            _target = await ResourceLocator.Get(_targetId) as IDestructible;
+            _actor = ResourceLocator.Get(_attackerId, serviceProvider) as IAttack;
+            _target = ResourceLocator.Get(_targetId, serviceProvider) as IDestructible;
 
             return this;
         }
@@ -53,7 +61,7 @@ namespace Core.Processes.Events
 
         protected override Event Persist()
         {
-            var repo = new PlayerRepository();
+            
 
             CombatMutator.Attack(_actor, _damage);
             CombatMutator.Mitigate(_target, _damage);

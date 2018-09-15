@@ -10,9 +10,9 @@ namespace Core.Processes.Events
         public delegate void EventHandler(EventResult result);
         public static event EventHandler EventResolved;
 
-        public virtual async Task<ReadonlyEvent> Process()
+        public virtual ReadonlyEvent Process()
         {
-            await GatherData();
+            GatherData();
             Resolve();
             Broadcast();
 
@@ -23,7 +23,7 @@ namespace Core.Processes.Events
         /// Fetch or create the needed resources
         /// </summary>
         /// <returns></returns>
-        protected abstract Task<ReadonlyEvent> GatherData();
+        protected abstract ReadonlyEvent GatherData();
 
         /// <summary>
         /// Create an eventResolution object for broadcasting

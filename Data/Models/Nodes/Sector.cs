@@ -57,10 +57,10 @@ namespace Data.Models.Nodes
             return locations.FirstOrDefault(i => IsPartyInScene(party, i));
         }
 
-        public async Task<Location> Create(Position pos)
+        public Location Create(Position pos)
         {
             var repo = new LocationRepository();
-            var location = await repo.Create(pos);
+            var location =  repo.Create(pos);
 
             if(Locations.Count == 1)
             {

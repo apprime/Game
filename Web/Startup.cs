@@ -1,5 +1,6 @@
 ﻿using Data.DataProviders;
 using Data.DataProviders.Players;
+using Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,19 +27,21 @@ namespace Web
             //Load data providers with physical DB connections.
             var gameDataConnectionString = Configuration["ConnectionStrings:GameData"];
             services.AddEntityFrameworkNpgsql().AddDbContextPool<GameDataContext>(options => options.UseNpgsql(gameDataConnectionString));
-        }
+            services.AddTransient<IPlayerDataProvider, PersistentPlayerData>();
 
+        }
+        
         public void ConfigureMockService(IServiceCollection services)
         {
             ConfigureCommon(services);
             //Mock data providers need no setup
-            services.AddTransient<IPlayerDataProvider, MockedPlayerData>(x => new MockedPlayerData());
+            services.AddTransient<IPlayerDataProvider, MockedPlayerData>();
         }
 
         private void ConfigureCommon(IServiceCollection services)
         {
             services.AddSingleton<GameWrapper, GameWrapper>();
-
+            services.AddTransient<PlayerRepository, PlayerRepository>();
             services.AddSignalR()
                     .AddJsonProtocol(options => {
                         options.PayloadSerializerSettings.ContractResolver =

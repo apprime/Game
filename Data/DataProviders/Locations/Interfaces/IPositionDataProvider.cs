@@ -5,6 +5,6 @@ namespace Data.DataProviders.Locations
 {
     public interface IPositionDataProvider<T>
     {
-        Task<T> Get(Position pos);
+        T Get(Position pos);
     }
 }

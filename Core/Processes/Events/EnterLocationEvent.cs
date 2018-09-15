@@ -4,8 +4,10 @@ using Data.Models.Entities.Humans;
 using Data.Models.EventResolution;
 using Data.Models.Nodes;
 using Data.Repositories;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Processes.Events
 {
@@ -20,9 +22,14 @@ namespace Core.Processes.Events
         private Movement movement;
         #endregion
 
-        private PlayerRepository repo = new PlayerRepository();
+        private PlayerRepository repo;
+        private IServiceProvider serviceProvider;
 
-        public EnterLocationEvent(string[] parts) : this(Id.FromString('P',parts[0]), Position.FromString(parts[1])) { } //This CTOR only converts string array to real params.
+        public EnterLocationEvent(string[] parts, IServiceProvider sp) : this(Id.FromString('P',parts[0]), Position.FromString(parts[1]))
+        {
+            this.serviceProvider = sp;
+            repo = sp.GetService<PlayerRepository>();
+        } //This CTOR only converts string array to real params.
 
         internal EnterLocationEvent(Id player, Position destination)
         {
@@ -30,9 +37,9 @@ namespace Core.Processes.Events
             _destinationId = destination;
         }
 
-        protected override async Task<ReadonlyEvent> GatherData()
+        protected override ReadonlyEvent GatherData()
         {
-            _actor = await repo.Get(_playerId);
+            _actor = repo.Get(_playerId);
 
             return this;
         }
@@ -102,7 +109,7 @@ namespace Core.Processes.Events
             }
             else
             {
-                var e = new LeaveLocationEvent(movement.Traveler, movement.Origin.Id);
+                var e = new LeaveLocationEvent(movement.Traveler, movement.Origin.Id, serviceProvider);
                 Engine.Instance.Push(e);
             }
 

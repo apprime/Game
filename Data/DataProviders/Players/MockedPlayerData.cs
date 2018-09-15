@@ -6,14 +6,14 @@ namespace Data.DataProviders.Players
 {
     public class MockedPlayerData : IPlayerDataProvider
     {
-        public Task<Player> Get(Id playerId, string connectionId)
+        public Player Get(Id playerId, string connectionId)
         {
             var p = new Player("P001001001001123/PlayerMcPlayerface/1/" + connectionId)
             {
                 ImageUrl = "player.png"
             };
 
-            return Task.Factory.StartNew(() => p);
+            return p;
         }
 
         public Task<Player> Add(Player player)

@@ -9,9 +9,9 @@ namespace Core.Processes.Events
     /// </summary>
     public abstract class Event : ReadonlyEvent
     {
-        public async override Task<ReadonlyEvent> Process()
+        public override ReadonlyEvent Process()
         {
-            await GatherData();
+            GatherData();
             Resolve();
             Persist();
             Broadcast();
